@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
+import { AuthModal } from "@/components/AuthModal";
 import {
   Printer,
   Sparkles,
@@ -15,6 +17,8 @@ import {
   FileText,
   RotateCcw,
   Check,
+  LogOut,
+  UserCheck,
 } from "lucide-react";
 
 export interface ResumeData {
@@ -149,6 +153,8 @@ const EMPTY_RESUME: ResumeData = {
 };
 
 export default function BuilderPage() {
+  const { data: session } = useSession();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [data, setData] = useState<ResumeData>(DEFAULT_SAMPLE_RESUME);
   const [activeTab, setActiveTab] = useState<
     "personal" | "summary" | "experience" | "education" | "skills" | "projects"
@@ -175,6 +181,11 @@ export default function BuilderPage() {
   };
 
   const handlePrint = () => {
+    // Gate Aksi: Wajib login saat hendak cetak/export dokumen
+    if (!session?.user) {
+      setShowAuthModal(true);
+      return;
+    }
     window.print();
   };
 
@@ -324,6 +335,33 @@ export default function BuilderPage() {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-2">
+            {/* User Account Status Indicator */}
+            {session?.user ? (
+              <div className="hidden sm:flex items-center gap-2 bg-white/10 px-2.5 py-1 border border-white/30 text-xs font-mono text-white">
+                <UserCheck className="w-3.5 h-3.5 text-[#FFF000]" />
+                <span className="font-bold truncate max-w-[120px]">
+                  {session.user.name || session.user.email}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="text-white/60 hover:text-red-400 ml-1"
+                  title="Keluar"
+                >
+                  <LogOut className="w-3 h-3" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setShowAuthModal(true)}
+                className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white border border-white/30 text-xs font-mono transition-colors"
+              >
+                <span>[ GUEST ]</span>
+                <span className="text-[#FFF000] underline font-bold">MASUK</span>
+              </button>
+            )}
+
             <button
               type="button"
               onClick={handleLoadSample}
@@ -1114,6 +1152,16 @@ export default function BuilderPage() {
           </div>
         </div>
       </main>
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setTimeout(() => {
+            window.print();
+          }, 400);
+        }}
+      />
 
       <Footer />
     </div>
