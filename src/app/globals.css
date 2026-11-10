@@ -149,33 +149,11 @@ body {
     padding: 0 !important;
     color: #000000 !important;
     background: #ffffff !important;
-    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
-    font-size: 10pt !important;
-    line-height: 1.35 !important;
-  }
-
-  .cv-document h1 {
-    font-size: 16pt !important;
-    margin-bottom: 2pt !important;
-    font-weight: bold !important;
-    color: #000000 !important;
   }
 
   .cv-document h2 {
-    font-size: 10.5pt !important;
-    border-bottom: 1pt solid #000000 !important;
-    margin-top: 8pt !important;
-    margin-bottom: 3pt !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5pt !important;
-    font-weight: bold !important;
     break-after: avoid !important;
     page-break-after: avoid !important;
-  }
-
-  .cv-document ul {
-    margin-left: 14pt !important;
-    list-style-type: disc !important;
   }
 
   .cv-document li {
