@@ -8,7 +8,7 @@ export function Footer() {
       {/* Marquee Banner */}
       <div className="bg-[#FFF000] text-black py-2 overflow-hidden border-b-2 border-black font-mono font-black text-xs uppercase tracking-widest flex items-center whitespace-nowrap select-none">
         <div className="flex gap-8 animate-marquee">
-          <span>ROSTERBAG ATS SCANNER</span>
+          <span>DRAFT CV ATS SCANNER</span>
           <BrutalistStar className="w-3 h-3 text-black" />
           <span>ZERO-BLOAT PDF BUILDER</span>
           <BrutalistStar className="w-3 h-3 text-black" />
@@ -27,7 +27,7 @@ export function Footer() {
         <div className="md:col-span-2 space-y-4">
           <div className="flex items-center gap-2">
             <span className="font-black text-3xl tracking-tighter uppercase text-[#FFF000]">
-              ROSTERBAG
+              DRAFT CV
             </span>
             <BrutalistStar className="w-5 h-5 text-[#FFF000]" />
           </div>
@@ -87,7 +87,7 @@ export function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-white/60 gap-2">
-        <div>© {SITE_CONFIG.year} ROSTERBAG. ALL RIGHTS RESERVED.</div>
+        <div>© {SITE_CONFIG.year} DRAFT CV. ALL RIGHTS RESERVED.</div>
         <div className="flex items-center gap-4">
           <span>ZERO HARDCODED SECRETS</span>
           <span>•</span>

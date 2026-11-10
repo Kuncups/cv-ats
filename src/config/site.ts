@@ -1,10 +1,10 @@
 export const SITE_CONFIG = {
-  name: "ROSTER // ATS",
-  shortName: "ROSTER",
-  tagline: "NEXT-GEN ATS RESUME SCANNER & BUILDER",
+  name: "Draft CV",
+  shortName: "Draft CV",
+  tagline: "ATS RESUME SCANNER & BUILDER",
   description:
     "Scan match score CV vs lowongan kerja via AI. Bangun resume standar ATS 1-kolom 100% terbaca sistem HRD.",
-  url: "https://roster-ats.pages.dev",
+  url: "https://draftcv.pages.dev",
   version: "2024.11.0",
   year: "2024 -> 2026",
   security: {

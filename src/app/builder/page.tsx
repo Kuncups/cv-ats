@@ -122,7 +122,7 @@ const DEFAULT_SAMPLE_RESUME: ResumeData = {
   projects: [
     {
       id: "proj-1",
-      name: "Rosterbag ATS Scanner",
+      name: "Draft CV ATS Scanner",
       techStack: "Next.js, TypeScript, Cloudflare Workers, unpdf",
       link: "https://github.com/myusuf/cv-ats",
       description: "Platform audit skor ATS dan builder CV standar industri dengan pemrosesan dokumen in-memory tanpa pihak ketiga.",

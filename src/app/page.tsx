@@ -110,7 +110,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* COMPARISON: CANVA SLOP VS ROSTERBAG ATS */}
+        {/* COMPARISON: CANVA SLOP VS DRAFT CV ATS */}
         <section id="standard" className="border-b-4 border-black py-16 px-4 sm:px-6 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="mb-12">
@@ -162,13 +162,13 @@ export default function HomePage() {
                 </ul>
               </div>
 
-              {/* The Good: Rosterbag ATS Standard */}
+              {/* The Good: Draft CV ATS Standard */}
               <div className="p-6 sm:p-8 bg-[#FFF000]/15 border-3 border-black shadow-[6px_6px_0px_#000] space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-6 h-6 text-green-700" />
                     <span className="font-mono font-bold text-sm uppercase text-black">
-                      ROSTERBAG ATS STANDARD
+                      DRAFT CV ATS STANDARD
                     </span>
                   </div>
                   <span className="text-[10px] font-mono bg-[#FFF000] text-black px-2 py-0.5 font-bold uppercase border border-black">

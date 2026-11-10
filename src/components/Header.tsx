@@ -22,12 +22,12 @@ export function Header() {
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-10 h-10 bg-black text-[#FFF000] flex items-center justify-center font-black text-xl border-2 border-black shadow-[3px_3px_0px_#000] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
-            [R]
+            [D]
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span className="font-black text-2xl tracking-tighter uppercase text-black leading-none">
-                Rosterbag
+                Draft CV
               </span>
               <BrutalistStar className="w-4 h-4 text-black" />
             </div>
