@@ -313,120 +313,61 @@ export default function BuilderPage() {
     }
   };
 
-  const handleExportJson = () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `resume-${data.personal.fullName.toLowerCase().replace(/\s+/g, "-") || "draft"}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
   const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
-    const isJson = file.name.toLowerCase().endsWith(".json") || file.type === "application/json";
-
-    if (!isPdf && !isJson) {
-      alert("Format tidak didukung. Silakan pilih file PDF (.pdf) atau file cadangan JSON (.json).");
+    if (!isPdf) {
+      alert("Hanya format dokumen PDF (.pdf) yang diperbolehkan.");
       e.target.value = "";
       return;
     }
 
-    if (isPdf) {
-      setIsImporting(true);
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
+    setIsImporting(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
 
-        const res = await fetch("/api/parse-resume", {
-          method: "POST",
-          body: formData,
-        });
+      const res = await fetch("/api/parse-resume", {
+        method: "POST",
+        body: formData,
+      });
 
-        const json = (await res.json()) as {
-          error?: string;
-          data?: Partial<ResumeData>;
+      const json = (await res.json()) as {
+        error?: string;
+        data?: Partial<ResumeData>;
+      };
+      if (!res.ok) {
+        throw new Error(json.error || "Gagal memproses file PDF.");
+      }
+
+      if (json.data) {
+        const parsed = json.data;
+        const merged: ResumeData = {
+          personal: { ...DEFAULT_SAMPLE_RESUME.personal, ...(parsed.personal || {}) },
+          summary: parsed.summary || "",
+          experience:
+            Array.isArray(parsed.experience) && parsed.experience.length > 0
+              ? parsed.experience
+              : DEFAULT_SAMPLE_RESUME.experience,
+          education:
+            Array.isArray(parsed.education) && parsed.education.length > 0
+              ? parsed.education
+              : DEFAULT_SAMPLE_RESUME.education,
+          skills: { ...DEFAULT_SAMPLE_RESUME.skills, ...(parsed.skills || {}) },
+          projects: Array.isArray(parsed.projects) ? parsed.projects : [],
         };
-        if (!res.ok) {
-          throw new Error(json.error || "Gagal memproses file PDF.");
-        }
-
-        if (json.data) {
-          const parsed = json.data;
-          const merged: ResumeData = {
-            personal: { ...DEFAULT_SAMPLE_RESUME.personal, ...(parsed.personal || {}) },
-            summary: parsed.summary || "",
-            experience:
-              Array.isArray(parsed.experience) && parsed.experience.length > 0
-                ? parsed.experience
-                : DEFAULT_SAMPLE_RESUME.experience,
-            education:
-              Array.isArray(parsed.education) && parsed.education.length > 0
-                ? parsed.education
-                : DEFAULT_SAMPLE_RESUME.education,
-            skills: { ...DEFAULT_SAMPLE_RESUME.skills, ...(parsed.skills || {}) },
-            projects: Array.isArray(parsed.projects) ? parsed.projects : [],
-          };
-          updateData(merged);
-          setCloudSaveStatus("PDF Berhasil Dimuat!");
-          setTimeout(() => setCloudSaveStatus(null), 3500);
-        }
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "Terjadi kesalahan saat membaca file PDF.");
-      } finally {
-        setIsImporting(false);
-        e.target.value = "";
+        updateData(merged);
+        setCloudSaveStatus("PDF Berhasil Dimuat!");
+        setTimeout(() => setCloudSaveStatus(null), 3500);
       }
-      return;
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Terjadi kesalahan saat membaca file PDF.");
+    } finally {
+      setIsImporting(false);
+      e.target.value = "";
     }
-
-    // JSON Handler
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const text = event.target?.result as string;
-        const parsed = JSON.parse(text);
-        if (parsed && typeof parsed === "object") {
-          const merged: ResumeData = {
-            personal: {
-              fullName: parsed.personal?.fullName ?? "",
-              jobTitle: parsed.personal?.jobTitle ?? "",
-              email: parsed.personal?.email ?? "",
-              phone: parsed.personal?.phone ?? "",
-              location: parsed.personal?.location ?? "",
-              linkedin: parsed.personal?.linkedin ?? "",
-              github: parsed.personal?.github ?? "",
-              website: parsed.personal?.website ?? "",
-            },
-            summary: parsed.summary ?? "",
-            experience: Array.isArray(parsed.experience) ? parsed.experience : [],
-            education: Array.isArray(parsed.education) ? parsed.education : [],
-            skills: {
-              technical: parsed.skills?.technical ?? "",
-              tools: parsed.skills?.tools ?? "",
-              soft: parsed.skills?.soft ?? "",
-            },
-            projects: Array.isArray(parsed.projects) ? parsed.projects : [],
-          };
-          updateData(merged);
-          setCloudSaveStatus("File dimuat!");
-          setTimeout(() => setCloudSaveStatus(null), 3000);
-        } else {
-          alert("Format file tidak sesuai dengan data resume.");
-        }
-      } catch (err) {
-        alert("Gagal membaca file JSON. Pastikan file valid.");
-      } finally {
-        e.target.value = "";
-      }
-    };
-    reader.readAsText(file);
   };
 
   // Experience handlers
@@ -599,20 +540,11 @@ export default function BuilderPage() {
               <span>ISI CONTOH CV</span>
             </button>
 
-            <button
-              type="button"
-              onClick={handleExportJson}
-              className="px-3 py-1.5 bg-black text-[#FFF000] font-mono text-xs font-bold border border-[#FFF000] hover:bg-[#FFF000] hover:text-black transition-colors flex items-center gap-1.5"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>SIMPAN KE FILE</span>
-            </button>
-
-            {/* Hidden Input & Button for Reliable Import (PDF & JSON) */}
+            {/* Hidden Input & Button for PDF Import */}
             <input
               ref={fileInputRef}
               type="file"
-              accept=".pdf,.json,application/pdf,application/json"
+              accept=".pdf,application/pdf"
               className="hidden"
               onChange={handleImportFile}
             />
@@ -623,7 +555,7 @@ export default function BuilderPage() {
               className="px-3 py-1.5 bg-black text-white font-mono text-xs font-bold border border-white/50 hover:bg-white hover:text-black transition-colors flex items-center gap-1.5"
             >
               <Upload className="w-3.5 h-3.5" />
-              <span>{isImporting ? "MEMBACA PDF..." : "BUKA DARI FILE (PDF/JSON)"}</span>
+              <span>{isImporting ? "MEMBACA PDF..." : "BUKA CV PDF"}</span>
             </button>
 
             <button
