@@ -65,14 +65,14 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         {/* Modal Header */}
         <div className="space-y-2 mb-6">
           <div className="flex items-center gap-2">
-            <Pill variant="black">AUTH GATEWAY</Pill>
+            <Pill variant="black">AKSES RESUME</Pill>
             <BrutalistStar className="w-4 h-4 text-black" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-tight">
-            Masuk untuk Mengekspor CV
+            Simpan & Unduh CV Anda
           </h2>
           <p className="font-mono text-xs text-black/80 leading-relaxed">
-            Draft CV Anda <strong>sudah tersimpan aman di browser</strong>. Masuk dengan akun gratis untuk mengunduh PDF atau menyimpan ke cloud.
+            Semua data yang Anda ketik <strong>sudah tersimpan aman di browser Anda</strong>. Cukup masukkan email Anda untuk langsung mengunduh file PDF standar ATS ini secara gratis.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         <form onSubmit={handleInstantSignIn} className="space-y-3 bg-white p-4 border-3 border-black shadow-[4px_4px_0px_#000]">
           <div className="flex items-center justify-between pb-2 border-b border-black">
             <span className="font-mono font-bold text-xs uppercase tracking-wider text-black">
-              [ AKUN INSTAN GRATIS ]
+              [ MASUK CEPAT GRATIS ]
             </span>
             <span className="text-[10px] font-mono bg-[#FFF000] px-1.5 py-0.5 border border-black font-bold">
               1-KLIK
@@ -89,7 +89,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
 
           <div>
             <label className="block text-xs font-mono font-bold uppercase mb-1">
-              Email Anda
+              Alamat Email Anda
             </label>
             <input
               type="email"
@@ -126,10 +126,10 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             className="w-full brutal-btn bg-black text-[#FFF000] font-black py-2.5 text-xs font-mono uppercase flex items-center justify-center gap-2 mt-2"
           >
             {loading ? (
-              <span>MEMVERIFIKASI...</span>
+              <span>MEMPROSES...</span>
             ) : (
               <>
-                <span>MASUK & LANJUT CETAK PDF</span>
+                <span>MASUK & UNDUH PDF</span>
                 <DoubleArrow className="w-5 h-3" />
               </>
             )}
@@ -140,9 +140,9 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         <div className="mt-4 pt-3 border-t-2 border-black/20 flex items-center justify-between text-[11px] font-mono text-black/70">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-green-700" />
-            <span>Nol SPAM • Data Enkripsi</span>
+            <span>Tanpa Password • Tanpa Spam</span>
           </div>
-          <span>Draft tidak akan hilang</span>
+          <span>Draft Anda tetap aman</span>
         </div>
       </div>
     </div>

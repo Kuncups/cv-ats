@@ -1,9 +1,9 @@
 export const SITE_CONFIG = {
   name: "Draft CV",
   shortName: "Draft CV",
-  tagline: "ATS RESUME SCANNER & BUILDER",
+  tagline: "Cek Skor ATS & Buat CV Standar HRD",
   description:
-    "Scan match score CV vs lowongan kerja via AI. Bangun resume standar ATS 1-kolom 100% terbaca sistem HRD.",
+    "Cek kecocokan CV Anda dengan lowongan kerja impian. Buat resume rapi standar ATS 1-kolom yang mudah dibaca recruiter secara gratis.",
   url: "https://draftcv.pages.dev",
   version: "2024.11.0",
   year: "2024 -> 2026",
@@ -20,10 +20,10 @@ export const SITE_CONFIG = {
     pureWhite: "#FFFFFF",
   },
   navigation: [
-    { label: "SCANNER", href: "/analyzer" },
-    { label: "BUILDER", href: "/builder" },
-    { label: "STANDAR ATS", href: "/#standard" },
-    { label: "FAQ", href: "/#faq" },
+    { label: "CEK SKOR CV", href: "/analyzer" },
+    { label: "BUAT CV BARU", href: "/builder" },
+    { label: "PANDUAN ATS", href: "/#standard" },
+    { label: "TANYA JAWAB", href: "/#faq" },
   ],
   sampleJobs: [
     {

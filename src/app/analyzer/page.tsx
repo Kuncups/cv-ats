@@ -116,15 +116,15 @@ export default function AnalyzerPage() {
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <Pill variant="black">ATS SCANNER ENGINE</Pill>
-            <Pill variant="white">REALTIME PARSER</Pill>
-            <Pill variant="yellow">CLOUDFLARE EDGE</Pill>
+            <Pill variant="black">CEK SKOR CV</Pill>
+            <Pill variant="white">ANALISIS KATA KUNCI</Pill>
+            <Pill variant="yellow">STANDAR ATS RESMI</Pill>
           </div>
-          <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight leading-none mb-2">
-            Audit Skor ATS & Keyword Match
+          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-tight mb-2">
+            Cek Skor & Kesesuaian Kata Kunci CV Anda
           </h1>
-          <p className="font-mono text-sm sm:text-base text-black/80 max-w-2xl">
-            Sistem memindai struktur teks digital, heading baku, metrik pencapaian, dan mencocokkan kata kunci resume Anda dengan kriteria lowongan kerja sasaran.
+          <p className="font-mono text-sm sm:text-base text-black/80 max-w-2xl leading-relaxed">
+            Ketahui seberapa cocok CV Anda dengan lowongan yang dituju, temukan keahlian penting yang belum Anda cantumkan, dan dapatkan saran perbaikan praktis agar lebih berpeluang lolos screening HRD.
           </p>
         </div>
 
@@ -135,10 +135,10 @@ export default function AnalyzerPage() {
             <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6 flex-1 flex flex-col">
               <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-black">
                 <span className="font-mono font-bold text-xs uppercase tracking-wider">
-                  [ STEP 01: UNGGAH PDF CV ]
+                  [ LANGKAH 1: UNGGAH FILE PDF CV ]
                 </span>
                 <span className="text-[10px] font-mono bg-[#FFF000] px-2 py-0.5 border border-black font-bold">
-                  MAX 2MB
+                  MAKS. 2MB
                 </span>
               </div>
 
@@ -167,7 +167,7 @@ export default function AnalyzerPage() {
                       {file.name}
                     </span>
                     <span className="text-xs font-mono text-black/60">
-                      {(file.size / 1024).toFixed(1)} KB • Klik untuk ganti
+                      {(file.size / 1024).toFixed(1)} KB • Klik untuk mengganti file
                     </span>
                   </div>
                 ) : (
@@ -176,10 +176,10 @@ export default function AnalyzerPage() {
                       <UploadCloud className="w-6 h-6" />
                     </div>
                     <span className="font-bold text-sm uppercase">
-                      Tarik & Letakkan File PDF di Sini
+                      Tarik & Lepas File PDF CV ke Sini
                     </span>
                     <span className="text-xs font-mono text-black/60">
-                      atau klik untuk menjelajah file dari perangkat
+                      atau klik untuk memilih file dari komputer / HP Anda
                     </span>
                   </div>
                 )}
@@ -187,7 +187,7 @@ export default function AnalyzerPage() {
 
               <div className="mt-4 pt-3 border-t-2 border-black/10 flex items-center gap-2 text-xs font-mono text-black/60">
                 <Info className="w-4 h-4 shrink-0" />
-                <span>Format harus PDF asli (bukan gambar scan/foto kamera).</span>
+                <span>Format harus PDF asli (bukan hasil foto kamera atau scan gambar).</span>
               </div>
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function AnalyzerPage() {
             <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6 flex-1 flex flex-col">
               <div className="flex items-center justify-between pb-3 mb-3 border-b-2 border-black">
                 <span className="font-mono font-bold text-xs uppercase tracking-wider">
-                  [ STEP 02: TARGET LOWONGAN KERJA ]
+                  [ LANGKAH 2: LOWONGAN KERJA SASARAN ]
                 </span>
                 <span className="text-[10px] font-mono text-black/60">
                   {jobDescription.length} karakter
@@ -207,7 +207,7 @@ export default function AnalyzerPage() {
               {/* Sample Preset Buttons */}
               <div className="flex flex-wrap items-center gap-1.5 mb-3">
                 <span className="text-[11px] font-mono font-bold text-black/70 mr-1">
-                  CONTOH LOKER:
+                  PILIH CONTOH LOKER:
                 </span>
                 {SITE_CONFIG.sampleJobs.map((sample, idx) => (
                   <button
@@ -224,7 +224,7 @@ export default function AnalyzerPage() {
               <textarea
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
-                placeholder="Tempel teks deskripsi pekerjaan (Job Description / Requirements) di sini..."
+                placeholder="Salin dan tempel deskripsi kualifikasi pekerjaan (Job Description / Requirements) yang ingin Anda lamar di sini..."
                 rows={7}
                 className="w-full flex-1 p-3 font-mono text-xs sm:text-sm border-2 border-black bg-[#FFF000]/5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black resize-y"
               />
@@ -251,11 +251,11 @@ export default function AnalyzerPage() {
                   {isAnalyzing ? (
                     <>
                       <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span>MEMINDAI DOKUMEN...</span>
+                      <span>SEDANG MEMINDAI DOKUMEN...</span>
                     </>
                   ) : (
                     <>
-                      <span>MULAI AUDIT ATS</span>
+                      <span>ANALISIS KECOCOKAN CV SEKARANG</span>
                       <DoubleArrow className="w-5 h-3" />
                     </>
                   )}
@@ -273,30 +273,30 @@ export default function AnalyzerPage() {
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b-2 border-white/20">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono text-xs uppercase tracking-widest text-white/60">
-                      STATUS HASIL PEMINDAIAN
+                    <span className="font-mono text-xs uppercase tracking-wider text-white/60">
+                      HASIL PEMINDAIAN
                     </span>
                     <BrutalistStar className="w-4 h-4 text-[#FFF000]" />
                   </div>
-                  <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
+                  <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight">
                     {result.summary}
                   </h2>
                 </div>
 
                 {/* Score Number Display */}
                 <div className="bg-[#FFF000] text-black border-3 border-black shadow-[4px_4px_0px_#fff] p-4 text-center shrink-0 min-w-[160px]">
-                  <span className="block font-mono text-[10px] font-bold uppercase tracking-widest">
-                    SKOR ATS TOTAL
+                  <span className="block font-mono text-[10px] font-bold uppercase tracking-wider">
+                    SKOR KECOCOKAN
                   </span>
                   <span className="text-5xl sm:text-6xl font-black font-mono tracking-tighter">
                     {result.overallScore}%
                   </span>
                   <span className="block text-[11px] font-bold uppercase mt-1">
                     {result.overallScore >= 80
-                      ? "SIAP SCREENING"
+                      ? "SANGAT SIAP SCREENING"
                       : result.overallScore >= 60
-                      ? "PERLU OPTIMASI"
-                      : "RISIKO TINGGI"}
+                      ? "CUKUP BAIK (BISA DIOPTIMALKAN)"
+                      : "PERLU DISESUAIKAN"}
                   </span>
                 </div>
               </div>
@@ -304,25 +304,25 @@ export default function AnalyzerPage() {
               {/* Breakdown Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
                 <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">KEYWORD MATCH</span>
+                  <span className="block text-xs font-mono text-white/60">KATA KUNCI LOKER</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
                     {result.matchScore}%
                   </span>
                 </div>
                 <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">FORMAT & STRUKTUR</span>
+                  <span className="block text-xs font-mono text-white/60">STRUKTUR & TATA LETAK</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
                     {result.formattingScore}%
                   </span>
                 </div>
                 <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">ACTION VERBS & METRIK</span>
+                  <span className="block text-xs font-mono text-white/60">TINDAKAN & PENCAPAIAN</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
                     {result.contentScore}%
                   </span>
                 </div>
                 <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">DATA KONTAK</span>
+                  <span className="block text-xs font-mono text-white/60">KELENGKAPAN KONTAK</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
                     {result.contactScore}%
                   </span>
@@ -338,7 +338,7 @@ export default function AnalyzerPage() {
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-green-600" />
                     <h3 className="font-mono font-bold text-sm uppercase">
-                      Kata Kunci Ditemukan ({result.matchedKeywords.length})
+                      Keahlian yang Sudah Cocok ({result.matchedKeywords.length})
                     </h3>
                   </div>
                 </div>
@@ -355,7 +355,7 @@ export default function AnalyzerPage() {
                     ))
                   ) : (
                     <p className="text-xs font-mono text-black/60 italic">
-                      Tidak ada kata kunci lowongan spesifik yang cocok.
+                      Belum ada kata kunci utama dari lowongan yang terdeteksi di CV Anda.
                     </p>
                   )}
                 </div>
@@ -367,7 +367,7 @@ export default function AnalyzerPage() {
                   <div className="flex items-center gap-2">
                     <XCircle className="w-5 h-5 text-red-600" />
                     <h3 className="font-mono font-bold text-sm uppercase">
-                      Kata Kunci Belum Ada ({result.missingKeywords.length})
+                      Saran Kata Kunci Ditambahkan ({result.missingKeywords.length})
                     </h3>
                   </div>
                 </div>
@@ -384,7 +384,7 @@ export default function AnalyzerPage() {
                     ))
                   ) : (
                     <p className="text-xs font-mono text-black/60 italic">
-                      Semua kata kunci utama lowongan sudah tercakup di CV Anda!
+                      Hebat! Semua keahlian utama lowongan sudah tercakup di CV Anda.
                     </p>
                   )}
                 </div>
@@ -395,10 +395,10 @@ export default function AnalyzerPage() {
             <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6">
               <div className="pb-3 mb-4 border-b-2 border-black flex items-center justify-between">
                 <h3 className="font-mono font-bold text-sm uppercase">
-                  Daftar Periksa Kelayakan ATS (Format & Struktur)
+                  Daftar Periksa Kelayakan Format CV
                 </h3>
                 <span className="text-xs font-mono text-black/60">
-                  {result.checks.filter((c) => c.status === "pass").length} / {result.checks.length} Lolos
+                  {result.checks.filter((c) => c.status === "pass").length} dari {result.checks.length} Kriteria Terpenuhi
                 </span>
               </div>
 
@@ -429,7 +429,7 @@ export default function AnalyzerPage() {
                               : "bg-red-300 text-black"
                           }`}
                         >
-                          {chk.status}
+                          {chk.status === "pass" ? "Lolos" : chk.status === "warn" ? "Perhatian" : "Perbaiki"}
                         </span>
                       </div>
                       <p className="text-xs font-mono text-black/75">{chk.detail}</p>
@@ -444,7 +444,7 @@ export default function AnalyzerPage() {
               <div className="pb-3 mb-4 border-b-2 border-black flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-black" />
                 <h3 className="font-mono font-bold text-sm uppercase">
-                  Rekomendasi Revisi untuk Meningkatkan Skor
+                  Saran Praktis untuk Memperbaiki CV Anda
                 </h3>
               </div>
 
@@ -453,7 +453,7 @@ export default function AnalyzerPage() {
                   <div key={i} className="p-4 bg-black text-white border-2 border-black space-y-2">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-mono bg-[#FFF000] text-black px-2 py-0.5 font-bold uppercase">
-                        {rec.type}
+                        {rec.type === "keyword" ? "Kata Kunci" : rec.type === "impact" ? "Pencapaian" : "Format"}
                       </span>
                       <h4 className="font-bold text-sm uppercase text-[#FFF000]">
                         {rec.title}
@@ -474,13 +474,13 @@ export default function AnalyzerPage() {
               {/* Next Step CTA */}
               <div className="mt-6 pt-4 border-t-2 border-black flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-xs font-mono text-black/70">
-                  Ingin format yang pasti 100% lulus dan bebas risiko kolom terpotong?
+                  Ingin format yang pasti 100% rapi dan lolos pembacaan sistem rekruter?
                 </div>
                 <Link
                   href="/builder"
                   className="brutal-btn bg-[#FFF000] text-black font-black px-6 py-2.5 text-xs font-mono uppercase inline-flex items-center gap-2"
                 >
-                  <span>BUAT ULANG DI RESUME BUILDER</span>
+                  <span>SUSUN CV DI RESUME BUILDER</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

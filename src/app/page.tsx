@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, DoubleArrow, Pill } from "@/components/BrutalistBadge";
-import { SITE_CONFIG } from "@/config/site";
 import {
   FileSearch,
   PenTool,
@@ -31,30 +30,30 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto">
             {/* Pill Badges Row */}
             <div className="flex flex-wrap items-center gap-2 mb-6">
-              <Pill variant="black">NEW STYLE</Pill>
-              <Pill variant="white">TRENDS 2026</Pill>
-              <Pill variant="yellow">UNIVERSAL CONCEPT</Pill>
-              <Pill variant="white">GENERATION ATS</Pill>
+              <Pill variant="black">BARU & GRATIS</Pill>
+              <Pill variant="white">TREN REKRUTMEN 2026</Pill>
+              <Pill variant="yellow">RAMAH PEMULA</Pill>
+              <Pill variant="white">STANDAR RESMI ATS</Pill>
             </div>
 
             {/* Main Headline */}
-            <div className="space-y-2 mb-8">
+            <div className="space-y-3 mb-8">
               <div className="flex items-center gap-4">
-                <span className="font-mono text-xl sm:text-3xl font-black bg-black text-[#FFF000] px-3 py-1 border-2 border-black">
-                  20 ⇒ 26
+                <span className="font-mono text-xl sm:text-2xl font-black bg-black text-[#FFF000] px-3 py-1 border-2 border-black">
+                  DRAFT CV
                 </span>
                 <DoubleArrow className="w-12 h-6 text-black hidden sm:block" />
-                <span className="font-mono text-sm sm:text-base font-bold uppercase tracking-widest text-black/80">
-                  STANDARD SCREENING PROTOCOL
+                <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-black/80">
+                  PANDUAN LULUS SCREENING RECRUITER
                 </span>
               </div>
 
-              <h1 className="text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9] text-black">
-                Lolos Screening HRD Tanpa Slop.
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-[1.0] text-black">
+                Bikin CV yang Benar-Benar Dibaca Recruiter.
               </h1>
 
-              <p className="font-mono text-base sm:text-xl text-black/85 max-w-3xl pt-4 leading-relaxed">
-                75% CV ditolak sebelum dibaca manusia karena template multi-kolom yang membingungkan parser ATS. Audit skor kecocokan kata kunci dan bangun resume 1-kolom baku dalam hitungan menit.
+              <p className="font-mono text-base sm:text-lg text-black/85 max-w-3xl pt-2 leading-relaxed">
+                Banyak pelamar bertalenta gugur di tahap awal hanya karena template CV yang berantakan saat dibaca oleh sistem ATS perusahaan. Cek kecocokan kata kunci CV Anda dengan loker impian, atau susun CV rapi 1-kolom dalam 5 menit.
               </p>
             </div>
 
@@ -64,14 +63,14 @@ export default function HomePage() {
                 href="/analyzer"
                 className="brutal-btn bg-black text-[#FFF000] font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-3"
               >
-                <span>SCAN MATCH SCORE CV (GRATIS)</span>
+                <span>CEK SKOR CV SAYA (GRATIS)</span>
                 <DoubleArrow className="w-6 h-3 text-[#FFF000]" />
               </Link>
               <Link
                 href="/builder"
                 className="brutal-btn bg-white text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-2"
               >
-                <span>BUAT RESUME STANDAR ATS</span>
+                <span>BUAT CV DENGAN BUILDER</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
@@ -80,63 +79,63 @@ export default function HomePage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-8 border-t-3 border-black">
               <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
                 <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
-                  COMPLIANCE
+                  FORMAT RESMI
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">100%</span>
-                <span className="block text-[11px] font-bold">Standard Single Column</span>
+                <span className="text-2xl sm:text-3xl font-black font-mono">1-KOLOM</span>
+                <span className="block text-[11px] font-bold">Paling disukai HRD & mesin</span>
               </div>
               <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
                 <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
-                  LATENCY RUNTIME
+                  WAKTU PROSES
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">&lt; 80ms</span>
-                <span className="block text-[11px] font-bold">Cloudflare Edge V8</span>
+                <span className="text-2xl sm:text-3xl font-black font-mono">INSTAN</span>
+                <span className="block text-[11px] font-bold">Analisis dalam hitungan detik</span>
               </div>
               <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
                 <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
-                  PRIVACY PROTOCOL
+                  KEAMANAN DATA
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">ZERO</span>
-                <span className="block text-[11px] font-bold">In-Memory PDF Drop</span>
+                <span className="text-2xl sm:text-3xl font-black font-mono">100% AMAN</span>
+                <span className="block text-[11px] font-bold">Dokumen Anda tidak disimpan</span>
               </div>
               <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
                 <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
-                  SERVER OVERHEAD
+                  BIAYA
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">$0.00</span>
-                <span className="block text-[11px] font-bold">Native Vector Print</span>
+                <span className="text-2xl sm:text-3xl font-black font-mono">GRATIS</span>
+                <span className="block text-[11px] font-bold">Tanpa watermark & biaya</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* COMPARISON: CANVA SLOP VS DRAFT CV ATS */}
+        {/* COMPARISON: GRAPHIC TEMPLATE VS STANDARD ATS */}
         <section id="standard" className="border-b-4 border-black py-16 px-4 sm:px-6 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="mb-12">
               <Pill variant="yellow" className="mb-2">
-                CRITICAL WARNING
+                PENTING UNTUK DIKETAHUI
               </Pill>
-              <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tight">
-                Kenapa Template Grafis Menghancurkan Karir Anda?
+              <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
+                Kenapa Template Grafis Sering Gagal Lolos Screening?
               </h2>
               <p className="font-mono text-sm sm:text-base text-zinc-700 max-w-2xl mt-2">
-                Applicant Tracking System (Workday, Taleo, Greenhouse, Lever) adalah bot parser teks, bukan desainer grafis.
+                Sistem ATS (Applicant Tracking System) membaca CV sebagai teks polos berurutan dari kiri ke kanan. Desain grafis berkolom sering kali membuat tulisan Anda tercampur aduk.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* The Bad: Multi Column Graphic CV */}
+              {/* The Bad: Graphic Multi-column */}
               <div className="p-6 sm:p-8 bg-red-50 border-3 border-black shadow-[6px_6px_0px_#000] space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <XCircle className="w-6 h-6 text-red-600" />
                     <span className="font-mono font-bold text-sm uppercase text-red-900">
-                      CV KREATIF / MULTI-KOLOM
+                      CV GRAFIS / MULTI-KOLOM
                     </span>
                   </div>
                   <span className="text-[10px] font-mono bg-red-200 text-red-950 px-2 py-0.5 font-bold uppercase border border-red-400">
-                    RISIKO GUGUR 85%
+                    SERING BERMASALAH
                   </span>
                 </div>
 
@@ -144,35 +143,35 @@ export default function HomePage() {
                   <li className="flex items-start gap-2">
                     <span className="text-red-600 font-bold">×</span>
                     <span>
-                      <strong>Kolom Ganda:</strong> Parser ATS membaca horizontal dari kiri ke kanan. Teks kolom kiri dan kanan tercampur aduk jadi kalimat rusak.
+                      <strong>Kolom Ganda:</strong> Kalimat di kolom kiri dan kanan sering terbaca bersambungan secara keliru oleh sistem, merusak arti kalimat pengalaman kerja Anda.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-600 font-bold">×</span>
                     <span>
-                      <strong>Grafik Skill Bar (⭐⭐⭐⭐):</strong> Mesin tidak bisa membaca rating visual 4/5 bintang. Angka skill Anda diabaikan total.
+                      <strong>Grafik Skill Bar (⭐⭐⭐⭐):</strong> Mesin tidak bisa membaca gambar bintang atau bar persentase. Tuliskan nama keahlian langsung secara gamblang.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-600 font-bold">×</span>
                     <span>
-                      <strong>Ikon & Foto:</strong> Menambah ukuran file dan berisiko bias screening tanpa menambah skor relevansi kualifikasi.
+                      <strong>Foto & Ikon Hiasan:</strong> Membesarkan ukuran file tanpa memberikan poin nilai tambah pada penyaringan kualifikasi keahlian.
                     </span>
                   </li>
                 </ul>
               </div>
 
-              {/* The Good: Draft CV ATS Standard */}
+              {/* The Good: Draft CV Standard */}
               <div className="p-6 sm:p-8 bg-[#FFF000]/15 border-3 border-black shadow-[6px_6px_0px_#000] space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-6 h-6 text-green-700" />
                     <span className="font-mono font-bold text-sm uppercase text-black">
-                      DRAFT CV ATS STANDARD
+                      STANDAR RESMI DRAFT CV
                     </span>
                   </div>
                   <span className="text-[10px] font-mono bg-[#FFF000] text-black px-2 py-0.5 font-bold uppercase border border-black">
-                    100% TERBACA MESIN
+                    TERBUKTI EFEKTIF
                   </span>
                 </div>
 
@@ -180,19 +179,19 @@ export default function HomePage() {
                   <li className="flex items-start gap-2">
                     <span className="text-green-700 font-bold">✓</span>
                     <span>
-                      <strong>1-Kolom Linear:</strong> Urutan teks mengalir terstruktur. Riwayat kerja dibaca runtut dari posisi terkini.
+                      <strong>1-Kolom Rapi:</strong> Alur teks mengalir dari atas ke bawah. Riwayat kerja dan pendidikan dibaca secara runtut dan tepat.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-700 font-bold">✓</span>
                     <span>
-                      <strong>Heading Baku:</strong> Menggunakan label universal yang dicari sistem (EXPERIENCE, EDUCATION, SKILLS).
+                      <strong>Judul Bagian Baku:</strong> Memakai penamaan standar yang langsung dicari sistem recruiter (PENGALAMAN KERJA, PENDIDIKAN, KEAHLIAN).
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-700 font-bold">✓</span>
                     <span>
-                      <strong>High Vector Selectable:</strong> Ekspor langsung melalui browser render engine. Teks tajam, ukuran file ringan (&lt; 60KB).
+                      <strong>Format PDF Bersih:</strong> File ringan, teks tajam, dan 100% bisa di-copy paste oleh recruiter saat wawancara.
                     </span>
                   </li>
                 </ul>
@@ -201,16 +200,16 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* DUAL CORE FEATURES */}
+        {/* DUAL TOOLS SECTION */}
         <section className="border-b-4 border-black py-16 px-4 sm:px-6 bg-[#FFF000]">
           <div className="max-w-7xl mx-auto space-y-12">
             <div className="text-center max-w-3xl mx-auto space-y-3">
-              <Pill variant="black">DUAL PROTOCOL</Pill>
-              <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tight">
-                Dua Alat yang Anda Butuhkan
+              <Pill variant="black">FITUR UTAMA</Pill>
+              <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
+                Dua Solusi Lengkap untuk Melamar Kerja
               </h2>
               <p className="font-mono text-sm sm:text-base text-black/80">
-                Verifikasi resume yang sudah Anda punya, atau bangun resume baru dari awal tanpa kompromi.
+                Pilih apakah Anda ingin mengevaluasi CV yang sudah ada, atau menyusun CV baru dari awal dengan panduan lengkap.
               </p>
             </div>
 
@@ -222,16 +221,16 @@ export default function HomePage() {
                     <FileSearch className="w-6 h-6" />
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">
-                    01. ATS Match Analyzer
+                    01. Cek Skor & Kata Kunci CV
                   </h3>
                   <p className="font-mono text-xs sm:text-sm text-zinc-700 leading-relaxed">
-                    Unggah PDF CV dan tempel deskripsi lowongan target. Algoritma kami mengekstrak teks via <code className="bg-zinc-200 px-1 font-bold">unpdf</code>, menghitung density kata kunci, mengecek data kontak, dan memberikan daftar keyword yang hilang.
+                    Unggah file PDF CV Anda dan masukkan teks lowongan yang ingin dilamar. Kami akan memindai kecocokan kata kunci, memeriksa kelengkapan kontak, dan memberi saran perbaikan konkret.
                   </p>
 
                   <div className="p-3 bg-[#FFF000]/20 border border-black font-mono text-xs space-y-1">
-                    <div className="font-bold uppercase">• Deteksi Dokumen Scan vs Teks Asli</div>
-                    <div className="font-bold uppercase">• Perhitungan Skor Match 0-100%</div>
-                    <div className="font-bold uppercase">• Rekomendasi Action Verbs & Angka</div>
+                    <div className="font-bold uppercase">• Skor kecocokan kata kunci (0-100%)</div>
+                    <div className="font-bold uppercase">• Daftar skill penting yang belum ada di CV</div>
+                    <div className="font-bold uppercase">• Saran penyempurnaan kalimat pencapaian</div>
                   </div>
                 </div>
 
@@ -240,7 +239,7 @@ export default function HomePage() {
                     href="/analyzer"
                     className="brutal-btn w-full bg-black text-[#FFF000] font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2"
                   >
-                    <span>COBA ATS ANALYZER</span>
+                    <span>CEK SKOR CV SAYA SEKARANG</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -253,16 +252,16 @@ export default function HomePage() {
                     <PenTool className="w-6 h-6" />
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">
-                    02. Standard Resume Builder
+                    02. Pembuat CV Standar ATS
                   </h3>
                   <p className="font-mono text-xs sm:text-sm text-zinc-700 leading-relaxed">
-                    Form input terarah dengan live preview instan. Ekspor langsung ke format PDF standar ATS menggunakan CSS Print browser murni. Nol server render, nol margin error, dan data tetap tersimpan aman di perangkat Anda.
+                    Isi formulir ringkas dengan panduan mudah, lihat pratinjau tampilan secara langsung, dan unduh hasil akhir sebagai PDF standar industri yang siap dikirim ke mana saja.
                   </p>
 
                   <div className="p-3 bg-[#FFF000]/20 border border-black font-mono text-xs space-y-1">
-                    <div className="font-bold uppercase">• Layout 1-Kolom Industri Standar</div>
-                    <div className="font-bold uppercase">• Simpan & Muat via JSON Lokal</div>
-                    <div className="font-bold uppercase">• Cetak Native Vector 100% Readable</div>
+                    <div className="font-bold uppercase">• Tata letak 1-kolom yang rapi dan elegan</div>
+                    <div className="font-bold uppercase">• Simpan draf otomatis di browser</div>
+                    <div className="font-bold uppercase">• Unduh PDF resmi tanpa watermark</div>
                   </div>
                 </div>
 
@@ -271,7 +270,7 @@ export default function HomePage() {
                     href="/builder"
                     className="brutal-btn w-full bg-[#FFF000] text-black font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2"
                   >
-                    <span>BUKA RESUME BUILDER</span>
+                    <span>MULAI BUAT CV SEKARANG</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -284,7 +283,7 @@ export default function HomePage() {
         <section id="faq" className="border-b-4 border-black py-16 px-4 sm:px-6 bg-white">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="text-center space-y-2">
-              <Pill variant="black">FAQ</Pill>
+              <Pill variant="black">TANYA JAWAB</Pill>
               <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
                 Pertanyaan yang Sering Diajukan
               </h2>
@@ -293,16 +292,20 @@ export default function HomePage() {
             <div className="space-y-4">
               {[
                 {
-                  q: "Mengapa template resume yang dihasilkan hanya hitam-putih 1-kolom?",
-                  a: "Karena parser ATS mengonversi dokumen menjadi teks mentah (plain text) tanpa peduli estetika warna. Layout 1-kolom hitam-putih menjamin teks dibaca secara sekuensial tanpa risiko kolom terpotong atau tercampur.",
+                  q: "Mengapa CV standar ATS disarankan memakai format 1-kolom bersih?",
+                  a: "Karena mesin pembaca CV (sistem ATS) mengubah dokumen menjadi teks mentah secara berurutan. Format 1-kolom menjamin tulisan dibaca runtut tanpa ada pengalaman kerja yang terpotong atau tercampur dengan kolom lain.",
                 },
                 {
-                  q: "Apakah data CV yang saya unggah disimpan di database?",
-                  a: "Tidak. Dokumen PDF Anda diproses secara in-memory di Edge isolate saat scanning berlangsung dan langsung dibuang setelah analisis selesai. Kami tidak mengarsipkan file CV Anda.",
+                  q: "Apakah data dan dokumen CV saya aman?",
+                  a: "Sangat aman. File CV Anda hanya dianalisis sementara di memori server dan langsung dihapus setelah hasil keluar. Kami tidak menyimpan atau menyebarkan dokumen Anda.",
                 },
                 {
-                  q: "Berapa biaya penggunaan platform ini?",
-                  a: "100% gratis untuk pemindaian dan pembuatan resume standar. Tidak ada biaya tersembunyi atau watermark pada file PDF yang di-export.",
+                  q: "Apakah layanan ini berbayar atau ada batasan download?",
+                  a: "Tidak, layanan ini 100% gratis. Anda bisa mengecek skor CV dan mengunduh hasil PDF tanpa batas dan tanpa watermark.",
+                },
+                {
+                  q: "Apakah draft CV saya bisa hilang jika tab browser tertutup?",
+                  a: "Tidak. Draft CV Anda otomatis tersimpan di browser perangkat Anda, sehingga Anda bisa melanjutkan pengisian kapan saja.",
                 },
               ].map((faq, idx) => (
                 <div
@@ -325,18 +328,18 @@ export default function HomePage() {
         <section className="py-16 px-4 sm:px-6 bg-black text-[#FFF000] text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <BrutalistStar className="w-12 h-12 mx-auto text-[#FFF000]" />
-            <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tight">
-              Siapkan CV Terbaik Anda Sekarang.
+            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
+              Siapkan CV Terbaik Anda Hari Ini.
             </h2>
             <p className="font-mono text-sm sm:text-base text-white/80 max-w-xl mx-auto">
-              Jangan biarkan kualifikasi Anda gugur hanya gara-gara tata letak file yang tidak kompatibel dengan mesin recruiter.
+              Tingkatkan peluang dipanggil wawancara kerja dengan dokumen yang rapi, profesional, dan mudah dipahami oleh tim rekruter.
             </p>
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/analyzer"
                 className="brutal-btn bg-[#FFF000] text-black font-black px-8 py-3.5 text-sm font-mono uppercase inline-flex items-center gap-2"
               >
-                <span>SCAN CV SEKARANG</span>
+                <span>CEK CV SAYA SEKARANG</span>
                 <DoubleArrow className="w-5 h-3 text-black" />
               </Link>
             </div>

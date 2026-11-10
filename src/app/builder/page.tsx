@@ -326,10 +326,10 @@ export default function BuilderPage() {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
-              [ BUILDER MODE ]
+              [ EDITOR RESUME ]
             </span>
             <Pill variant="yellow" className="text-[10px]">
-              ATS 1-KOLOM STANDAR
+              STANDAR RESMI ATS 1-KOLOM
             </Pill>
           </div>
 
@@ -357,7 +357,7 @@ export default function BuilderPage() {
                 onClick={() => setShowAuthModal(true)}
                 className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white border border-white/30 text-xs font-mono transition-colors"
               >
-                <span>[ GUEST ]</span>
+                <span>[ STATUS: TAMU ]</span>
                 <span className="text-[#FFF000] underline font-bold">MASUK</span>
               </button>
             )}
@@ -368,7 +368,7 @@ export default function BuilderPage() {
               className="px-3 py-1.5 bg-white text-black font-mono text-xs font-bold border border-white hover:bg-[#FFF000] transition-colors flex items-center gap-1.5"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>LOAD CONTOH</span>
+              <span>ISI CONTOH CV</span>
             </button>
 
             <button
@@ -377,12 +377,12 @@ export default function BuilderPage() {
               className="px-3 py-1.5 bg-black text-[#FFF000] font-mono text-xs font-bold border border-[#FFF000] hover:bg-[#FFF000] hover:text-black transition-colors flex items-center gap-1.5"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>SIMPAN JSON</span>
+              <span>SIMPAN KE FILE</span>
             </button>
 
             <label className="px-3 py-1.5 bg-black text-white font-mono text-xs font-bold border border-white/50 hover:bg-white hover:text-black transition-colors flex items-center gap-1.5 cursor-pointer">
               <Upload className="w-3.5 h-3.5" />
-              <span>LOAD JSON</span>
+              <span>BUKA DARI FILE</span>
               <input
                 type="file"
                 accept=".json"
@@ -395,7 +395,7 @@ export default function BuilderPage() {
               type="button"
               onClick={handleClear}
               className="px-2.5 py-1.5 text-white/60 hover:text-red-400 font-mono text-xs transition-colors"
-              title="Kosongkan form"
+              title="Kosongkan formulir"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -407,7 +407,7 @@ export default function BuilderPage() {
               className="brutal-btn bg-[#FFF000] text-black font-mono text-xs font-black px-5 py-2 uppercase flex items-center gap-2"
             >
               <Printer className="w-4 h-4" />
-              <span>CETAK / EXPORT PDF</span>
+              <span>UNDUH PDF CV</span>
             </button>
           </div>
         </div>
@@ -422,7 +422,7 @@ export default function BuilderPage() {
             mobileView === "editor" ? "bg-[#FFF000]" : "bg-white"
           }`}
         >
-          Form Editor
+          Formulir Editor
         </button>
         <button
           type="button"
@@ -431,7 +431,7 @@ export default function BuilderPage() {
             mobileView === "preview" ? "bg-[#FFF000]" : "bg-white"
           }`}
         >
-          Live Preview ATS
+          Pratinjau CV ATS
         </button>
       </div>
 
@@ -976,10 +976,10 @@ export default function BuilderPage() {
             {/* Preview Banner */}
             <div className="flex items-center justify-between bg-black text-[#FFF000] px-4 py-2 border-3 border-black no-print">
               <span className="font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                <span>[ LIVE PREVIEW // FORMAT RESUME STANDAR ATS ]</span>
+                <span>[ PRATINJAU DOKUMEN // FORMAT RESMI STANDAR ATS ]</span>
               </span>
               <span className="text-[10px] font-mono bg-white text-black px-2 py-0.5 font-bold">
-                1-KOLOM BAKU
+                SIAP CETAK A4
               </span>
             </div>
 

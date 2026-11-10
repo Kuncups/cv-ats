@@ -6,19 +6,19 @@ export function Footer() {
   return (
     <footer className="w-full bg-black text-[#FFF000] border-t-4 border-black no-print">
       {/* Marquee Banner */}
-      <div className="bg-[#FFF000] text-black py-2 overflow-hidden border-b-2 border-black font-mono font-black text-xs uppercase tracking-widest flex items-center whitespace-nowrap select-none">
+      <div className="bg-[#FFF000] text-black py-2 overflow-hidden border-b-2 border-black font-mono font-black text-xs uppercase tracking-wider flex items-center whitespace-nowrap select-none">
         <div className="flex gap-8 animate-marquee">
-          <span>DRAFT CV ATS SCANNER</span>
+          <span>DRAFT CV — CEK SKOR ATS & BUAT RESUME</span>
           <BrutalistStar className="w-3 h-3 text-black" />
-          <span>ZERO-BLOAT PDF BUILDER</span>
+          <span>FORMAT 1-KOLOM STANDAR RECRUITER</span>
           <BrutalistStar className="w-3 h-3 text-black" />
-          <span>100% MACHINE-READABLE</span>
+          <span>MUDAH DIBACA SISTEM HRD</span>
           <BrutalistStar className="w-3 h-3 text-black" />
-          <span>CLOUDFLARE EDGE V8 RUNTIME</span>
+          <span>GRATIS SELAMANYA</span>
           <BrutalistStar className="w-3 h-3 text-black" />
-          <span>PASS RECRUITER SCREENING</span>
+          <span>PRIVASI TERJAGA 100%</span>
           <BrutalistStar className="w-3 h-3 text-black" />
-          <span>NO MULTI-COLUMN CRASH</span>
+          <span>SIAP MELAMAR KERJA</span>
           <BrutalistStar className="w-3 h-3 text-black" />
         </div>
       </div>
@@ -32,66 +32,66 @@ export function Footer() {
             <BrutalistStar className="w-5 h-5 text-[#FFF000]" />
           </div>
           <p className="text-white/80 font-mono text-sm max-w-md leading-relaxed">
-            Platform minimalis untuk verifikasi kompatibilitas ATS (Applicant Tracking System) dan pembuatan CV standar industri. Tanpa template warna-warni yang bikin mesin HRD error.
+            Membantu pencari kerja dan profesional menyusun resume yang rapi, profesional, dan mudah dipindai oleh sistem ATS perusahaan besar.
           </p>
           <div className="flex items-center gap-2 text-xs font-mono text-white/50">
-            <span>PLATFORM: DARWIN</span>
+            <span>DIBUAT DENGAN NEXT.JS</span>
             <span>•</span>
-            <span>RUNTIME: EDGE WORKERS</span>
+            <span>CLOUDFLARE EDGE</span>
             <span>•</span>
-            <span>VER: {SITE_CONFIG.version}</span>
+            <span>GRATIS & TERBUKA</span>
           </div>
         </div>
 
         <div className="space-y-3 font-mono">
-          <h4 className="text-xs font-bold text-white uppercase tracking-widest border-b border-white/20 pb-1">
-            NAVIGASI CORE
+          <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-white/20 pb-1">
+            MENU UTAMA
           </h4>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/analyzer" className="hover:text-white transition-colors">
-                {"->"} ATS Analyzer
+                {"->"} Cek Skor & Kata Kunci CV
               </Link>
             </li>
             <li>
               <Link href="/builder" className="hover:text-white transition-colors">
-                {"->"} Resume Builder
+                {"->"} Buat CV Standar ATS
               </Link>
             </li>
             <li>
-              <Link href="/#sample" className="hover:text-white transition-colors">
-                {"->"} Contoh Loker & Standar
+              <Link href="/#standard" className="hover:text-white transition-colors">
+                {"->"} Panduan Format Standar
               </Link>
             </li>
             <li>
               <Link href="/#faq" className="hover:text-white transition-colors">
-                {"->"} Tanya Jawab (FAQ)
+                {"->"} Pertanyaan Umum (FAQ)
               </Link>
             </li>
           </ul>
         </div>
 
         <div className="space-y-3 font-mono">
-          <h4 className="text-xs font-bold text-white uppercase tracking-widest border-b border-white/20 pb-1">
-            PRIVASI & KEAMANAN
+          <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-white/20 pb-1">
+            KEAMANAN & PRIVASI
           </h4>
           <p className="text-xs text-white/70 leading-relaxed">
-            File PDF diproses in-memory saat scanning dan langsung di-drop. Tidak ada data CV yang dijual ke pihak ketiga.
+            Dokumen Anda hanya dianalisis saat scanning dan langsung dihapus dari memori. Data pribadi Anda tidak pernah dijual atau disebarkan.
           </p>
           <div className="pt-2">
             <span className="inline-block bg-[#FFF000] text-black font-bold text-[10px] px-2 py-0.5 border border-black uppercase">
-              100% PRIVATE IN-MEMORY
+              DATA ANDA 100% AMAN
             </span>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-white/60 gap-2">
-        <div>© {SITE_CONFIG.year} DRAFT CV. ALL RIGHTS RESERVED.</div>
+        <div>© {SITE_CONFIG.year} DRAFT CV. HAK CIPTA DILINDUNGI.</div>
         <div className="flex items-center gap-4">
-          <span>ZERO HARDCODED SECRETS</span>
+          <span>BEBAS IKLAN</span>
           <span>•</span>
-          <span>STRICT TYPE SAFE</span>
+          <span>RAMAH PEMULA</span>
         </div>
       </div>
     </footer>
