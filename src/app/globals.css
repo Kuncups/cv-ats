@@ -120,7 +120,8 @@ body {
     box-shadow: none !important;
   }
 
-  .cv-preview-container {
+  .cv-preview-container,
+  .cv-page {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
@@ -131,6 +132,13 @@ body {
     background: #ffffff !important;
     min-height: auto !important;
     overflow: visible !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  .cv-page:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
   }
 
   .cv-document {

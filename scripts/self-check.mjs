@@ -145,6 +145,33 @@ async function runSelfChecks() {
   assert.strictEqual(parsedResume.experience.length, 1);
   assert.strictEqual(parsedResume.experience[0].role, "Senior Developer");
 
+  // 7. Dynamic Resume Multi-Page Pagination Validation
+  const { paginateResume } = await import("../src/lib/resume-paginator.ts");
+  const singlePage = paginateResume(parsedResume);
+  assert.strictEqual(singlePage.length, 1, "Short CV must be 1 page");
+  assert.strictEqual(singlePage[0].pageNumber, 1);
+  assert.strictEqual(singlePage[0].hasHeader, true);
+
+  // Multi-page CV test
+  const heavyCv = {
+    ...parsedResume,
+    experience: [
+      { id: "e1", role: "R1", company: "C1", location: "", startDate: "2020", endDate: "2022", isCurrent: false, bullets: ["B1", "B2", "B3"] },
+      { id: "e2", role: "R2", company: "C2", location: "", startDate: "2018", endDate: "2020", isCurrent: false, bullets: ["B1", "B2"] },
+      { id: "e3", role: "R3", company: "C3", location: "", startDate: "2016", endDate: "2018", isCurrent: false, bullets: ["B1", "B2"] },
+      { id: "e4", role: "R4", company: "C4", location: "", startDate: "2014", endDate: "2016", isCurrent: false, bullets: ["B1", "B2"] },
+    ],
+    projects: [
+      { id: "p1", name: "P1", description: "D1", techStack: "", link: "" },
+      { id: "p2", name: "P2", description: "D2", techStack: "", link: "" },
+      { id: "p3", name: "P3", description: "D3", techStack: "", link: "" },
+    ],
+  };
+  const multiPage = paginateResume(heavyCv);
+  assert.ok(multiPage.length >= 2, "Long CV must be paginated into 2 or more sheets");
+  assert.strictEqual(multiPage[1].pageNumber, 2);
+  assert.strictEqual(multiPage[1].hasHeader, false, "Subsequent pages should use continuation header");
+
   console.log("✓ All self-checks passed successfully!");
 }
 

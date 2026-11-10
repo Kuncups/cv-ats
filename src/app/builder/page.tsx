@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import { AuthModal } from "@/components/AuthModal";
 import { generateResumePdfBlob } from "@/lib/pdf-generator";
+import { paginateResume } from "@/lib/resume-paginator";
 import {
   Sparkles,
   Download,
@@ -170,6 +171,7 @@ export default function BuilderPage() {
   >("personal");
   const [mobileView, setMobileView] = useState<"editor" | "preview">("editor");
   const [copiedNotification, setCopiedNotification] = useState(false);
+  const pages = paginateResume(data);
 
   // Load from localStorage on mount if available
   useEffect(() => {
@@ -1147,175 +1149,217 @@ export default function BuilderPage() {
                 <span>[ PRATINJAU DOKUMEN // FORMAT RESMI STANDAR ATS ]</span>
               </span>
               <span className="text-[10px] font-mono bg-white text-black px-2 py-0.5 font-bold">
-                SIAP CETAK A4
+                {pages.length === 1 ? "1 HALAMAN A4 (IDEAL)" : `${pages.length} HALAMAN A4`}
               </span>
             </div>
 
-            {/* Resume Document A4 Canvas */}
-            <div className="cv-preview-container bg-white border-3 border-black shadow-[8px_8px_0px_#000] p-8 sm:p-12 text-black font-sans leading-normal overflow-hidden min-h-[840px] print:border-none print:shadow-none print:p-0 print:overflow-visible print:min-h-0">
-              <div className="cv-document max-w-[720px] mx-auto text-black print:max-w-none print:w-full">
-                {/* Header Section */}
-                <div className="text-center pb-4 mb-4 border-b border-black">
-                  <h1 className="text-2xl font-bold tracking-tight uppercase mb-1">
-                    {data.personal.fullName || "NAMA LENGKAP"}
-                  </h1>
-                  {data.personal.jobTitle && (
-                    <div className="text-sm font-semibold text-zinc-700 uppercase tracking-wide mb-2">
-                      {data.personal.jobTitle}
+            {/* Paginated Resume Pages (Sheet 1, Sheet 2, etc.) */}
+            <div className="space-y-4">
+              {pages.map((page, pIdx) => (
+                <React.Fragment key={`page-${page.pageNumber}`}>
+                  {/* Visual Page Break Separator between pages */}
+                  {pIdx > 0 && (
+                    <div className="flex items-center justify-center gap-3 my-4 no-print select-none">
+                      <div className="h-[2px] bg-black/40 flex-1 border-b border-dashed border-black" />
+                      <span className="font-mono text-[11px] font-bold bg-[#FFF000] text-black px-3 py-1 border-2 border-black shadow-[2px_2px_0px_#000] uppercase tracking-wider flex items-center gap-1.5">
+                        <span>✂ BATAS HALAMAN {pIdx} // AWAL HALAMAN {page.pageNumber} ✂</span>
+                      </span>
+                      <div className="h-[2px] bg-black/40 flex-1 border-b border-dashed border-black" />
                     </div>
                   )}
-                  <div className="text-xs text-zinc-700 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-                    {data.personal.email && <span>{data.personal.email}</span>}
-                    {data.personal.phone && <span>• {data.personal.phone}</span>}
-                    {data.personal.location && <span>• {data.personal.location}</span>}
-                    {data.personal.linkedin && <span>• {data.personal.linkedin}</span>}
-                    {data.personal.github && <span>• {data.personal.github}</span>}
-                  </div>
-                </div>
 
-                {/* Summary Section */}
-                {data.summary && (
-                  <div className="mb-4">
-                    <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-1.5">
-                      PROFESSIONAL SUMMARY
-                    </h2>
-                    <p className="text-xs text-zinc-800 leading-relaxed text-justify">
-                      {data.summary}
-                    </p>
-                  </div>
-                )}
-
-                {/* Experience Section */}
-                {data.experience.length > 0 && (
-                  <div className="mb-4">
-                    <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-2">
-                      WORK EXPERIENCE
-                    </h2>
-                    <div className="space-y-3">
-                      {data.experience.map((exp, i) => (
-                        <div key={exp.id || i}>
-                          <div className="flex justify-between items-baseline text-xs">
-                            <span className="font-bold text-black">
-                              {exp.role || "Posisi"} —{" "}
-                              <span className="font-medium text-zinc-800">
-                                {exp.company || "Perusahaan"}
-                              </span>
-                            </span>
-                            <span className="font-medium text-zinc-600 text-[11px]">
-                              {exp.startDate} - {exp.endDate}
-                              {exp.location ? ` | ${exp.location}` : ""}
-                            </span>
-                          </div>
-                          {exp.bullets && exp.bullets.length > 0 && (
-                            <ul className="list-disc ml-4 mt-1 space-y-1 text-xs text-zinc-800 leading-relaxed">
-                              {exp.bullets.filter(Boolean).map((b, bIdx) => (
-                                <li key={bIdx}>{b}</li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      ))}
+                  {/* A4 Page Canvas Sheet */}
+                  <div className="cv-preview-container cv-page relative bg-white border-3 border-black shadow-[8px_8px_0px_#000] p-8 sm:p-12 text-black font-sans leading-normal overflow-hidden min-h-[840px] print:border-none print:shadow-none print:p-0 print:overflow-visible print:min-h-0 print:mb-0">
+                    {/* Page Badge Indicator */}
+                    <div className="absolute top-3 right-4 font-mono text-[10px] text-zinc-400 font-bold no-print select-none">
+                      HALAMAN {page.pageNumber} / {pages.length}
                     </div>
-                  </div>
-                )}
 
-                {/* Skills Section */}
-                {(data.skills.technical || data.skills.tools || data.skills.soft) && (
-                  <div className="mb-4">
-                    <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-1.5">
-                      TECHNICAL & CORE SKILLS
-                    </h2>
-                    <div className="space-y-1 text-xs text-zinc-800">
-                      {data.skills.technical && (
-                        <div>
-                          <strong className="font-semibold text-black">Languages & Frameworks:</strong>{" "}
-                          {data.skills.technical}
-                        </div>
-                      )}
-                      {data.skills.tools && (
-                        <div>
-                          <strong className="font-semibold text-black">Tools & Infrastructure:</strong>{" "}
-                          {data.skills.tools}
-                        </div>
-                      )}
-                      {data.skills.soft && (
-                        <div>
-                          <strong className="font-semibold text-black">Methodologies:</strong>{" "}
-                          {data.skills.soft}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Education Section */}
-                {data.education.length > 0 && (
-                  <div className="mb-4">
-                    <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-2">
-                      EDUCATION
-                    </h2>
-                    <div className="space-y-2">
-                      {data.education.map((edu, i) => (
-                        <div key={edu.id || i}>
-                          <div className="flex justify-between items-baseline text-xs">
-                            <span className="font-bold text-black">
-                              {edu.institution || "Institusi"}
-                            </span>
-                            <span className="font-medium text-zinc-600 text-[11px]">
-                              {edu.year}
-                              {edu.location ? ` | ${edu.location}` : ""}
-                            </span>
-                          </div>
-                          <div className="text-xs text-zinc-800 font-medium">
-                            {edu.degree}
-                          </div>
-                          {edu.details && (
-                            <div className="text-[11px] text-zinc-600 italic">
-                              {edu.details}
+                    <div className="cv-document max-w-[720px] mx-auto text-black print:max-w-none print:w-full">
+                      {page.hasHeader ? (
+                        /* Header Section */
+                        <div className="text-center pb-4 mb-4 border-b border-black">
+                          <h1 className="text-2xl font-bold tracking-tight uppercase mb-1">
+                            {data.personal.fullName || "NAMA LENGKAP"}
+                          </h1>
+                          {data.personal.jobTitle && (
+                            <div className="text-sm font-semibold text-zinc-700 uppercase tracking-wide mb-2">
+                              {data.personal.jobTitle}
                             </div>
                           )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Projects Section */}
-                {data.projects.length > 0 && (
-                  <div className="mb-4">
-                    <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-2">
-                      KEY PROJECTS
-                    </h2>
-                    <div className="space-y-2">
-                      {data.projects.map((proj, i) => (
-                        <div key={proj.id || i}>
-                          <div className="flex justify-between items-baseline text-xs">
-                            <span className="font-bold text-black">
-                              {proj.name}
-                              {proj.techStack ? (
-                                <span className="font-normal text-zinc-600">
-                                  {" "}
-                                  ({proj.techStack})
-                                </span>
-                              ) : null}
-                            </span>
-                            {proj.link && (
-                              <span className="font-mono text-[10px] text-zinc-600">
-                                {proj.link}
-                              </span>
-                            )}
+                          <div className="text-xs text-zinc-700 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+                            {data.personal.email && <span>{data.personal.email}</span>}
+                            {data.personal.phone && <span>• {data.personal.phone}</span>}
+                            {data.personal.location && <span>• {data.personal.location}</span>}
+                            {data.personal.linkedin && <span>• {data.personal.linkedin}</span>}
+                            {data.personal.github && <span>• {data.personal.github}</span>}
                           </div>
-                          {proj.description && (
-                            <p className="text-xs text-zinc-800 mt-0.5">
-                              {proj.description}
-                            </p>
-                          )}
                         </div>
-                      ))}
+                      ) : (
+                        /* Running Header for Subsequent Pages */
+                        <div className="flex justify-between items-center pb-2 mb-4 border-b border-black text-xs text-zinc-700">
+                          <span className="font-bold uppercase tracking-wider">
+                            {data.personal.fullName || "RESUME"}
+                          </span>
+                          <span className="font-mono text-[10px] text-zinc-500">
+                            Lanjutan Halaman {page.pageNumber}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Summary Section */}
+                      {page.summary && (
+                        <div className="mb-4">
+                          <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-1.5">
+                            PROFESSIONAL SUMMARY
+                          </h2>
+                          <p className="text-xs text-zinc-800 leading-relaxed text-justify">
+                            {page.summary}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Experience Section */}
+                      {page.experience && page.experience.length > 0 && (
+                        <div className="mb-4">
+                          <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-2">
+                            WORK EXPERIENCE
+                          </h2>
+                          <div className="space-y-3">
+                            {page.experience.map((exp, i) => (
+                              <div key={exp.id || i}>
+                                <div className="flex justify-between items-baseline text-xs">
+                                  <span className="font-bold text-black">
+                                    {exp.role || "Posisi"} —{" "}
+                                    <span className="font-medium text-zinc-800">
+                                      {exp.company || "Perusahaan"}
+                                    </span>
+                                  </span>
+                                  <span className="font-medium text-zinc-600 text-[11px]">
+                                    {exp.startDate} - {exp.endDate}
+                                    {exp.location ? ` | ${exp.location}` : ""}
+                                  </span>
+                                </div>
+                                {exp.bullets && exp.bullets.length > 0 && (
+                                  <ul className="list-disc ml-4 mt-1 space-y-1 text-xs text-zinc-800 leading-relaxed">
+                                    {exp.bullets.filter(Boolean).map((b, bIdx) => (
+                                      <li key={bIdx}>{b}</li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Skills Section */}
+                      {page.skills &&
+                        (page.skills.technical || page.skills.tools || page.skills.soft) && (
+                          <div className="mb-4">
+                            <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-1.5">
+                              TECHNICAL & CORE SKILLS
+                            </h2>
+                            <div className="space-y-1 text-xs text-zinc-800">
+                              {page.skills.technical && (
+                                <div>
+                                  <strong className="font-semibold text-black">
+                                    Languages & Frameworks:
+                                  </strong>{" "}
+                                  {page.skills.technical}
+                                </div>
+                              )}
+                              {page.skills.tools && (
+                                <div>
+                                  <strong className="font-semibold text-black">
+                                    Tools & Infrastructure:
+                                  </strong>{" "}
+                                  {page.skills.tools}
+                                </div>
+                              )}
+                              {page.skills.soft && (
+                                <div>
+                                  <strong className="font-semibold text-black">
+                                    Methodologies:
+                                  </strong>{" "}
+                                  {page.skills.soft}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                      {/* Education Section */}
+                      {page.education && page.education.length > 0 && (
+                        <div className="mb-4">
+                          <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-2">
+                            EDUCATION
+                          </h2>
+                          <div className="space-y-2">
+                            {page.education.map((edu, i) => (
+                              <div key={edu.id || i}>
+                                <div className="flex justify-between items-baseline text-xs">
+                                  <span className="font-bold text-black">
+                                    {edu.institution || "Institusi"}
+                                  </span>
+                                  <span className="font-medium text-zinc-600 text-[11px]">
+                                    {edu.year}
+                                    {edu.location ? ` | ${edu.location}` : ""}
+                                  </span>
+                                </div>
+                                <div className="text-xs text-zinc-800 font-medium">
+                                  {edu.degree}
+                                </div>
+                                {edu.details && (
+                                  <div className="text-[11px] text-zinc-600 italic">
+                                    {edu.details}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Projects Section */}
+                      {page.projects && page.projects.length > 0 && (
+                        <div className="mb-4">
+                          <h2 className="text-xs font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-2">
+                            KEY PROJECTS
+                          </h2>
+                          <div className="space-y-2">
+                            {page.projects.map((proj, i) => (
+                              <div key={proj.id || i}>
+                                <div className="flex justify-between items-baseline text-xs">
+                                  <span className="font-bold text-black">
+                                    {proj.name}
+                                    {proj.techStack ? (
+                                      <span className="font-normal text-zinc-600">
+                                        {" "}
+                                        ({proj.techStack})
+                                      </span>
+                                    ) : null}
+                                  </span>
+                                  {proj.link && (
+                                    <span className="font-mono text-[10px] text-zinc-600">
+                                      {proj.link}
+                                    </span>
+                                  )}
+                                </div>
+                                {proj.description && (
+                                  <p className="text-xs text-zinc-800 mt-0.5">
+                                    {proj.description}
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
+                </React.Fragment>
+              ))}
             </div>
           </div>
         </div>
