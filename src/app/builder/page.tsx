@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
@@ -10,7 +10,6 @@ import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import { AuthModal } from "@/components/AuthModal";
 import { generateResumePdfBlob } from "@/lib/pdf-generator";
 import {
-  Printer,
   Sparkles,
   Download,
   Upload,
@@ -159,6 +158,7 @@ const EMPTY_RESUME: ResumeData = {
 export default function BuilderPage() {
   const router = useRouter();
   const { data: session } = useSession();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isSavingCloud, setIsSavingCloud] = useState(false);
   const [cloudSaveStatus, setCloudSaveStatus] = useState<string | null>(null);
@@ -212,20 +212,10 @@ export default function BuilderPage() {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Gagal membuat PDF otomatis:", err);
-      // Fallback ke dialog print sistem
-      window.print();
+      alert("Terjadi kesalahan saat membuat file PDF. Silakan coba lagi.");
     } finally {
       setIsGeneratingPdf(false);
     }
-  };
-
-  const handlePrint = () => {
-    // Gate Aksi: Wajib login saat hendak cetak dokumen
-    if (!session?.user) {
-      setShowAuthModal(true);
-      return;
-    }
-    window.print();
   };
 
   const handleSaveToCloud = async () => {
@@ -337,13 +327,50 @@ export default function BuilderPage() {
   const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (!file.name.endsWith(".json") && file.type !== "application/json" && file.type !== "") {
+      alert("Hanya file backup .json yang didukung untuk fitur ini.");
+      e.target.value = "";
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const parsed = JSON.parse(event.target?.result as string);
-        updateData(parsed);
+        const text = event.target?.result as string;
+        const parsed = JSON.parse(text);
+        if (parsed && typeof parsed === "object") {
+          const merged: ResumeData = {
+            personal: {
+              fullName: parsed.personal?.fullName ?? "",
+              jobTitle: parsed.personal?.jobTitle ?? "",
+              email: parsed.personal?.email ?? "",
+              phone: parsed.personal?.phone ?? "",
+              location: parsed.personal?.location ?? "",
+              linkedin: parsed.personal?.linkedin ?? "",
+              github: parsed.personal?.github ?? "",
+              website: parsed.personal?.website ?? "",
+            },
+            summary: parsed.summary ?? "",
+            experience: Array.isArray(parsed.experience) ? parsed.experience : [],
+            education: Array.isArray(parsed.education) ? parsed.education : [],
+            skills: {
+              technical: parsed.skills?.technical ?? "",
+              tools: parsed.skills?.tools ?? "",
+              soft: parsed.skills?.soft ?? "",
+            },
+            projects: Array.isArray(parsed.projects) ? parsed.projects : [],
+          };
+          updateData(merged);
+          setCloudSaveStatus("File dimuat!");
+          setTimeout(() => setCloudSaveStatus(null), 3000);
+        } else {
+          alert("Format file tidak sesuai dengan data resume.");
+        }
       } catch (err) {
-        alert("File JSON tidak valid.");
+        alert("Gagal membaca file JSON. Pastikan file valid.");
+      } finally {
+        e.target.value = "";
       }
     };
     reader.readAsText(file);
@@ -528,16 +555,22 @@ export default function BuilderPage() {
               <span>SIMPAN KE FILE</span>
             </button>
 
-            <label className="px-3 py-1.5 bg-black text-white font-mono text-xs font-bold border border-white/50 hover:bg-white hover:text-black transition-colors flex items-center gap-1.5 cursor-pointer">
+            {/* Hidden Input & Button for Reliable Import */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json,application/json"
+              className="hidden"
+              onChange={handleImportJson}
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="px-3 py-1.5 bg-black text-white font-mono text-xs font-bold border border-white/50 hover:bg-white hover:text-black transition-colors flex items-center gap-1.5"
+            >
               <Upload className="w-3.5 h-3.5" />
               <span>BUKA DARI FILE</span>
-              <input
-                type="file"
-                accept=".json"
-                className="hidden"
-                onChange={handleImportJson}
-              />
-            </label>
+            </button>
 
             <button
               type="button"
@@ -546,17 +579,6 @@ export default function BuilderPage() {
               title="Kosongkan formulir"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-
-            {/* Secondary Print Button */}
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="px-2.5 py-2 text-white/70 hover:text-white border border-white/30 hover:border-white font-mono text-xs transition-colors flex items-center gap-1.5"
-              title="Cetak via printer dialog"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">CETAK</span>
             </button>
 
             {/* Direct PDF Download Primary Button */}
