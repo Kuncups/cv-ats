@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -19,6 +20,8 @@ import {
   Check,
   LogOut,
   UserCheck,
+  Cloud,
+  FileSearch,
 } from "lucide-react";
 
 export interface ResumeData {
@@ -153,8 +156,11 @@ const EMPTY_RESUME: ResumeData = {
 };
 
 export default function BuilderPage() {
+  const router = useRouter();
   const { data: session } = useSession();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isSavingCloud, setIsSavingCloud] = useState(false);
+  const [cloudSaveStatus, setCloudSaveStatus] = useState<string | null>(null);
   const [data, setData] = useState<ResumeData>(DEFAULT_SAMPLE_RESUME);
   const [activeTab, setActiveTab] = useState<
     "personal" | "summary" | "experience" | "education" | "skills" | "projects"
@@ -178,6 +184,7 @@ export default function BuilderPage() {
   const updateData = (newData: ResumeData) => {
     setData(newData);
     localStorage.setItem("roster_resume_draft", JSON.stringify(newData));
+    if (cloudSaveStatus) setCloudSaveStatus(null);
   };
 
   const handlePrint = () => {
@@ -187,6 +194,90 @@ export default function BuilderPage() {
       return;
     }
     window.print();
+  };
+
+  const handleSaveToCloud = async () => {
+    if (!session?.user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    setIsSavingCloud(true);
+    try {
+      const res = await fetch("/api/resumes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: data.personal.jobTitle || data.personal.fullName || "Draft CV",
+          content: data,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Gagal menyimpan.");
+      setCloudSaveStatus("Tersimpan!");
+      setTimeout(() => setCloudSaveStatus(null), 3000);
+    } catch (err) {
+      alert("Gagal menyimpan ke cloud. Silakan coba lagi.");
+    } finally {
+      setIsSavingCloud(false);
+    }
+  };
+
+  const handleBridgeToAnalyzer = () => {
+    // Compile structured resume into clean text representation
+    const lines: string[] = [];
+    lines.push(data.personal.fullName);
+    lines.push(data.personal.jobTitle);
+    lines.push(
+      [
+        data.personal.email,
+        data.personal.phone,
+        data.personal.location,
+        data.personal.linkedin,
+        data.personal.github,
+      ]
+        .filter(Boolean)
+        .join(" | ")
+    );
+
+    if (data.summary) {
+      lines.push("\nPROFESSIONAL SUMMARY\n" + data.summary);
+    }
+
+    if (data.experience.length > 0) {
+      lines.push("\nWORK EXPERIENCE");
+      for (const exp of data.experience) {
+        lines.push(`${exp.role} - ${exp.company} (${exp.startDate} - ${exp.endDate})`);
+        for (const b of exp.bullets) {
+          if (b) lines.push(`- ${b}`);
+        }
+      }
+    }
+
+    if (data.skills.technical || data.skills.tools || data.skills.soft) {
+      lines.push("\nTECHNICAL & CORE SKILLS");
+      if (data.skills.technical) lines.push(`Languages & Frameworks: ${data.skills.technical}`);
+      if (data.skills.tools) lines.push(`Tools & Infrastructure: ${data.skills.tools}`);
+      if (data.skills.soft) lines.push(`Methodologies: ${data.skills.soft}`);
+    }
+
+    if (data.education.length > 0) {
+      lines.push("\nEDUCATION");
+      for (const edu of data.education) {
+        lines.push(`${edu.degree} - ${edu.institution} (${edu.year}) ${edu.details}`);
+      }
+    }
+
+    if (data.projects.length > 0) {
+      lines.push("\nKEY PROJECTS");
+      for (const p of data.projects) {
+        lines.push(`${p.name} (${p.techStack}) - ${p.description}`);
+      }
+    }
+
+    sessionStorage.setItem("draftcv_bridge_text", lines.join("\n"));
+    sessionStorage.setItem("draftcv_bridge_title", data.personal.jobTitle || "Resume Anda");
+    router.push("/analyzer");
   };
 
   const handleLoadSample = () => {
@@ -361,6 +452,31 @@ export default function BuilderPage() {
                 <span className="text-[#FFF000] underline font-bold">MASUK</span>
               </button>
             )}
+
+            {/* Save to Cloud Button */}
+            <button
+              type="button"
+              onClick={handleSaveToCloud}
+              disabled={isSavingCloud}
+              className={`px-3 py-1.5 font-mono text-xs font-bold border transition-colors flex items-center gap-1.5 ${
+                cloudSaveStatus
+                  ? "bg-green-400 text-black border-green-500"
+                  : "bg-black text-white border-white/40 hover:bg-white hover:text-black"
+              }`}
+            >
+              <Cloud className="w-3.5 h-3.5" />
+              <span>{cloudSaveStatus || (isSavingCloud ? "MENYIMPAN..." : "SIMPAN CLOUD")}</span>
+            </button>
+
+            {/* Bridge to Analyzer Button */}
+            <button
+              type="button"
+              onClick={handleBridgeToAnalyzer}
+              className="px-3 py-1.5 bg-[#FFF000] text-black font-mono text-xs font-bold border border-black hover:bg-white transition-colors flex items-center gap-1.5"
+            >
+              <FileSearch className="w-3.5 h-3.5" />
+              <span>UJI DI ANALYZER</span>
+            </button>
 
             <button
               type="button"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -17,14 +17,35 @@ import {
   ArrowRight,
   RefreshCw,
   Info,
+  Check,
+  RotateCcw,
 } from "lucide-react";
 
 export default function AnalyzerPage() {
   const [file, setFile] = useState<File | null>(null);
+  const [bridgedText, setBridgedText] = useState<string | null>(null);
+  const [bridgedTitle, setBridgedTitle] = useState<string | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AtsAnalysisResult | null>(null);
+
+  // Check if user came from Builder with preloaded resume text
+  useEffect(() => {
+    const bridge = sessionStorage.getItem("draftcv_bridge_text");
+    const title = sessionStorage.getItem("draftcv_bridge_title");
+    if (bridge) {
+      setBridgedText(bridge);
+      setBridgedTitle(title || "Resume dari Builder");
+    }
+  }, []);
+
+  const handleClearBridge = () => {
+    sessionStorage.removeItem("draftcv_bridge_text");
+    sessionStorage.removeItem("draftcv_bridge_title");
+    setBridgedText(null);
+    setBridgedTitle(null);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -71,8 +92,8 @@ export default function AnalyzerPage() {
   };
 
   const handleAnalyze = async () => {
-    if (!file) {
-      setError("Pilih atau unggah file resume PDF terlebih dahulu.");
+    if (!file && !bridgedText) {
+      setError("Pilih file PDF resume atau gunakan draft dari Builder terlebih dahulu.");
       return;
     }
 
@@ -81,7 +102,11 @@ export default function AnalyzerPage() {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      if (file) {
+        formData.append("file", file);
+      } else if (bridgedText) {
+        formData.append("directText", bridgedText);
+      }
       formData.append("jobDescription", jobDescription);
 
       const res = await fetch("/api/analyze", {
@@ -130,64 +155,92 @@ export default function AnalyzerPage() {
 
         {/* Input Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-          {/* File Upload Dropzone (5 cols) */}
+          {/* File Upload Dropzone or Bridged Text (5 cols) */}
           <div className="lg:col-span-5 flex flex-col">
             <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6 flex-1 flex flex-col">
               <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-black">
                 <span className="font-mono font-bold text-xs uppercase tracking-wider">
-                  [ LANGKAH 1: UNGGAH FILE PDF CV ]
+                  [ LANGKAH 1: DOKUMEN RESUME ]
                 </span>
                 <span className="text-[10px] font-mono bg-[#FFF000] px-2 py-0.5 border border-black font-bold">
-                  MAKS. 2MB
+                  {bridgedText ? "DARI BUILDER" : "MAKS. 2MB"}
                 </span>
               </div>
 
-              <div
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleDrop}
-                className={`border-3 border-dashed border-black p-8 text-center flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors ${
-                  file ? "bg-[#FFF000]/20" : "bg-[#FFF000]/5 hover:bg-[#FFF000]/10"
-                }`}
-                onClick={() => document.getElementById("file-input")?.click()}
-              >
-                <input
-                  id="file-input"
-                  type="file"
-                  accept="application/pdf"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
+              {bridgedText ? (
+                <div className="border-3 border-black bg-[#FFF000]/25 p-6 flex-1 flex flex-col items-center justify-center text-center space-y-3">
+                  <div className="w-12 h-12 bg-black text-[#FFF000] flex items-center justify-center border-2 border-black">
+                    <Check className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="block font-bold text-sm uppercase">
+                      {bridgedTitle || "Resume Terhubung"}
+                    </span>
+                    <span className="block text-xs font-mono text-black/70 mt-1">
+                      Data resume langsung terhubung dari Resume Builder
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleClearBridge}
+                    className="text-xs font-mono underline hover:text-red-700 pt-2 flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Ganti dengan Unggah PDF Lain</span>
+                  </button>
+                </div>
+              ) : (
+                <div
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={handleDrop}
+                  className={`border-3 border-dashed border-black p-8 text-center flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors ${
+                    file ? "bg-[#FFF000]/20" : "bg-[#FFF000]/5 hover:bg-[#FFF000]/10"
+                  }`}
+                  onClick={() => document.getElementById("file-input")?.click()}
+                >
+                  <input
+                    id="file-input"
+                    type="file"
+                    accept="application/pdf"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
 
-                {file ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 bg-black text-[#FFF000] flex items-center justify-center border-2 border-black">
-                      <FileCheck className="w-6 h-6" />
+                  {file ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-12 h-12 bg-black text-[#FFF000] flex items-center justify-center border-2 border-black">
+                        <FileCheck className="w-6 h-6" />
+                      </div>
+                      <span className="font-mono font-bold text-sm text-black break-all max-w-[240px]">
+                        {file.name}
+                      </span>
+                      <span className="text-xs font-mono text-black/60">
+                        {(file.size / 1024).toFixed(1)} KB • Klik untuk mengganti file
+                      </span>
                     </div>
-                    <span className="font-mono font-bold text-sm text-black break-all max-w-[240px]">
-                      {file.name}
-                    </span>
-                    <span className="text-xs font-mono text-black/60">
-                      {(file.size / 1024).toFixed(1)} KB • Klik untuk mengganti file
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 bg-white text-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
-                      <UploadCloud className="w-6 h-6" />
+                  ) : (
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-12 h-12 bg-white text-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
+                        <UploadCloud className="w-6 h-6" />
+                      </div>
+                      <span className="font-bold text-sm uppercase">
+                        Tarik & Lepas File PDF CV ke Sini
+                      </span>
+                      <span className="text-xs font-mono text-black/60">
+                        atau klik untuk memilih file dari komputer / HP Anda
+                      </span>
                     </div>
-                    <span className="font-bold text-sm uppercase">
-                      Tarik & Lepas File PDF CV ke Sini
-                    </span>
-                    <span className="text-xs font-mono text-black/60">
-                      atau klik untuk memilih file dari komputer / HP Anda
-                    </span>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
 
               <div className="mt-4 pt-3 border-t-2 border-black/10 flex items-center gap-2 text-xs font-mono text-black/60">
                 <Info className="w-4 h-4 shrink-0" />
-                <span>Format harus PDF asli (bukan hasil foto kamera atau scan gambar).</span>
+                <span>
+                  {bridgedText
+                    ? "Teks CV Anda siap langsung dicocokkan dengan loker sasaran."
+                    : "Format harus PDF asli (bukan hasil foto kamera atau scan gambar)."}
+                </span>
               </div>
             </div>
           </div>

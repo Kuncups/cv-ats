@@ -1,6 +1,7 @@
 import assert from "node:assert";
 import { validatePdfBuffer, sanitizeText } from "../src/lib/security.ts";
 import { checkRateLimit } from "../src/lib/rate-limit.ts";
+import { analyzeCvText } from "../src/lib/ats-scanner.ts";
 
 async function runSelfChecks() {
   console.log("Running ATS Platform self-checks...");
@@ -31,6 +32,28 @@ async function runSelfChecks() {
   const blocked = checkRateLimit(testIp, 10, 60);
   assert.strictEqual(blocked.success, false, "Request 11 must be rate-limited");
   assert.strictEqual(blocked.remaining, 0, "Remaining tokens must be 0");
+
+  // 4. Direct Text ATS Analysis Check
+  const sampleCvText = `
+    JOHN DOE
+    Frontend Developer
+    john@example.com | +62 812-0000-0000 | linkedin.com/in/johndoe
+    PROFESSIONAL SUMMARY
+    Experienced Frontend Engineer with 4 years building web apps.
+    WORK EXPERIENCE
+    Software Engineer - PT Digital
+    - Spearheaded frontend architecture using React, Next.js and TypeScript.
+    - Optimized page load by 35% across 200k monthly users.
+    TECHNICAL & CORE SKILLS
+    React, Next.js, TypeScript, Tailwind CSS
+    EDUCATION
+    Universitas Komputer - Teknik Informatika
+  `;
+  const sampleJd = "Looking for a Frontend Developer with React, Next.js, and TypeScript experience.";
+  const analysis = analyzeCvText(sampleCvText, sampleJd);
+  assert.ok(analysis.overallScore >= 70, "Realistic CV must score >= 70");
+  assert.ok(analysis.matchedKeywords.includes("react"), "React must be matched");
+  assert.ok(analysis.matchedKeywords.includes("typescript"), "TypeScript must be matched");
 
   console.log("✓ All self-checks passed successfully!");
 }

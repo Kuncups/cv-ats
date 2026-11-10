@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validatePdfBuffer, sanitizeText } from "@/lib/security";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { analyzeCvPdf } from "@/lib/ats-scanner";
+import { analyzeCvPdf, analyzeCvText } from "@/lib/ats-scanner";
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,33 +30,41 @@ export async function POST(req: NextRequest) {
     // 2. Parse FormData
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
+    const directText = formData.get("directText") as string | null;
     const rawJobDescription = formData.get("jobDescription") as string | null;
 
-    if (!file) {
+    if (!file && !directText) {
       return NextResponse.json(
-        { error: "File resume (PDF) wajib diunggah." },
+        { error: "Unggah file resume (PDF) atau kirim teks CV." },
         { status: 400 }
       );
     }
 
-    // 3. Read buffer & Validate PDF Security (MIME + Magic Bytes + Size)
-    const arrayBuffer = await file.arrayBuffer();
-    const validation = await validatePdfBuffer(arrayBuffer, file.type);
-
-    if (!validation.valid) {
-      return NextResponse.json(
-        { error: validation.error || "File PDF tidak valid." },
-        { status: 400 }
-      );
-    }
-
-    // 4. Sanitize Job Description
+    // 3. Sanitize Job Description
     const sanitizedJd = sanitizeText(
-      rawJobDescription || "General Software Engineering Position"
+      rawJobDescription || "General Professional Position"
     );
 
-    // 5. Run ATS Analysis Engine
-    const result = await analyzeCvPdf(arrayBuffer, sanitizedJd);
+    let result;
+
+    if (directText) {
+      // Direct text analysis (bridged from Builder)
+      const sanitizedCvText = sanitizeText(directText, 50000);
+      result = analyzeCvText(sanitizedCvText, sanitizedJd);
+    } else if (file) {
+      // PDF File validation & analysis
+      const arrayBuffer = await file.arrayBuffer();
+      const validation = await validatePdfBuffer(arrayBuffer, file.type);
+
+      if (!validation.valid) {
+        return NextResponse.json(
+          { error: validation.error || "File PDF tidak valid." },
+          { status: 400 }
+        );
+      }
+
+      result = await analyzeCvPdf(arrayBuffer, sanitizedJd);
+    }
 
     return NextResponse.json(
       {

@@ -98,14 +98,24 @@ export async function analyzeCvPdf(
     );
   }
 
-  const cleanText = extractedText.replace(/\s+/g, " ").trim();
+  return analyzeCvText(extractedText, jobDescription);
+}
+
+/**
+ * Scan extracted CV text directly and compare against Job Description.
+ */
+export function analyzeCvText(
+  rawText: string,
+  jobDescription: string
+): AtsAnalysisResult {
+  const cleanText = rawText.replace(/\s+/g, " ").trim();
   const lowerText = cleanText.toLowerCase();
   const wordCount = cleanText ? cleanText.split(/\s+/).length : 0;
   const estimatedPages = Math.max(1, Math.ceil(wordCount / 450));
 
   const checks: AtsCheckItem[] = [];
 
-  // 2. Check: Scanned Image vs Selectable Text
+  // Check: Scanned Image vs Selectable Text
   if (cleanText.length < 100) {
     checks.push({
       id: "text-selectable",
