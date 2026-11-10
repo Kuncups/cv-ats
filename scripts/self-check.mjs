@@ -1,7 +1,8 @@
 import assert from "node:assert";
 import { validatePdfBuffer, sanitizeText } from "../src/lib/security.ts";
 import { checkRateLimit } from "../src/lib/rate-limit.ts";
-import { analyzeCvText } from "../src/lib/ats-scanner.ts";
+import { analyzeCvText, analyzeCvPdf } from "../src/lib/ats-scanner.ts";
+import { generateResumePdfBlob } from "../src/lib/pdf-generator.ts";
 
 async function runSelfChecks() {
   console.log("Running ATS Platform self-checks...");
@@ -54,6 +55,67 @@ async function runSelfChecks() {
   assert.ok(analysis.overallScore >= 70, "Realistic CV must score >= 70");
   assert.ok(analysis.matchedKeywords.includes("react"), "React must be matched");
   assert.ok(analysis.matchedKeywords.includes("typescript"), "TypeScript must be matched");
+
+  // 5. PDF Generator & ATS Parser Validation
+  const sampleData = {
+    personal: {
+      fullName: "Budi Santoso",
+      jobTitle: "Senior Frontend Engineer",
+      email: "budi@example.com",
+      phone: "+62 812-3456-7890",
+      location: "Jakarta, Indonesia",
+      linkedin: "linkedin.com/in/budisantoso",
+      github: "github.com/budisantoso",
+    },
+    summary: "Senior Frontend Engineer dengan 5+ tahun pengalaman membangun sistem web skalabel dengan React dan TypeScript.",
+    experience: [
+      {
+        id: "exp-1",
+        role: "Lead Frontend Engineer",
+        company: "PT Teknologi Indonesia",
+        location: "Jakarta",
+        startDate: "2022",
+        endDate: "Sekarang",
+        bullets: [
+          "Memimpin perancangan arsitektur Next.js untuk platform e-commerce dengan 500k pengguna aktif bulanan.",
+          "Meningkatkan skor performa Core Web Vitals dari 62 menjadi 95 melalui optimasi gambar dan code-splitting.",
+        ],
+      },
+    ],
+    skills: {
+      technical: "React, Next.js, TypeScript, JavaScript, Tailwind CSS",
+      tools: "Git, Docker, CI/CD, Figma",
+      soft: "Agile Scrum, Leadership, Code Review",
+    },
+    education: [
+      {
+        id: "edu-1",
+        institution: "Institut Teknologi Bandung",
+        degree: "Sarjana Teknik Informatika",
+        year: "2018 - 2022",
+        location: "Bandung",
+        details: "IPK: 3.82 / 4.00",
+      },
+    ],
+    projects: [
+      {
+        id: "proj-1",
+        name: "Enterprise Design System",
+        techStack: "React, TypeScript, Storybook",
+        description: "Membangun 40+ komponen UI reusable dengan cakupan testing 90%.",
+        link: "github.com/budisantoso/design-system",
+      },
+    ],
+  };
+
+  const pdfBlob = await generateResumePdfBlob(sampleData);
+  const pdfBuffer = await pdfBlob.arrayBuffer();
+  const pdfValidation = await validatePdfBuffer(pdfBuffer, "application/pdf");
+  assert.strictEqual(pdfValidation.valid, true, "Generated PDF must pass binary magic bytes check");
+
+  const pdfAnalysis = await analyzeCvPdf(pdfBuffer, "Looking for a Senior Frontend Engineer with React, Next.js, and TypeScript.");
+  assert.ok(pdfAnalysis.overallScore >= 75, "Generated PDF must score >= 75 in ATS scanner");
+  assert.ok(pdfAnalysis.matchedKeywords.includes("react"), "Generated PDF must yield matched keywords");
 
   console.log("✓ All self-checks passed successfully!");
 }

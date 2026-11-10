@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import { AuthModal } from "@/components/AuthModal";
+import { generateResumePdfBlob } from "@/lib/pdf-generator";
 import {
   Printer,
   Sparkles,
@@ -161,6 +162,7 @@ export default function BuilderPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isSavingCloud, setIsSavingCloud] = useState(false);
   const [cloudSaveStatus, setCloudSaveStatus] = useState<string | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [data, setData] = useState<ResumeData>(DEFAULT_SAMPLE_RESUME);
   const [activeTab, setActiveTab] = useState<
     "personal" | "summary" | "experience" | "education" | "skills" | "projects"
@@ -187,8 +189,38 @@ export default function BuilderPage() {
     if (cloudSaveStatus) setCloudSaveStatus(null);
   };
 
+  const handleDownloadPdf = async () => {
+    // Gate Aksi: Wajib login saat hendak unduh file PDF
+    if (!session?.user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    setIsGeneratingPdf(true);
+    try {
+      const blob = await generateResumePdfBlob(data);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const sanitizedName = data.personal.fullName
+        ? data.personal.fullName.toLowerCase().replace(/[^a-z0-9]/g, "-")
+        : "ats";
+      a.download = `resume-${sanitizedName}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Gagal membuat PDF otomatis:", err);
+      // Fallback ke dialog print sistem
+      window.print();
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
   const handlePrint = () => {
-    // Gate Aksi: Wajib login saat hendak cetak/export dokumen
+    // Gate Aksi: Wajib login saat hendak cetak dokumen
     if (!session?.user) {
       setShowAuthModal(true);
       return;
@@ -516,14 +548,26 @@ export default function BuilderPage() {
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
 
-            {/* Print Primary Button */}
+            {/* Secondary Print Button */}
             <button
               type="button"
               onClick={handlePrint}
+              className="px-2.5 py-2 text-white/70 hover:text-white border border-white/30 hover:border-white font-mono text-xs transition-colors flex items-center gap-1.5"
+              title="Cetak via printer dialog"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">CETAK</span>
+            </button>
+
+            {/* Direct PDF Download Primary Button */}
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={isGeneratingPdf}
               className="brutal-btn bg-[#FFF000] text-black font-mono text-xs font-black px-5 py-2 uppercase flex items-center gap-2"
             >
-              <Printer className="w-4 h-4" />
-              <span>UNDUH PDF CV</span>
+              <Download className="w-4 h-4" />
+              <span>{isGeneratingPdf ? "MEMBUAT PDF..." : "UNDUH PDF CV"}</span>
             </button>
           </div>
         </div>
