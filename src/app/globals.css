@@ -80,15 +80,21 @@ body {
 /* Print Stylesheet for ATS CV Export */
 @media print {
   @page {
-    margin: 12mm 15mm;
+    margin: 10mm 12mm;
     size: A4 portrait;
   }
 
+  html,
   body {
+    background: #ffffff !important;
     background-color: #ffffff !important;
     color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
   }
 
+  /* Sembunyikan elemen UI di luar dokumen CV */
   .no-print,
   nav,
   header,
@@ -98,11 +104,24 @@ body {
     display: none !important;
   }
 
-  .print-only {
+  /* Reset layout app wrapper agar CV full page dan tidak kuning */
+  .min-h-screen,
+  main,
+  main > div,
+  .cv-preview-wrapper {
     display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .cv-preview-container {
+    display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
@@ -110,35 +129,49 @@ body {
     box-shadow: none !important;
     border: none !important;
     background: #ffffff !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
 
   .cv-document {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     color: #000000 !important;
     background: #ffffff !important;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
     font-size: 10pt !important;
-    line-height: 1.4 !important;
+    line-height: 1.35 !important;
   }
 
   .cv-document h1 {
-    font-size: 18pt !important;
-    margin-bottom: 4pt !important;
+    font-size: 16pt !important;
+    margin-bottom: 2pt !important;
     font-weight: bold !important;
     color: #000000 !important;
   }
 
   .cv-document h2 {
-    font-size: 11pt !important;
+    font-size: 10.5pt !important;
     border-bottom: 1pt solid #000000 !important;
-    margin-top: 10pt !important;
-    margin-bottom: 4pt !important;
+    margin-top: 8pt !important;
+    margin-bottom: 3pt !important;
     text-transform: uppercase !important;
     letter-spacing: 0.5pt !important;
     font-weight: bold !important;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
   }
 
   .cv-document ul {
     margin-left: 14pt !important;
     list-style-type: disc !important;
+  }
+
+  .cv-document li {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }

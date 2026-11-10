@@ -409,7 +409,7 @@ export default function BuilderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF000] text-black flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FFF000] text-black flex flex-col font-sans print:bg-white print:min-h-0">
       <Header />
 
       {/* Control Action Bar */}
@@ -551,8 +551,8 @@ export default function BuilderPage() {
         </button>
       </div>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 print:p-0 print:m-0 print:max-w-none print:w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start print:block print:w-full">
           {/* Left Side: Form Editor (5 cols) */}
           <div
             className={`lg:col-span-6 space-y-4 no-print ${
@@ -1085,7 +1085,7 @@ export default function BuilderPage() {
 
           {/* Right Side: Live ATS Preview (6 cols) */}
           <div
-            className={`lg:col-span-6 flex flex-col ${
+            className={`cv-preview-wrapper lg:col-span-6 flex flex-col print:!block print:!w-full ${
               mobileView === "preview" ? "block" : "hidden lg:block"
             }`}
           >
@@ -1100,8 +1100,8 @@ export default function BuilderPage() {
             </div>
 
             {/* Resume Document A4 Canvas */}
-            <div className="cv-preview-container bg-white border-3 border-black shadow-[8px_8px_0px_#000] p-8 sm:p-12 text-black font-sans leading-normal overflow-hidden min-h-[840px]">
-              <div className="cv-document max-w-[720px] mx-auto text-black">
+            <div className="cv-preview-container bg-white border-3 border-black shadow-[8px_8px_0px_#000] p-8 sm:p-12 text-black font-sans leading-normal overflow-hidden min-h-[840px] print:border-none print:shadow-none print:p-0 print:overflow-visible print:min-h-0">
+              <div className="cv-document max-w-[720px] mx-auto text-black print:max-w-none print:w-full">
                 {/* Header Section */}
                 <div className="text-center pb-4 mb-4 border-b border-black">
                   <h1 className="text-2xl font-bold tracking-tight uppercase mb-1">
