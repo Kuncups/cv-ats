@@ -117,6 +117,34 @@ async function runSelfChecks() {
   assert.ok(pdfAnalysis.overallScore >= 75, "Generated PDF must score >= 75 in ATS scanner");
   assert.ok(pdfAnalysis.matchedKeywords.includes("react"), "Generated PDF must yield matched keywords");
 
+  // 6. Resume Text-to-Form Parser Validation
+  const { parseResumeFromText } = await import("../src/lib/resume-parser.ts");
+  const extractedRawText = `
+    ANDI PRATAMA
+    Fullstack Engineer
+    andi@example.com | +62 811-2233-4455 | Jakarta, Indonesia | linkedin.com/in/andipratama
+    PROFESSIONAL SUMMARY
+    Berpengalaman 4 tahun merancang aplikasi berskala besar menggunakan Node.js dan React.
+    WORK EXPERIENCE
+    Senior Developer — PT Solusi Digital
+    - Merancang backend microservices berbasis Node.js dan TypeScript.
+    - Mengurangi latensi database hingga 40%.
+    TECHNICAL & CORE SKILLS
+    JavaScript, TypeScript, React, Node.js, PostgreSQL, Docker
+    EDUCATION
+    Universitas Indonesia
+    Sarjana Ilmu Komputer (2018 - 2022)
+  `;
+  const parsedResume = parseResumeFromText(extractedRawText);
+  assert.strictEqual(parsedResume.personal.fullName, "ANDI PRATAMA");
+  assert.strictEqual(parsedResume.personal.jobTitle, "Fullstack Engineer");
+  assert.strictEqual(parsedResume.personal.email, "andi@example.com");
+  assert.strictEqual(parsedResume.personal.phone, "+62 811-2233-4455");
+  assert.ok(parsedResume.summary.includes("Berpengalaman 4 tahun"));
+  assert.ok(parsedResume.skills.technical.includes("TypeScript"));
+  assert.strictEqual(parsedResume.experience.length, 1);
+  assert.strictEqual(parsedResume.experience[0].role, "Senior Developer");
+
   console.log("✓ All self-checks passed successfully!");
 }
 

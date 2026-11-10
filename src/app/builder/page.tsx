@@ -163,6 +163,7 @@ export default function BuilderPage() {
   const [isSavingCloud, setIsSavingCloud] = useState(false);
   const [cloudSaveStatus, setCloudSaveStatus] = useState<string | null>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const [data, setData] = useState<ResumeData>(DEFAULT_SAMPLE_RESUME);
   const [activeTab, setActiveTab] = useState<
     "personal" | "summary" | "experience" | "education" | "skills" | "projects"
@@ -324,16 +325,68 @@ export default function BuilderPage() {
     URL.revokeObjectURL(url);
   };
 
-  const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.name.endsWith(".json") && file.type !== "application/json" && file.type !== "") {
-      alert("Hanya file backup .json yang didukung untuk fitur ini.");
+    const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
+    const isJson = file.name.toLowerCase().endsWith(".json") || file.type === "application/json";
+
+    if (!isPdf && !isJson) {
+      alert("Format tidak didukung. Silakan pilih file PDF (.pdf) atau file cadangan JSON (.json).");
       e.target.value = "";
       return;
     }
 
+    if (isPdf) {
+      setIsImporting(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch("/api/parse-resume", {
+          method: "POST",
+          body: formData,
+        });
+
+        const json = (await res.json()) as {
+          error?: string;
+          data?: Partial<ResumeData>;
+        };
+        if (!res.ok) {
+          throw new Error(json.error || "Gagal memproses file PDF.");
+        }
+
+        if (json.data) {
+          const parsed = json.data;
+          const merged: ResumeData = {
+            personal: { ...DEFAULT_SAMPLE_RESUME.personal, ...(parsed.personal || {}) },
+            summary: parsed.summary || "",
+            experience:
+              Array.isArray(parsed.experience) && parsed.experience.length > 0
+                ? parsed.experience
+                : DEFAULT_SAMPLE_RESUME.experience,
+            education:
+              Array.isArray(parsed.education) && parsed.education.length > 0
+                ? parsed.education
+                : DEFAULT_SAMPLE_RESUME.education,
+            skills: { ...DEFAULT_SAMPLE_RESUME.skills, ...(parsed.skills || {}) },
+            projects: Array.isArray(parsed.projects) ? parsed.projects : [],
+          };
+          updateData(merged);
+          setCloudSaveStatus("PDF Berhasil Dimuat!");
+          setTimeout(() => setCloudSaveStatus(null), 3500);
+        }
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Terjadi kesalahan saat membaca file PDF.");
+      } finally {
+        setIsImporting(false);
+        e.target.value = "";
+      }
+      return;
+    }
+
+    // JSON Handler
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
@@ -555,21 +608,22 @@ export default function BuilderPage() {
               <span>SIMPAN KE FILE</span>
             </button>
 
-            {/* Hidden Input & Button for Reliable Import */}
+            {/* Hidden Input & Button for Reliable Import (PDF & JSON) */}
             <input
               ref={fileInputRef}
               type="file"
-              accept=".json,application/json"
+              accept=".pdf,.json,application/pdf,application/json"
               className="hidden"
-              onChange={handleImportJson}
+              onChange={handleImportFile}
             />
             <button
               type="button"
+              disabled={isImporting}
               onClick={() => fileInputRef.current?.click()}
               className="px-3 py-1.5 bg-black text-white font-mono text-xs font-bold border border-white/50 hover:bg-white hover:text-black transition-colors flex items-center gap-1.5"
             >
               <Upload className="w-3.5 h-3.5" />
-              <span>BUKA DARI FILE</span>
+              <span>{isImporting ? "MEMBACA PDF..." : "BUKA DARI FILE (PDF/JSON)"}</span>
             </button>
 
             <button
