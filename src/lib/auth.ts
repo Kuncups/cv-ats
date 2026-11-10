@@ -7,6 +7,7 @@ import { getEnv } from "@/lib/env";
 const env = getEnv();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: env.NEXTAUTH_SECRET,
   providers: [
     ...(env.GITHUB_ID && env.GITHUB_SECRET
       ? [
