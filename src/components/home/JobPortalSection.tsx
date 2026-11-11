@@ -3,8 +3,7 @@ import { Pill } from "@/components/BrutalistBadge";
 
 interface JobPortal {
   name: string;
-  initial: string;
-  color: string;
+  logo: string;
   description: string;
   url: string;
 }
@@ -12,57 +11,49 @@ interface JobPortal {
 const JOB_PORTALS: JobPortal[] = [
   {
     name: "Jobstreet",
-    initial: "JS",
-    color: "#E4002B",
+    logo: "/logos/jobstreet.png",
     description: "Portal lowongan terbesar di Indonesia dengan filter gaji, lokasi, dan tingkat pengalaman.",
     url: "https://www.jobstreet.co.id/",
   },
   {
     name: "LinkedIn Jobs",
-    initial: "in",
-    color: "#0A66C2",
+    logo: "/logos/linkedin.svg",
     description: "Cocok untuk posisi profesional dan multinasional; bisa langsung terhubung ke rekruter.",
     url: "https://www.linkedin.com/jobs/",
   },
   {
     name: "Glints",
-    initial: "G",
-    color: "#0D7B63",
+    logo: "/logos/glints.png",
     description: "Banyak lowongan startup, tech, dan remote untuk kandidat muda hingga senior.",
     url: "https://glints.com/id/opportunities/jobs/explore",
   },
   {
     name: "Kalibrr",
-    initial: "K",
-    color: "#2B5CE6",
+    logo: "/logos/kalibrr.png",
     description: "Fokus pada perusahaan ternama dengan proses seleksi terstruktur dan profil kandidat.",
     url: "https://www.kalibrr.com/home/te",
   },
   {
     name: "Indeed",
-    initial: "in",
-    color: "#2557A7",
+    logo: "/logos/indeed.svg",
     description: "Agregator lowongan global yang menampilkan estimasi gaji dan ulasan perusahaan.",
     url: "https://id.indeed.com/",
   },
   {
     name: "KitaLulus",
-    initial: "KL",
-    color: "#0064D2",
+    logo: "/logos/kitalulus.svg",
     description: "Banyak lowongan entry-level, retail, operasional, dan administrasi di seluruh Indonesia.",
     url: "https://www.kitalulus.com/",
   },
   {
     name: "Dealls",
-    initial: "D",
-    color: "#7C3AED",
+    logo: "/logos/dealls.png",
     description: "Lowongan startup dan tech dengan informasi gaji transparan serta proses rekrutmen cepat.",
     url: "https://dealls.com/",
   },
   {
     name: "TopKarir",
-    initial: "TK",
-    color: "#EA580C",
+    logo: "/logos/topkarir.png",
     description: "Portal karier lokal dengan banyak lowongan BUMN, perbankan, dan perusahaan swasta.",
     url: "https://www.topkarir.com/",
   },
@@ -106,15 +97,17 @@ export function JobPortalSection() {
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
-                  {/* Logo mark */}
-                  <span
-                    className="w-11 h-11 shrink-0 border-2 border-black flex items-center justify-center font-black text-sm uppercase shadow-[2px_2px_0px_#000]"
-                    style={{ backgroundColor: portal.color, color: "#fff" }}
-                    aria-hidden="true"
-                  >
-                    {portal.initial}
+                  {/* Official logo */}
+                  <span className="h-11 flex items-center">
+                    <img
+                      src={portal.logo}
+                      alt={`Logo ${portal.name}`}
+                      loading="lazy"
+                      decoding="async"
+                      className="max-h-11 max-w-[150px] w-auto h-auto object-contain object-left"
+                    />
                   </span>
-                  <ArrowUpRight className="w-4 h-4 text-black/40 group-hover:text-[#1D4ED8] transition-colors" />
+                  <ArrowUpRight className="w-4 h-4 text-black/40 group-hover:text-[#1D4ED8] transition-colors shrink-0" />
                 </div>
 
                 <div>
