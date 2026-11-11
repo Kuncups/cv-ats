@@ -857,6 +857,21 @@ export default function BuilderPage() {
                   </button>
                 </div>
               </div>
+
+              <div className="pt-2 border-t border-black/15 flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs font-mono font-bold uppercase text-black">
+                  SURAT LAMARAN KERJA:
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowCoverLetterModal(true)}
+                  className="px-2.5 py-1 bg-yellow-300 hover:bg-yellow-400 text-black font-mono font-bold text-xs border-2 border-black flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000] transition-colors"
+                  title="Buat Cover Letter resmi diselaraskan dengan data CV"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>BUAT COVER LETTER (AI)</span>
+                </button>
+              </div>
             </div>
 
             {/* ATS Form Stepper */}

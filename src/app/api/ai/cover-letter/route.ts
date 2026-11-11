@@ -64,7 +64,7 @@ Thank you very much for your time and consideration.
 Sincerely,
 
 ${params.fullName}
-${params.email} | ${params.phone}`;
+${params.email ? params.email : ""}${params.email && params.phone ? " | " : ""}${params.phone ? params.phone : ""}`;
   }
 
   return `${today}
@@ -87,7 +87,7 @@ Demikian surat lamaran ini saya sampaikan. Terima kasih atas perhatian dan kesem
 Hormat saya,
 
 ${params.fullName}
-${params.email} | ${params.phone}`;
+${params.email ? params.email : ""}${params.email && params.phone ? " | " : ""}${params.phone ? params.phone : ""}`;
 }
 
 export async function POST(req: NextRequest) {
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       "127.0.0.1";
 
-    const rateLimit = checkRateLimit(`cl_${clientIp}`, 12, 60);
+    const rateLimit = checkRateLimit(`cl_${clientIp}`, 20, 60);
     if (!rateLimit.success) {
       return NextResponse.json(
         {
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = (await req.json()) as {
+    const body = ((await req.json().catch(() => ({}))) || {}) as {
       resumeData?: ResumeData;
       companyName?: string;
       targetRole?: string;
@@ -119,29 +119,78 @@ export async function POST(req: NextRequest) {
     const language = body.language === "en" ? "en" : "id";
     const isEn = language === "en";
 
-    const fullName = sanitizeText(resume?.personal.fullName || "Candidate Name");
-    const email = sanitizeText(resume?.personal.email || "");
-    const phone = sanitizeText(resume?.personal.phone || "");
-    const targetRole = sanitizeText(body.targetRole || resume?.personal.jobTitle || "Professional");
+    const fullName = sanitizeText(resume?.personal?.fullName || "Candidate Name");
+    const email = sanitizeText(resume?.personal?.email || "");
+    const phone = sanitizeText(resume?.personal?.phone || "");
+    const targetRole = sanitizeText(body.targetRole || resume?.personal?.jobTitle || "Professional");
     const companyName = sanitizeText(body.companyName || "Target Company");
     const jobDescription = sanitizeText(body.jobDescription || "", 1500);
 
     const skills = [
-      resume?.skills.technical,
-      resume?.skills.tools,
+      resume?.skills?.technical,
+      resume?.skills?.tools,
+      resume?.skills?.soft,
     ]
       .filter(Boolean)
       .join(", ")
       .slice(0, 300);
 
-    const recentExp = resume?.experience?.[0]
-      ? `${resume.experience[0].role} di ${resume.experience[0].company}: ${resume.experience[0].bullets.filter(Boolean).slice(0, 2).join("; ")}`
+    const firstExp = resume?.experience?.[0];
+    const expBullets = Array.isArray(firstExp?.bullets) ? firstExp.bullets : [];
+    const recentExp = firstExp
+      ? `${firstExp.role || "Staf"} di ${firstExp.company || "Perusahaan"}: ${expBullets.filter(Boolean).slice(0, 2).join("; ")}`
       : "";
 
+    let generatedLetter = "";
+    let usedSource: "ai" | "template" = "template";
+
+    // Attempt Cloudflare Workers AI call
     const ai = await getAiBinding();
 
-    if (!ai) {
-      const fallback = generateFallbackCoverLetter({
+    if (ai) {
+      try {
+        const systemPrompt = isEn
+          ? `You are an executive career advisor and professional ATS cover letter writer.
+Write a formal, highly compelling 3-4 paragraph cover letter for the candidate applying for the target job.
+Highlight key achievements and concrete skills directly from their CV data.
+DO NOT use placeholder brackets like [Company] or [Insert Date]. Fill all known information realistically.
+Use clean, concise, impactful business writing.`
+          : `Anda adalah penasihat karier profesional dan spesialis penulisan surat lamaran kerja (Cover Letter) standar HRD resmi.
+Buat surat lamaran kerja 3-4 paragraf yang profesional, elegan, dan menarik bagi HRD untuk posisi sasaran.
+Sorot pencapaian terukur dan keahlian dari data CV kandidat secara spesifik.
+JANGAN gunakan tanda kurung placeholder seperti [Nama Perusahaan]. Gunakan informasi yang telah diberikan secara natural.`;
+
+        const userPrompt = `Candidate: ${fullName}
+Email: ${email}
+Phone: ${phone}
+Target Position: ${targetRole}
+Company Name: ${companyName}
+Target Job Requirements: ${jobDescription || "Standard requirements for " + targetRole}
+Key Skills: ${skills || "Relevant core domain competencies"}
+Recent Experience: ${recentExp || "Proven track record in delivering high impact results"}
+Language: ${isEn ? "English" : "Bahasa Indonesia"}`;
+
+        const response = (await ai.run("@cf/meta/llama-3.2-3b-instruct", {
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          max_tokens: 650,
+          temperature: 0.35,
+        })) as any;
+
+        const aiText = typeof response?.response === "string" ? response.response.trim() : "";
+        if (aiText && aiText.length > 150) {
+          generatedLetter = aiText;
+          usedSource = "ai";
+        }
+      } catch (aiErr) {
+        console.warn("[CoverLetter API] Workers AI call failed, falling back to engine:", aiErr);
+      }
+    }
+
+    if (!generatedLetter) {
+      generatedLetter = generateFallbackCoverLetter({
         fullName,
         email,
         phone,
@@ -152,60 +201,18 @@ export async function POST(req: NextRequest) {
         topSkills: skills,
         language,
       });
-      return NextResponse.json({ success: true, data: fallback, source: "template" });
+      usedSource = "template";
     }
 
-    const systemPrompt = isEn
-      ? `You are an executive career advisor and professional ATS cover letter writer.
-Write a formal, highly compelling 3-4 paragraph cover letter for the candidate applying for the target job.
-Highlight key achievements and concrete skills directly from their CV data.
-DO NOT use placeholder brackets like [Company] or [Insert Date]. Fill all known information realistically.
-Use clean, concise, impactful business writing.`
-      : `Anda adalah penasihat karier profesional dan spesialis penulisan surat lamaran kerja (Cover Letter) standar HRD resmi.
-Buat surat lamaran kerja 3-4 paragraf yang profesional, elegan, dan menarik bagi HRD untuk posisi sasaran.
-Sorot pencapaian terukur dan keahlian dari data CV kandidat secara spesifik.
-JANGAN gunakan tanda kurung placeholder seperti [Nama Perusahaan]. Gunakan informasi yang telah diberikan secara natural.`;
-
-    const userPrompt = `Candidate: ${fullName}
-Email: ${email}
-Phone: ${phone}
-Target Position: ${targetRole}
-Company Name: ${companyName}
-Target Job Requirements: ${jobDescription || "Standard job requirements for " + targetRole}
-Key Skills: ${skills}
-Recent Experience: ${recentExp}
-Language: ${isEn ? "English" : "Bahasa Indonesia"}`;
-
-    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      max_tokens: 700,
-      temperature: 0.4,
+    return NextResponse.json({
+      success: true,
+      data: generatedLetter,
+      source: usedSource,
     });
-
-    const aiText = response?.response?.trim();
-    if (aiText && aiText.length > 200) {
-      return NextResponse.json({ success: true, data: aiText, source: "ai" });
-    }
-
-    const fallback = generateFallbackCoverLetter({
-      fullName,
-      email,
-      phone,
-      targetRole,
-      companyName,
-      jobDescription,
-      experienceSummary: recentExp,
-      topSkills: skills,
-      language,
-    });
-    return NextResponse.json({ success: true, data: fallback, source: "template" });
   } catch (err) {
     console.error("[CoverLetter API] Error:", err);
     return NextResponse.json(
-      { error: "Gagal membuat surat lamaran kerja." },
+      { error: "Gagal memproses surat lamaran kerja." },
       { status: 500 }
     );
   }
