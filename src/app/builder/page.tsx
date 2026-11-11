@@ -34,6 +34,8 @@ import {
   FolderOpen,
   Plus,
   ChevronDown,
+  Pencil,
+  X,
 } from "lucide-react";
 
 // Backwards compatibility re-exports
@@ -57,6 +59,8 @@ export default function BuilderPage() {
   const [resumeCloudId, setResumeCloudId] = useState<string | null>(null);
   const [userDrafts, setUserDrafts] = useState<Array<{ id: string; title: string; updatedAt: string }>>([]);
   const [showDraftMenu, setShowDraftMenu] = useState(false);
+  const [editingDraftId, setEditingDraftId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState("");
   const isInitialMount = useRef(true);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [data, setData] = useState<ResumeData>(DEFAULT_SAMPLE_RESUME);
@@ -235,6 +239,52 @@ export default function BuilderPage() {
       }
     } catch (err) {
       console.error("Gagal menghapus draf:", err);
+    }
+  };
+
+  // Rename draft
+  const handleStartRename = (
+    draftId: string,
+    currentTitle: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+    setEditingDraftId(draftId);
+    setEditingTitle(currentTitle);
+  };
+
+  const handleSaveRename = async (draftId: string) => {
+    const trimmed = editingTitle.trim();
+    if (!trimmed) {
+      setEditingDraftId(null);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/resumes", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: draftId, title: trimmed }),
+      });
+
+      if (res.ok) {
+        setUserDrafts((prev) =>
+          prev.map((d) => (d.id === draftId ? { ...d, title: trimmed } : d))
+        );
+        if (resumeCloudId === draftId) {
+          setData((prev) => ({
+            ...prev,
+            personal: {
+              ...prev.personal,
+              jobTitle: trimmed,
+            },
+          }));
+        }
+      }
+    } catch (err) {
+      console.error("Gagal mengganti nama draf:", err);
+    } finally {
+      setEditingDraftId(null);
     }
   };
 
@@ -487,6 +537,44 @@ export default function BuilderPage() {
                         ) : (
                           userDrafts.map((d) => {
                             const isActive = d.id === resumeCloudId;
+                            if (editingDraftId === d.id) {
+                              return (
+                                <div
+                                  key={d.id}
+                                  className="p-1.5 border border-black bg-white flex items-center gap-1 text-xs"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <input
+                                    type="text"
+                                    value={editingTitle}
+                                    onChange={(e) => setEditingTitle(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") handleSaveRename(d.id);
+                                      if (e.key === "Escape") setEditingDraftId(null);
+                                    }}
+                                    autoFocus
+                                    className="flex-1 p-1 text-xs border border-black font-sans bg-white focus:outline-none focus:ring-1 focus:ring-[#1D4ED8]"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleSaveRename(d.id)}
+                                    className="p-1 bg-[#1D4ED8] text-white hover:bg-[#2563EB] border border-black cursor-pointer"
+                                    title="Simpan nama baru"
+                                  >
+                                    <Check className="w-3 h-3" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setEditingDraftId(null)}
+                                    className="p-1 bg-white hover:bg-zinc-100 text-black border border-black cursor-pointer"
+                                    title="Batal"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              );
+                            }
+
                             return (
                               <div
                                 key={d.id}
@@ -497,7 +585,7 @@ export default function BuilderPage() {
                                     : "bg-white border-black/20 hover:border-black hover:bg-zinc-50"
                                 }`}
                               >
-                                <div className="flex flex-col min-w-0">
+                                <div className="flex flex-col min-w-0 flex-1">
                                   <span className="truncate">{d.title || "Draf Tanpa Judul"}</span>
                                   <span className="text-[10px] text-black/50">
                                     {new Date(d.updatedAt).toLocaleDateString("id-ID", {
@@ -508,15 +596,24 @@ export default function BuilderPage() {
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1 shrink-0">
-                                  {isActive ? (
+                                  {isActive && (
                                     <span className="text-[9px] bg-[#1D4ED8] text-white px-1.5 py-0.5 font-bold">
                                       AKTIF
                                     </span>
-                                  ) : (
+                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={(e) => handleStartRename(d.id, d.title, e)}
+                                    className="text-black/60 hover:text-[#1D4ED8] p-1 hover:bg-black/5 rounded cursor-pointer"
+                                    title="Ubah nama draf"
+                                  >
+                                    <Pencil className="w-3.5 h-3.5" />
+                                  </button>
+                                  {!isActive && (
                                     <button
                                       type="button"
                                       onClick={(e) => handleDeleteDraft(d.id, d.title, e)}
-                                      className="text-red-500 hover:text-red-700 p-1 hover:bg-red-50 rounded"
+                                      className="text-red-500 hover:text-red-700 p-1 hover:bg-red-50 rounded cursor-pointer"
                                       title="Hapus draf ini"
                                     >
                                       <Trash2 className="w-3.5 h-3.5" />

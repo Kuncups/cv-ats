@@ -135,6 +135,38 @@ export async function deleteUserResume(id: string, userId: string): Promise<bool
   return false;
 }
 
+export async function renameUserResume(
+  id: string,
+  userId: string,
+  newTitle: string
+): Promise<boolean> {
+  const title = newTitle.trim();
+  if (!title) return false;
+
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+
+  if (db) {
+    try {
+      await db
+        .update(resumes)
+        .set({ title, updatedAt: new Date() })
+        .where(and(eq(resumes.id, id), eq(resumes.userId, userId)));
+      return true;
+    } catch (e) {
+      console.warn("[resume-store] D1 rename failed:", e);
+    }
+  }
+
+  const found = fallbackStore.get(id);
+  if (found && found.userId === userId) {
+    found.title = title;
+    found.updatedAt = new Date().toISOString();
+    return true;
+  }
+  return false;
+}
+
 export async function saveUserResume(
   userId: string,
   title: string,

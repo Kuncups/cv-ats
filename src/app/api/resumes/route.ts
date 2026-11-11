@@ -5,6 +5,7 @@ import {
   saveUserResume,
   deleteUserResume,
   getResumeById,
+  renameUserResume,
 } from "@/lib/resume-store";
 
 export async function GET(req: NextRequest) {
@@ -89,6 +90,35 @@ export async function DELETE(req: NextRequest) {
     console.error("[API/resumes] DELETE Error:", err);
     return NextResponse.json(
       { error: "Gagal menghapus draf CV." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  const session = await auth();
+  const userId = session?.user?.id || session?.user?.email;
+  if (!userId) {
+    return NextResponse.json({ error: "Silakan masuk terlebih dahulu." }, { status: 401 });
+  }
+
+  try {
+    const body = (await req.json()) as { id?: string; title?: string };
+    const { id, title } = body;
+
+    if (!id || !title?.trim()) {
+      return NextResponse.json(
+        { error: "ID dan nama baru draf wajib diisi." },
+        { status: 400 }
+      );
+    }
+
+    const renamed = await renameUserResume(id, userId, title.trim());
+    return NextResponse.json({ success: renamed });
+  } catch (err) {
+    console.error("[API/resumes] PATCH Error:", err);
+    return NextResponse.json(
+      { error: "Gagal mengganti nama draf CV." },
       { status: 500 }
     );
   }

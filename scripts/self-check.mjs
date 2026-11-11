@@ -261,6 +261,7 @@ async function runSelfChecks() {
     getUserResumes,
     getResumeById,
     deleteUserResume,
+    renameUserResume,
   } = await import("../src/lib/resume-store.ts");
 
   const testUserId = "user-test-multi-draft";
@@ -271,6 +272,20 @@ async function runSelfChecks() {
   );
   assert.ok(draft1.id, "Draft 1 must have an ID");
   assert.strictEqual(draft1.title, "CV Software Engineer");
+
+  const renamedOk = await renameUserResume(
+    draft1.id,
+    testUserId,
+    "CV Senior Fullstack Engineer"
+  );
+  assert.strictEqual(renamedOk, true, "Renaming draft must succeed");
+
+  const fetchedRenamed = await getResumeById(draft1.id, testUserId);
+  assert.strictEqual(
+    fetchedRenamed?.title,
+    "CV Senior Fullstack Engineer",
+    "Title must be updated to new name"
+  );
 
   const draft2 = await saveUserResume(
     testUserId,
@@ -285,7 +300,7 @@ async function runSelfChecks() {
   assert.ok(userDrafts.some((d) => d.id === draft2.id));
 
   const fetchedDraft1 = await getResumeById(draft1.id, testUserId);
-  assert.strictEqual(fetchedDraft1?.title, "CV Software Engineer");
+  assert.strictEqual(fetchedDraft1?.title, "CV Senior Fullstack Engineer");
 
   const deleted = await deleteUserResume(draft2.id, testUserId);
   assert.strictEqual(deleted, true, "Draft deletion must succeed");
