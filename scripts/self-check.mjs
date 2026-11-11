@@ -230,7 +230,7 @@ async function runSelfChecks() {
   assert.ok(richPdfBlob instanceof Blob);
   assert.ok(richPdfBlob.size > 2000, "Rich text PDF should generate valid vector bytes");
 
-  // 10. AI Enhancement Service Validation (with Contextual Heuristic Refinement)
+  // 10. AI Enhancement Service Validation (with Dynamic Contextual Refinement)
   const { enhanceResumeContent } = await import("../src/lib/ai-service.ts");
   const polishedBullet = await enhanceResumeContent({
     mode: "bullet",
@@ -240,8 +240,20 @@ async function runSelfChecks() {
   });
   assert.ok(polishedBullet.length > 20, "Polished bullet must be non-empty string");
   assert.ok(!polishedBullet.startsWith("saya bantu bikin"), "Must strip informal conversational prefix");
-  assert.match(polishedBullet, /^(Mengelola|Menyusun|Mengoptimalkan|Mengembangkan)/, "Must start with strong action verb");
+  assert.match(polishedBullet, /^(Mengelola|Menyusun|Mengoptimalkan|Mengembangkan|Mengoordinasikan)/, "Must start with strong action verb");
   assert.ok(polishedBullet.includes("laporan keuangan"), "Must preserve user's authentic task/domain");
+  assert.ok(polishedBullet.includes("**"), "Must format metrics with bold markdown");
+
+  // Dynamic variation check: different inputs produce different ending structures
+  const polishedBullet2 = await enhanceResumeContent({
+    mode: "bullet",
+    text: "bikin desain poster promosi dan posting di instagram",
+    role: "Graphic Designer",
+    language: "id",
+  });
+  assert.ok(polishedBullet2.length > 20);
+  assert.match(polishedBullet2, /^(Merancang|Memproduksi|Mengembangkan|Mengoptimalkan)/);
+  assert.notStrictEqual(polishedBullet, polishedBullet2, "Different bullets must produce distinct wording");
 
   const refinedSummary = await enhanceResumeContent({
     mode: "summary",

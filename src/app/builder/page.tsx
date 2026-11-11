@@ -69,7 +69,7 @@ export default function BuilderPage() {
   useEffect(() => {
     const handleResize = () => {
       if (!previewWrapperRef.current) return;
-      const availableWidth = previewWrapperRef.current.clientWidth - 16;
+      const availableWidth = previewWrapperRef.current.clientWidth - 28;
       if (availableWidth > 0 && availableWidth < 794) {
         setPreviewScale(availableWidth / 794);
       } else {
@@ -523,7 +523,7 @@ export default function BuilderPage() {
           {/* Right Side: Live ATS Preview (7 cols on lg+) */}
           <div
             ref={previewWrapperRef}
-            className={`cv-preview-wrapper lg:col-span-7 flex flex-col items-center print:!block print:!w-full ${
+            className={`cv-preview-wrapper lg:col-span-7 flex flex-col items-center lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto no-scrollbar print:!block print:!w-full print:!overflow-visible print:!static ${
               mobileView === "preview" ? "block w-full" : "hidden lg:flex"
             }`}
           >
