@@ -59,10 +59,9 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
               <Link
                 href="/analyzer"
-                className="brutal-btn w-full sm:w-auto justify-center bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center gap-3 transition-colors shadow-[4px_4px_0px_#000]"
+                className="brutal-btn w-full sm:w-auto justify-center bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center transition-colors shadow-[4px_4px_0px_#000]"
               >
                 <span>CEK SKOR CV SAYA (GRATIS)</span>
-                <DoubleArrow className="w-5 sm:w-6 h-3 text-current" />
               </Link>
               <Link
                 href="/builder"
