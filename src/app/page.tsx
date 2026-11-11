@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BrutalistStar, DoubleArrow, Pill } from "@/components/BrutalistBadge";
+import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import {
   FileSearch,
   PenTool,
@@ -334,10 +334,9 @@ export default function HomePage() {
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/analyzer"
-                className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-8 py-3.5 text-sm font-mono uppercase inline-flex items-center gap-2 shadow-[4px_4px_0px_#fff]"
+                className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-8 py-3.5 text-sm font-mono uppercase inline-flex items-center shadow-[4px_4px_0px_#fff]"
               >
                 <span>RAPIKAN & CEK CV SAYA SEKARANG</span>
-                <DoubleArrow className="w-5 h-3 text-current" />
               </Link>
             </div>
           </div>
