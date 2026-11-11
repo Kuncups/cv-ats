@@ -7,10 +7,7 @@ import {
   PenTool,
   CheckCircle,
   XCircle,
-  Sparkles,
   ShieldCheck,
-  Zap,
-  Cpu,
 } from "lucide-react";
 
 export default function HomePage() {

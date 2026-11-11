@@ -14,7 +14,7 @@ import {
   AlertTriangle,
   CheckCircle2,
   XCircle,
-  Sparkles,
+  Plus,
   RefreshCw,
   Info,
   Check,
@@ -56,34 +56,6 @@ export default function AnalyzerPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AtsAnalysisResult | null>(null);
   const [copiedReport, setCopiedReport] = useState(false);
-  const [aiKeywordBullets, setAiKeywordBullets] = useState<string | null>(null);
-  const [isGeneratingAiBullets, setIsGeneratingAiBullets] = useState(false);
-  const [copiedAiBullets, setCopiedAiBullets] = useState(false);
-
-  const handleGenerateAiKeywordBullets = async () => {
-    if (!result?.missingKeywords || result.missingKeywords.length === 0) return;
-    setIsGeneratingAiBullets(true);
-    try {
-      const res = await fetch("/api/ai/enhance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          mode: "keyword-suggestion",
-          text: result.missingKeywords.slice(0, 5).join(", "),
-          role: bridgedTitle || "Kandidat Profesional",
-          language: "id",
-        }),
-      });
-      const json = (await res.json()) as { data?: { result?: string } };
-      if (json.data?.result) {
-        setAiKeywordBullets(json.data.result);
-      }
-    } catch (err) {
-      console.error("AI keyword bullets error:", err);
-    } finally {
-      setIsGeneratingAiBullets(false);
-    }
-  };
 
   const handleCopyReport = async () => {
     if (!result) return;
@@ -554,7 +526,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                       className="px-3 py-1.5 bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-mono font-bold text-xs border-2 border-black transition-colors flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000]"
                       title="Salin kata kunci langsung ke draf CV Anda"
                     >
-                      <Sparkles className="w-3.5 h-3.5" />
+                      <Plus className="w-3.5 h-3.5" />
                       <span>Terapkan di CV Builder</span>
                     </button>
                   )}
@@ -576,47 +548,6 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                     </p>
                   )}
                 </div>
-
-                {result.missingKeywords.length > 0 && (
-                  <div className="mt-4 pt-3 border-t-2 border-black/10">
-                    <button
-                      type="button"
-                      onClick={handleGenerateAiKeywordBullets}
-                      disabled={isGeneratingAiBullets}
-                      className="w-full py-2 bg-zinc-100 hover:bg-blue-50 text-black border border-black font-mono text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000] disabled:opacity-50"
-                    >
-                      <Sparkles className={`w-3.5 h-3.5 text-[#1D4ED8] ${isGeneratingAiBullets ? "animate-spin" : ""}`} />
-                      <span>
-                        {isGeneratingAiBullets
-                          ? "AI SEDANG MERANCANG CONTOH POIN..."
-                          : "BUATKAN CONTOH KALIMAT DENGAN KATA KUNCI INI"}
-                      </span>
-                    </button>
-
-                    {aiKeywordBullets && (
-                      <div className="mt-3 p-3 bg-blue-50/80 border-2 border-black space-y-2">
-                        <div className="flex justify-between items-center text-[11px] font-mono font-bold text-[#1D4ED8] uppercase">
-                          <span>Contoh Poin Prestasi Standar ATS:</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              navigator.clipboard.writeText(aiKeywordBullets);
-                              setCopiedAiBullets(true);
-                              setTimeout(() => setCopiedAiBullets(false), 2000);
-                            }}
-                            className="underline hover:text-black cursor-pointer flex items-center gap-1 text-[10px]"
-                          >
-                            <Copy className="w-3 h-3" />
-                            <span>{copiedAiBullets ? "Tersalin!" : "Salin Teks"}</span>
-                          </button>
-                        </div>
-                        <p className="whitespace-pre-line text-xs font-sans text-black leading-relaxed">
-                          {aiKeywordBullets}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             </div>
 
@@ -671,7 +602,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
             {/* Recommendations & Actionable Rewrites */}
             <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6">
               <div className="pb-3 mb-4 border-b-2 border-black flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-black" />
+                <FileCheck className="w-5 h-5 text-black" />
                 <h3 className="font-mono font-bold text-sm uppercase">
                   Saran Praktis untuk Memperbaiki CV Anda
                 </h3>
