@@ -8,6 +8,7 @@ import {
   GripVertical,
   ChevronUp,
   ChevronDown,
+  Sparkles,
 } from "lucide-react";
 
 interface StepExperienceProps {
@@ -24,9 +25,44 @@ export function StepExperience({
   onBack,
 }: StepExperienceProps) {
   const isEnglish = (data.language || "id") === "en";
+  const [polishingBullet, setPolishingBullet] = useState<string | null>(null);
   // ponytail: HTML5 drag & drop + direct array swap. Upgrade to @dnd-kit if touch sensor needed.
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+
+  const handleEnhanceBullet = async (
+    expIdx: number,
+    bulletIdx: number,
+    role: string,
+    company: string
+  ) => {
+    const currentBullet = data.experience[expIdx]?.bullets[bulletIdx] || "";
+    const key = `${expIdx}-${bulletIdx}`;
+    setPolishingBullet(key);
+
+    try {
+      const res = await fetch("/api/ai/enhance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "bullet",
+          text: currentBullet,
+          role,
+          company,
+          language: data.language || "id",
+        }),
+      });
+
+      const json = (await res.json()) as { data?: { result?: string } };
+      if (json.data?.result) {
+        updateExpBullet(expIdx, bulletIdx, json.data.result);
+      }
+    } catch (err) {
+      console.error("AI polish error:", err);
+    } finally {
+      setPolishingBullet(null);
+    }
+  };
 
   const handleDragStart = (index: number) => {
     setDraggedIdx(index);
@@ -284,29 +320,44 @@ export function StepExperience({
               </button>
             </div>
 
-            {exp.bullets.map((bullet, bIdx) => (
-              <div key={bIdx} className="flex items-center gap-2">
-                <span className="font-mono text-xs text-black/60">•</span>
-                <RichInput
-                  value={bullet}
-                  onChange={(val) => updateExpBullet(expIdx, bIdx, val)}
-                  placeholder={
-                    isEnglish
-                      ? "Formula: Action Verb + Task + Quantifiable Result (e.g. Led **15** team members...)"
-                      : "Gunakan formula: Action Verb + Task + Hasil Terukur (cth: Memimpin **15** staf...)"
-                  }
-                />
-                {exp.bullets.length > 1 && (
+            {exp.bullets.map((bullet, bIdx) => {
+              const isPolishing = polishingBullet === `${expIdx}-${bIdx}`;
+              return (
+                <div key={bIdx} className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="font-mono text-xs text-black/60 shrink-0">•</span>
+                  <div className="flex-1">
+                    <RichInput
+                      value={bullet}
+                      onChange={(val) => updateExpBullet(expIdx, bIdx, val)}
+                      placeholder={
+                        isEnglish
+                          ? "Formula: Action Verb + Task + Quantifiable Result (e.g. Led **15** team members...)"
+                          : "Gunakan formula: Action Verb + Task + Hasil Terukur (cth: Memimpin **15** staf...)"
+                      }
+                    />
+                  </div>
                   <button
                     type="button"
-                    onClick={() => removeExpBullet(expIdx, bIdx)}
-                    className="text-red-500 hover:text-red-800 text-xs px-1 cursor-pointer"
+                    onClick={() => handleEnhanceBullet(expIdx, bIdx, exp.role, exp.company)}
+                    disabled={isPolishing}
+                    title="Poles kalimat dengan standar ATS AI (Formula Google X-Y-Z)"
+                    className="px-2 py-1.5 bg-[#1D4ED8] hover:bg-[#2563EB] text-white border border-black text-[10px] font-mono font-bold flex items-center gap-1 shrink-0 cursor-pointer shadow-[1px_1px_0px_#000] disabled:opacity-50"
                   >
-                    ×
+                    <Sparkles className={`w-3 h-3 ${isPolishing ? "animate-spin" : ""}`} />
+                    <span className="hidden sm:inline">{isPolishing ? "..." : "POLES AI"}</span>
                   </button>
-                )}
-              </div>
-            ))}
+                  {exp.bullets.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeExpBullet(expIdx, bIdx)}
+                      className="text-red-500 hover:text-red-800 text-sm px-1 cursor-pointer shrink-0 font-bold"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       ))}

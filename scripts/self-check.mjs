@@ -230,6 +230,26 @@ async function runSelfChecks() {
   assert.ok(richPdfBlob instanceof Blob);
   assert.ok(richPdfBlob.size > 2000, "Rich text PDF should generate valid vector bytes");
 
+  // 10. AI Enhancement Service Validation (with Heuristic Fallback)
+  const { enhanceResumeContent } = await import("../src/lib/ai-service.ts");
+  const polishedBullet = await enhanceResumeContent({
+    mode: "bullet",
+    text: "membuat web untuk toko",
+    role: "Frontend Developer",
+    language: "id",
+  });
+  assert.ok(polishedBullet.length > 10, "Polished bullet must be non-empty string");
+  assert.match(polishedBullet, /^[A-Z]/, "Polished bullet must start with a capitalized action verb");
+
+  const generatedSummary = await enhanceResumeContent({
+    mode: "summary",
+    text: "",
+    role: "Accountant",
+    skills: "Taxation, Excel",
+    language: "id",
+  });
+  assert.ok(generatedSummary.includes("Accountant") || generatedSummary.includes("Profesional"), "Summary must reflect role");
+
   console.log("✓ All self-checks passed successfully!");
 }
 

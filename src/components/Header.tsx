@@ -15,17 +15,17 @@ export function Header() {
 
   return (
     <>
-      <header className="w-full bg-white border-b-3 border-black sticky top-0 z-50 no-print">
+      <header className="w-full bg-white border-b-3 border-black sticky top-0 z-50 no-print font-sans">
         {/* Main Navigation Bar */}
         <div className="w-full px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#1D4ED8] text-white flex items-center justify-center font-black text-lg sm:text-xl border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#1D4ED8] text-white flex items-center justify-center font-sans font-black text-lg sm:text-xl border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
               [D]
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-black text-xl sm:text-2xl tracking-tighter uppercase text-black leading-none">
+                <span className="font-sans font-black text-xl sm:text-2xl tracking-tighter uppercase text-black leading-none">
                   Draft CV
                 </span>
                 <BrutalistStar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#1D4ED8]" />

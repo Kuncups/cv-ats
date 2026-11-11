@@ -8,5 +8,8 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  "ai": {
+    "binding": "AI"
   }
 }

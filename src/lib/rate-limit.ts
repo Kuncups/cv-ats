@@ -12,8 +12,8 @@ const memoryStore = new Map<string, RateLimitRecord>();
  */
 export function checkRateLimit(
   identifier: string,
-  limit = SITE_CONFIG.security.rateLimitMaxRequests,
-  windowSec = SITE_CONFIG.security.rateLimitWindowSec
+  limit: number = SITE_CONFIG.security.rateLimitMaxRequests,
+  windowSec: number = SITE_CONFIG.security.rateLimitWindowSec
 ): { success: boolean; remaining: number; resetSec: number } {
   const now = Date.now();
   const windowMs = windowSec * 1000;

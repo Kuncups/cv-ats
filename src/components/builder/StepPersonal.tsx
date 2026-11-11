@@ -18,7 +18,33 @@ export function StepPersonal({
   onLoadPreset,
 }: StepPersonalProps) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
   const isEnglish = (data.language || "id") === "en";
+
+  const handleGenerateSummary = async () => {
+    setIsGeneratingSummary(true);
+    try {
+      const res = await fetch("/api/ai/enhance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "summary",
+          text: data.summary || "",
+          role: data.personal.jobTitle || "",
+          skills: data.skills.technical || "",
+          language: data.language || "id",
+        }),
+      });
+      const json = (await res.json()) as { data?: { result?: string } };
+      if (json.data?.result) {
+        updateData({ ...data, summary: json.data.result });
+      }
+    } catch (err) {
+      console.error("AI summary error:", err);
+    } finally {
+      setIsGeneratingSummary(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -208,18 +234,30 @@ export function StepPersonal({
 
       {/* Deskripsi Singkat / Ringkasan Profesional */}
       <div className="pt-3 border-t border-black/20 space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <label className="block text-xs font-mono font-bold uppercase">
             {isEnglish
               ? "Professional Summary (Short Bio)"
               : "Deskripsi Singkat Tentang Kamu (Ringkasan Profesional)"}
           </label>
-          <span className="text-[10px] font-mono text-black/60">
-            {data.summary.length}{" "}
-            {isEnglish
-              ? "characters (100-300 recommended)"
-              : "karakter (direkomendasikan 100-300)"}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono text-black/60 hidden sm:inline">
+              {data.summary.length}{" "}
+              {isEnglish
+                ? "chars"
+                : "karakter"}
+            </span>
+            <button
+              type="button"
+              onClick={handleGenerateSummary}
+              disabled={isGeneratingSummary}
+              className="px-2.5 py-1 bg-[#1D4ED8] hover:bg-[#2563EB] text-white text-[11px] font-mono font-bold border border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              title="Tuliskan ringkasan profesional otomatis dengan AI"
+            >
+              <Sparkles className={`w-3.5 h-3.5 ${isGeneratingSummary ? "animate-spin" : ""}`} />
+              <span>{isGeneratingSummary ? "AI MENULIS..." : "BUAT DENGAN AI"}</span>
+            </button>
+          </div>
         </div>
         <RichTextarea
           rows={5}
