@@ -8,21 +8,39 @@ interface AtsPreviewProps {
   data: ResumeData;
   pages: ResumePageContent[];
   previewScale: number;
+  isCompact?: boolean;
+  onToggleCompact?: () => void;
 }
 
-export function AtsPreview({ data, pages, previewScale }: AtsPreviewProps) {
+export function AtsPreview({ data, pages, previewScale, isCompact = false, onToggleCompact }: AtsPreviewProps) {
   const isEnglish = (data.language || "id") === "en";
 
   return (
     <>
       {/* Preview Banner */}
-      <div className="w-full flex items-center justify-between bg-black text-[#FFF000] px-4 py-2 border-3 border-black no-print mb-4">
+      <div className="w-full flex flex-wrap items-center justify-between gap-2 bg-black text-white px-4 py-2 border-3 border-black no-print mb-4">
         <span className="font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2">
           <span>[ PRATINJAU DOKUMEN // FORMAT RESMI STANDAR ATS ]</span>
         </span>
-        <span className="text-[10px] font-mono bg-white text-black px-2 py-0.5 font-bold">
-          {pages.length === 1 ? "1 HALAMAN A4 (IDEAL)" : `${pages.length} HALAMAN A4`}
-        </span>
+        <div className="flex items-center gap-2">
+          {onToggleCompact && (
+            <button
+              type="button"
+              onClick={onToggleCompact}
+              className={`text-[10px] font-mono px-2 py-0.5 font-bold border border-white transition-colors cursor-pointer uppercase ${
+                isCompact
+                  ? "bg-[#1D4ED8] text-white"
+                  : "bg-white/10 text-white hover:bg-white/20"
+              }`}
+              title="Persempit margin dan spasi agar muat 1 halaman"
+            >
+              {isCompact ? "SPASI PADAT: ON" : "PADATKAN SPASI"}
+            </button>
+          )}
+          <span className="text-[10px] font-mono bg-white text-black px-2 py-0.5 font-bold">
+            {pages.length === 1 ? "1 HALAMAN A4 (IDEAL)" : `${pages.length} HALAMAN A4`}
+          </span>
+        </div>
       </div>
 
       {/* Paginated Resume Pages (Sheet 1, Sheet 2, etc.) */}
@@ -33,7 +51,7 @@ export function AtsPreview({ data, pages, previewScale }: AtsPreviewProps) {
             {pIdx > 0 && (
               <div className="w-full flex items-center justify-center gap-3 my-4 no-print select-none">
                 <div className="h-[2px] bg-black/40 flex-1 border-b border-dashed border-black" />
-                <span className="font-mono text-[11px] font-bold bg-[#FFF000] text-black px-3 py-1 border-2 border-black shadow-[2px_2px_0px_#000] uppercase tracking-wider flex items-center gap-1.5">
+                <span className="font-mono text-[11px] font-bold bg-[#1D4ED8] text-white px-3 py-1 border-2 border-black shadow-[2px_2px_0px_#000] uppercase tracking-wider flex items-center gap-1.5">
                   <span>✂ BATAS HALAMAN {pIdx} // AWAL HALAMAN {page.pageNumber} ✂</span>
                 </span>
                 <div className="h-[2px] bg-black/40 flex-1 border-b border-dashed border-black" />
@@ -45,7 +63,9 @@ export function AtsPreview({ data, pages, previewScale }: AtsPreviewProps) {
               style={{
                 zoom: previewScale < 1 ? previewScale : undefined,
               }}
-              className="cv-preview-container cv-page relative bg-white border-3 border-black shadow-[8px_8px_0px_#000] w-[794px] min-h-[1123px] p-[38px] text-black leading-normal print:border-none print:shadow-none print:p-0 print:m-0 print:w-full print:min-h-0 print:[zoom:1]"
+              className={`cv-preview-container cv-page relative bg-white border-3 border-black shadow-[8px_8px_0px_#000] w-[794px] min-h-[1123px] text-black leading-normal print:border-none print:shadow-none print:p-0 print:m-0 print:w-full print:min-h-0 print:[zoom:1] ${
+                isCompact ? "p-[26px]" : "p-[38px]"
+              }`}
             >
               {/* Page Badge Indicator */}
               <div className="absolute top-3 right-4 font-mono text-[10px] text-zinc-400 font-bold no-print select-none">

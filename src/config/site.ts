@@ -1,9 +1,9 @@
 export const SITE_CONFIG = {
   name: "Draft CV",
   shortName: "Draft CV",
-  tagline: "Cek Skor ATS & Buat CV Standar HRD",
+  tagline: "Bantu Rapikan CV & Tingkatkan Peluang Kerja",
   description:
-    "Cek kecocokan CV Anda dengan lowongan kerja impian. Buat resume rapi standar ATS 1-kolom yang mudah dibaca recruiter secara gratis.",
+    "Bantu merapikan format dan struktur CV Anda agar sesuai standar ATS, terbaca sempurna oleh recruiter, dan meningkatkan peluang lolos panggilan kerja.",
   url: "https://draftcv.pages.dev",
   version: "2024.11.0",
   year: "2024 -> 2026",
@@ -15,7 +15,9 @@ export const SITE_CONFIG = {
     rateLimitWindowSec: 60,
   },
   theme: {
-    acidYellow: "#FFF000",
+    primary: "#1D4ED8",
+    swissBlue: "#1D4ED8",
+    swissBlueHover: "#2563EB",
     jetBlack: "#000000",
     pureWhite: "#FFFFFF",
   },

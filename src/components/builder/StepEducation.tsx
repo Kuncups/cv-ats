@@ -57,7 +57,7 @@ export function StepEducation({
         <button
           type="button"
           onClick={addEducation}
-          className="px-2.5 py-1 bg-black text-[#FFF000] text-xs font-mono font-bold border border-black hover:bg-white hover:text-black flex items-center gap-1 shrink-0 cursor-pointer"
+          className="px-2.5 py-1 bg-[#1D4ED8] text-white text-xs font-mono font-bold border border-black hover:bg-[#2563EB] flex items-center gap-1 shrink-0 cursor-pointer shadow-[1px_1px_0px_#000]"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>TAMBAH</span>
@@ -122,7 +122,7 @@ export function StepEducation({
         <button
           type="button"
           onClick={onNext}
-          className="px-5 py-2.5 bg-black text-[#FFF000] font-mono text-xs font-bold border-2 border-black hover:bg-white hover:text-black flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="px-5 py-2.5 bg-[#1D4ED8] text-white font-mono text-xs font-bold border-2 border-black hover:bg-[#2563EB] flex items-center gap-1.5 transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
         >
           <span>SIMPAN & LANJUTKAN</span>
           <ArrowRight className="w-3.5 h-3.5" />

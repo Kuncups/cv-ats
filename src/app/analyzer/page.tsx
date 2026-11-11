@@ -20,7 +20,32 @@ import {
   Info,
   Check,
   RotateCcw,
+  Copy,
 } from "lucide-react";
+
+function ScoreTicker({ target }: { target: number }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    let frameId: number;
+    const start = performance.now();
+    const duration = 650;
+
+    const step = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      setCurrent(Math.round(eased * target));
+      if (progress < 1) {
+        frameId = requestAnimationFrame(step);
+      }
+    };
+    frameId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frameId);
+  }, [target]);
+
+  return <>{current}</>;
+}
 
 export default function AnalyzerPage() {
   const router = useRouter();
@@ -31,6 +56,31 @@ export default function AnalyzerPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AtsAnalysisResult | null>(null);
+  const [copiedReport, setCopiedReport] = useState(false);
+
+  const handleCopyReport = async () => {
+    if (!result) return;
+    const text = `HASIL EVALUASI CV - DRAFT CV
+Skor Kecocokan: ${result.overallScore}% (${result.summary})
+- Kecocokan Kata Kunci: ${result.matchScore}%
+- Format & Tata Letak: ${result.formattingScore}%
+- Konten & Pencapaian: ${result.contentScore}%
+- Kelengkapan Kontak: ${result.contactScore}%
+
+Keahlian Cocok: ${result.matchedKeywords.join(", ") || "-"}
+Keahlian Disarankan: ${result.missingKeywords.join(", ") || "-"}
+
+Saran Perbaikan:
+${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).join("\n")}
+`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedReport(true);
+      setTimeout(() => setCopiedReport(false), 2000);
+    } catch {
+      // Fallback
+    }
+  };
 
   const handleApplyKeywordsToBuilder = () => {
     if (!result?.missingKeywords || result.missingKeywords.length === 0) return;
@@ -171,13 +221,13 @@ export default function AnalyzerPage() {
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <Pill variant="black">CEK SKOR CV</Pill>
             <Pill variant="white">ANALISIS KATA KUNCI</Pill>
-            <Pill variant="yellow">STANDAR ATS RESMI</Pill>
+            <Pill variant="blue">STANDAR ATS RESMI</Pill>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-tight mb-2">
             Cek Skor & Kesesuaian Kata Kunci CV Anda
           </h1>
           <p className="font-mono text-sm sm:text-base text-black/80 max-w-2xl leading-relaxed">
-            Ketahui seberapa cocok CV Anda dengan lowongan yang dituju, temukan keahlian penting yang belum Anda cantumkan, dan dapatkan saran perbaikan praktis agar lebih berpeluang lolos screening HRD.
+            Ketahui seberapa cocok CV Anda dengan lowongan yang dituju, temukan keahlian penting yang belum Anda cantumkan, dan rapikan isi CV agar peluang dipanggil wawancara kerja meningkat pesat.
           </p>
         </div>
 
@@ -190,14 +240,15 @@ export default function AnalyzerPage() {
                 <span className="font-mono font-bold text-xs uppercase tracking-wider">
                   [ LANGKAH 1: DOKUMEN RESUME ]
                 </span>
-                <span className="text-[10px] font-mono bg-[#FFF000] px-2 py-0.5 border border-black font-bold">
+                <span className="text-[10px] font-mono bg-[#1D4ED8] text-white px-2 py-0.5 border border-black font-bold shadow-[1px_1px_0px_#000]">
                   {bridgedText ? "DARI BUILDER" : "MAKS. 2MB"}
                 </span>
               </div>
 
               {bridgedText ? (
-                <div className="border-3 border-black bg-[#FFF000]/25 p-6 flex-1 flex flex-col items-center justify-center text-center space-y-3">
-                  <div className="w-12 h-12 bg-black text-[#FFF000] flex items-center justify-center border-2 border-black">
+                <div className="relative overflow-hidden border-3 border-black bg-blue-50/70 p-6 flex-1 flex flex-col items-center justify-center text-center space-y-3">
+                  {isAnalyzing && <div className="animate-laser" />}
+                  <div className="w-12 h-12 bg-[#1D4ED8] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
                     <Check className="w-6 h-6" />
                   </div>
                   <div>
@@ -211,7 +262,7 @@ export default function AnalyzerPage() {
                   <button
                     type="button"
                     onClick={handleClearBridge}
-                    className="text-xs font-mono underline hover:text-red-700 pt-2 flex items-center gap-1"
+                    className="text-xs font-mono underline hover:text-red-700 pt-2 flex items-center gap-1 cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>Ganti dengan Unggah PDF Lain</span>
@@ -221,11 +272,12 @@ export default function AnalyzerPage() {
                 <div
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={handleDrop}
-                  className={`border-3 border-dashed border-black p-8 text-center flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors ${
-                    file ? "bg-[#FFF000]/20" : "bg-[#FFF000]/5 hover:bg-[#FFF000]/10"
+                  className={`relative overflow-hidden border-3 border-dashed border-black p-8 text-center flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors ${
+                    file ? "bg-blue-50/80" : "bg-zinc-50 hover:bg-blue-50/40"
                   }`}
                   onClick={() => document.getElementById("file-input")?.click()}
                 >
+                  {isAnalyzing && <div className="animate-laser" />}
                   <input
                     id="file-input"
                     type="file"
@@ -236,7 +288,7 @@ export default function AnalyzerPage() {
 
                   {file ? (
                     <div className="flex flex-col items-center gap-2">
-                      <div className="w-12 h-12 bg-black text-[#FFF000] flex items-center justify-center border-2 border-black">
+                      <div className="w-12 h-12 bg-[#1D4ED8] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
                         <FileCheck className="w-6 h-6" />
                       </div>
                       <span className="font-mono font-bold text-sm text-black break-all max-w-[240px]">
@@ -295,7 +347,7 @@ export default function AnalyzerPage() {
                       key={sample.title}
                       type="button"
                       onClick={() => handleSelectSampleJob(idx)}
-                      className="text-[11px] font-mono font-bold px-2 py-1 bg-[#FFF000] border border-black hover:bg-black hover:text-[#FFF000] transition-colors"
+                      className="text-[11px] font-mono font-bold px-2 py-1 bg-zinc-100 border border-black hover:bg-[#1D4ED8] hover:text-white transition-colors cursor-pointer"
                     >
                       {sample.shortTitle || sample.title}
                     </button>
@@ -307,7 +359,7 @@ export default function AnalyzerPage() {
                 onChange={(e) => setJobDescription(e.target.value)}
                 placeholder="Salin dan tempel deskripsi kualifikasi pekerjaan (Job Description / Requirements) yang ingin Anda lamar di sini..."
                 rows={7}
-                className="w-full flex-1 p-3 font-mono text-xs sm:text-sm border-2 border-black bg-[#FFF000]/5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black resize-y"
+                className="w-full flex-1 p-3 font-mono text-xs sm:text-sm border-2 border-black bg-zinc-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1D4ED8] resize-y"
               />
 
               {error && (
@@ -323,10 +375,10 @@ export default function AnalyzerPage() {
                   type="button"
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || (!file && !bridgedText)}
-                  className={`w-full sm:w-auto brutal-btn font-black px-8 py-3 text-sm font-mono uppercase flex items-center justify-center gap-2 ${
+                  className={`w-full sm:w-auto brutal-btn font-black px-8 py-3 text-sm font-mono uppercase flex items-center justify-center gap-2 transition-colors ${
                     isAnalyzing || (!file && !bridgedText)
                       ? "bg-black/20 text-black/50 cursor-not-allowed border-black/30 shadow-none"
-                      : "bg-black text-[#FFF000]"
+                      : "bg-[#1D4ED8] text-white hover:bg-[#2563EB] shadow-[3px_3px_0px_#000]"
                   }`}
                 >
                   {isAnalyzing ? (
@@ -337,7 +389,7 @@ export default function AnalyzerPage() {
                   ) : (
                     <>
                       <span>ANALISIS KECOCOKAN CV SEKARANG</span>
-                      <DoubleArrow className="w-5 h-3" />
+                      <DoubleArrow className="w-5 h-3 text-current" />
                     </>
                   )}
                 </button>
@@ -350,27 +402,47 @@ export default function AnalyzerPage() {
         {result && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
             {/* Main Score Hero Card */}
-            <div className="bg-black text-[#FFF000] border-4 border-black shadow-[8px_8px_0px_#000] p-6 sm:p-8">
+            <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_#000] p-6 sm:p-8">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b-2 border-white/20">
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono text-xs uppercase tracking-wider text-white/60">
-                      HASIL PEMINDAIAN
-                    </span>
-                    <BrutalistStar className="w-4 h-4 text-[#FFF000]" />
+                  <div className="flex flex-wrap items-center gap-3 mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs uppercase tracking-wider text-white/60">
+                        HASIL PEMINDAIAN
+                      </span>
+                      <BrutalistStar className="w-4 h-4 text-[#1D4ED8]" />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleCopyReport}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white text-black font-mono font-bold text-[11px] border border-black hover:bg-blue-100 transition-colors cursor-pointer select-none"
+                      title="Salin hasil evaluasi lengkap ke clipboard"
+                    >
+                      {copiedReport ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-green-700" />
+                          <span>TERSALIN!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>SALIN RINGKASAN</span>
+                        </>
+                      )}
+                    </button>
                   </div>
-                  <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight">
+                  <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
                     {result.summary}
                   </h2>
                 </div>
 
                 {/* Score Number Display */}
-                <div className="bg-[#FFF000] text-black border-3 border-black shadow-[4px_4px_0px_#fff] p-4 text-center shrink-0 min-w-[160px]">
-                  <span className="block font-mono text-[10px] font-bold uppercase tracking-wider">
+                <div className="bg-[#1D4ED8] text-white border-3 border-black shadow-[4px_4px_0px_#fff] p-4 text-center shrink-0 min-w-[160px]">
+                  <span className="block font-mono text-[10px] font-bold uppercase tracking-wider text-blue-100">
                     SKOR KECOCOKAN
                   </span>
                   <span className="text-5xl sm:text-6xl font-black font-mono tracking-tighter">
-                    {result.overallScore}%
+                    <ScoreTicker target={result.overallScore} />%
                   </span>
                   <span className="block text-[11px] font-bold uppercase mt-1">
                     {result.overallScore >= 80
@@ -387,25 +459,25 @@ export default function AnalyzerPage() {
                 <div className="border-2 border-white/30 p-3 bg-white/5">
                   <span className="block text-xs font-mono text-white/60">KATA KUNCI LOKER</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
-                    {result.matchScore}%
+                    <ScoreTicker target={result.matchScore} />%
                   </span>
                 </div>
                 <div className="border-2 border-white/30 p-3 bg-white/5">
                   <span className="block text-xs font-mono text-white/60">STRUKTUR & TATA LETAK</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
-                    {result.formattingScore}%
+                    <ScoreTicker target={result.formattingScore} />%
                   </span>
                 </div>
                 <div className="border-2 border-white/30 p-3 bg-white/5">
                   <span className="block text-xs font-mono text-white/60">TINDAKAN & PENCAPAIAN</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
-                    {result.contentScore}%
+                    <ScoreTicker target={result.contentScore} />%
                   </span>
                 </div>
                 <div className="border-2 border-white/30 p-3 bg-white/5">
                   <span className="block text-xs font-mono text-white/60">KELENGKAPAN KONTAK</span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
-                    {result.contactScore}%
+                    <ScoreTicker target={result.contactScore} />%
                   </span>
                 </div>
               </div>
@@ -455,7 +527,7 @@ export default function AnalyzerPage() {
                     <button
                       type="button"
                       onClick={handleApplyKeywordsToBuilder}
-                      className="px-3 py-1.5 bg-black text-[#FFF000] hover:bg-[#FFF000] hover:text-black font-mono font-bold text-xs border-2 border-black transition-colors flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000]"
+                      className="px-3 py-1.5 bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-mono font-bold text-xs border-2 border-black transition-colors flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000]"
                       title="Salin kata kunci langsung ke draf CV Anda"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
@@ -498,7 +570,7 @@ export default function AnalyzerPage() {
                 {result.checks.map((chk) => (
                   <div
                     key={chk.id}
-                    className="p-3 border-2 border-black bg-[#FFF000]/10 flex items-start gap-3"
+                    className="p-3 border-2 border-black bg-blue-50/50 flex items-start gap-3"
                   >
                     {chk.status === "pass" && (
                       <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
@@ -544,10 +616,10 @@ export default function AnalyzerPage() {
                 {result.recommendations.map((rec, i) => (
                   <div key={i} className="p-4 bg-black text-white border-2 border-black space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono bg-[#FFF000] text-black px-2 py-0.5 font-bold uppercase">
+                      <span className="text-xs font-mono bg-[#1D4ED8] text-white px-2 py-0.5 font-bold uppercase">
                         {rec.type === "keyword" ? "Kata Kunci" : rec.type === "impact" ? "Pencapaian" : "Format"}
                       </span>
-                      <h4 className="font-bold text-sm uppercase text-[#FFF000]">
+                      <h4 className="font-bold text-sm uppercase text-white">
                         {rec.title}
                       </h4>
                     </div>
@@ -555,7 +627,7 @@ export default function AnalyzerPage() {
                       {rec.advice}
                     </p>
                     {rec.example && (
-                      <div className="mt-2 p-2.5 bg-white/10 border border-white/20 text-xs font-mono text-[#FFF000]">
+                      <div className="mt-2 p-2.5 bg-white/10 border border-white/20 text-xs font-mono text-blue-200">
                         {rec.example}
                       </div>
                     )}
@@ -570,7 +642,7 @@ export default function AnalyzerPage() {
                 </div>
                 <Link
                   href="/builder"
-                  className="brutal-btn bg-[#FFF000] text-black font-black px-6 py-2.5 text-xs font-mono uppercase inline-flex items-center gap-2"
+                  className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-6 py-2.5 text-xs font-mono uppercase inline-flex items-center gap-2 shadow-[3px_3px_0px_#000]"
                 >
                   <span>SUSUN CV DI RESUME BUILDER</span>
                   <ArrowRight className="w-4 h-4" />

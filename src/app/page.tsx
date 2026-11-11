@@ -16,44 +16,42 @@ import {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-blueprint text-black flex flex-col font-sans selection:bg-black selection:text-[#FFF000]">
+    <div className="min-h-screen bg-blueprint text-black flex flex-col font-sans selection:bg-[#1D4ED8] selection:text-white">
       <Header />
 
       <main className="flex-1 w-full">
         {/* HERO SECTION */}
         <section className="border-b-4 border-black py-12 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           {/* Decorative Background Elements */}
-          <div className="absolute top-8 right-8 hidden lg:block opacity-20 pointer-events-none">
-            <BrutalistStar className="w-48 h-48 text-black" />
+          <div className="absolute top-8 right-8 hidden lg:block opacity-10 pointer-events-none">
+            <BrutalistStar className="w-48 h-48 text-[#1D4ED8]" />
           </div>
 
           <div className="w-full">
             {/* Pill Badges Row */}
             <div className="flex flex-wrap items-center gap-2 mb-6">
-              <Pill variant="black">BARU & GRATIS</Pill>
-              <Pill variant="white">TREN REKRUTMEN 2026</Pill>
-              <Pill variant="yellow">RAMAH PEMULA</Pill>
-              <Pill variant="white">STANDAR RESMI ATS</Pill>
+              <Pill variant="black">100% GRATIS</Pill>
+              <Pill variant="blue">RAPIKAN FORMAT CV</Pill>
+              <Pill variant="white">TINGKATKAN PELUANG KERJA</Pill>
             </div>
 
             {/* Main Headline */}
             <div className="space-y-3 mb-8">
               <div className="flex items-center gap-4">
-                <span className="font-mono text-xl sm:text-2xl font-black bg-black text-[#FFF000] px-3 py-1 border-2 border-black">
+                <span className="font-mono text-xl sm:text-2xl font-black bg-[#1D4ED8] text-white px-3 py-1 border-2 border-black shadow-[3px_3px_0px_#000]">
                   DRAFT CV
                 </span>
-                <DoubleArrow className="w-12 h-6 text-black hidden sm:block" />
                 <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-black/80">
-                  PANDUAN LULUS SCREENING RECRUITER
+                  MERAPIKAN CV // MEMPERBESAR PELUANG LOLOS KERJA
                 </span>
               </div>
 
               <h1 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-[1.0] text-black">
-                Bikin CV yang Benar-Benar Dibaca Recruiter.
+                Rapikan CV Anda. Tingkatkan Peluang Dapat Kerja.
               </h1>
 
               <p className="font-mono text-base sm:text-lg text-black/85 max-w-3xl pt-2 leading-relaxed">
-                Banyak pelamar bertalenta gugur di tahap awal hanya karena template CV yang berantakan saat dibaca oleh sistem ATS perusahaan. Cek kecocokan kata kunci CV Anda dengan loker impian, atau susun CV rapi 1-kolom dalam 5 menit.
+                Banyak kandidat hebat gagal dipanggil wawancara hanya karena susunan CV yang berantakan dan sulit dibaca sistem rekrutmen. Draft CV membantu Anda merapikan struktur resume ke standar 1-kolom ATS profesional dan memastikan isi pengalaman Anda menarik perhatian recruiter.
               </p>
             </div>
 
@@ -61,14 +59,14 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="/analyzer"
-                className="brutal-btn bg-black text-[#FFF000] hover:bg-[#FFF000] hover:text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-3 transition-colors"
+                className="brutal-btn bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-3 transition-colors shadow-[4px_4px_0px_#000]"
               >
                 <span>CEK SKOR CV SAYA (GRATIS)</span>
                 <DoubleArrow className="w-6 h-3 text-current" />
               </Link>
               <Link
                 href="/builder"
-                className="brutal-btn bg-white hover:bg-[#FFF000] text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-2 transition-colors"
+                className="brutal-btn bg-white hover:bg-black hover:text-white text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-2 transition-colors shadow-[4px_4px_0px_#000]"
               >
                 <span>BUAT CV DENGAN BUILDER</span>
                 <ArrowRight className="w-5 h-5" />
@@ -77,29 +75,29 @@ export default function HomePage() {
 
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-8 border-t-3 border-black">
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
+              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   FORMAT RESMI
                 </span>
                 <span className="text-2xl sm:text-3xl font-black font-mono">1-KOLOM</span>
                 <span className="block text-[11px] font-bold">Paling disukai HRD & mesin</span>
               </div>
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
+              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   WAKTU PROSES
                 </span>
                 <span className="text-2xl sm:text-3xl font-black font-mono">INSTAN</span>
                 <span className="block text-[11px] font-bold">Analisis dalam hitungan detik</span>
               </div>
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
+              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   KEAMANAN DATA
                 </span>
                 <span className="text-2xl sm:text-3xl font-black font-mono">100% AMAN</span>
                 <span className="block text-[11px] font-bold">Dokumen Anda tidak disimpan</span>
               </div>
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase">
+              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   BIAYA
                 </span>
                 <span className="text-2xl sm:text-3xl font-black font-mono">GRATIS</span>
@@ -113,7 +111,7 @@ export default function HomePage() {
         <section id="standard" className="border-b-4 border-black py-16 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="w-full">
             <div className="mb-12">
-              <Pill variant="yellow" className="mb-2">
+              <Pill variant="blue" className="mb-2">
                 PENTING UNTUK DIKETAHUI
               </Pill>
               <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
@@ -126,7 +124,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* The Bad: Graphic Multi-column */}
-              <div className="p-6 sm:p-8 bg-red-50 border-3 border-black shadow-[6px_6px_0px_#000] space-y-4">
+              <div className="p-6 sm:p-8 bg-red-50 border-3 border-black shadow-[6px_6px_0px_#000] brutal-card-hover space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <XCircle className="w-6 h-6 text-red-600" />
@@ -162,7 +160,7 @@ export default function HomePage() {
               </div>
 
               {/* The Good: Draft CV Standard */}
-              <div className="p-6 sm:p-8 bg-[#FFF000]/15 border-3 border-black shadow-[6px_6px_0px_#000] space-y-4">
+              <div className="p-6 sm:p-8 bg-blue-50/60 border-3 border-black shadow-[6px_6px_0px_#000] brutal-card-hover space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-6 h-6 text-green-700" />
@@ -170,7 +168,7 @@ export default function HomePage() {
                       STANDAR RESMI DRAFT CV
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono bg-[#FFF000] text-black px-2 py-0.5 font-bold uppercase border border-black">
+                  <span className="text-[10px] font-mono bg-[#1D4ED8] text-white px-2 py-0.5 font-bold uppercase border border-black shadow-[1px_1px_0px_#000]">
                     TERBUKTI EFEKTIF
                   </span>
                 </div>
@@ -206,18 +204,18 @@ export default function HomePage() {
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <Pill variant="black">FITUR UTAMA</Pill>
               <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
-                Dua Solusi Lengkap untuk Melamar Kerja
+                Dua Cara Cepat Merapikan CV & Memperbesar Peluang Kerja
               </h2>
               <p className="font-mono text-sm sm:text-base text-black/80">
-                Pilih apakah Anda ingin mengevaluasi CV yang sudah ada, atau menyusun CV baru dari awal dengan panduan lengkap.
+                Pilih apakah Anda ingin mengevaluasi dan merapikan CV yang sudah ada, atau menyusun ulang CV baru yang rapi sesuai standar industri.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Feature 1: Analyzer */}
-              <div className="bg-white border-3 border-black shadow-[8px_8px_0px_#000] p-8 flex flex-col justify-between">
+              <div className="bg-white border-3 border-black shadow-[8px_8px_0px_#000] brutal-card-hover p-8 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="w-12 h-12 bg-black text-[#FFF000] flex items-center justify-center border-2 border-black">
+                  <div className="w-12 h-12 bg-[#1D4ED8] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
                     <FileSearch className="w-6 h-6" />
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">
@@ -227,7 +225,7 @@ export default function HomePage() {
                     Unggah file PDF CV Anda dan masukkan teks lowongan yang ingin dilamar. Kami akan memindai kecocokan kata kunci, memeriksa kelengkapan kontak, dan memberi saran perbaikan konkret.
                   </p>
 
-                  <div className="p-3 bg-[#FFF000]/20 border border-black font-mono text-xs space-y-1">
+                  <div className="p-3 bg-blue-50/70 border border-black font-mono text-xs space-y-1">
                     <div className="font-bold uppercase">• Skor kecocokan kata kunci (0-100%)</div>
                     <div className="font-bold uppercase">• Daftar skill penting yang belum ada di CV</div>
                     <div className="font-bold uppercase">• Saran penyempurnaan kalimat pencapaian</div>
@@ -237,7 +235,7 @@ export default function HomePage() {
                 <div className="pt-6 mt-6 border-t-2 border-black">
                   <Link
                     href="/analyzer"
-                    className="brutal-btn w-full bg-black text-[#FFF000] font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2"
+                    className="brutal-btn w-full bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2 transition-colors shadow-[3px_3px_0px_#000]"
                   >
                     <span>CEK SKOR CV SAYA SEKARANG</span>
                     <ArrowRight className="w-4 h-4" />
@@ -246,9 +244,9 @@ export default function HomePage() {
               </div>
 
               {/* Feature 2: Builder */}
-              <div className="bg-white border-3 border-black shadow-[8px_8px_0px_#000] p-8 flex flex-col justify-between">
+              <div className="bg-white border-3 border-black shadow-[8px_8px_0px_#000] brutal-card-hover p-8 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="w-12 h-12 bg-[#FFF000] text-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
+                  <div className="w-12 h-12 bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
                     <PenTool className="w-6 h-6" />
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">
@@ -258,7 +256,7 @@ export default function HomePage() {
                     Isi formulir ringkas dengan panduan mudah, lihat pratinjau tampilan secara langsung, dan unduh hasil akhir sebagai PDF standar industri yang siap dikirim ke mana saja.
                   </p>
 
-                  <div className="p-3 bg-[#FFF000]/20 border border-black font-mono text-xs space-y-1">
+                  <div className="p-3 bg-zinc-100 border border-black font-mono text-xs space-y-1">
                     <div className="font-bold uppercase">• Tata letak 1-kolom yang rapi dan elegan</div>
                     <div className="font-bold uppercase">• Simpan draf otomatis di browser</div>
                     <div className="font-bold uppercase">• Unduh PDF resmi tanpa watermark</div>
@@ -268,7 +266,7 @@ export default function HomePage() {
                 <div className="pt-6 mt-6 border-t-2 border-black">
                   <Link
                     href="/builder"
-                    className="brutal-btn w-full bg-[#FFF000] text-black font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2"
+                    className="brutal-btn w-full bg-black hover:bg-[#1D4ED8] text-white font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2 transition-colors shadow-[3px_3px_0px_#000]"
                   >
                     <span>MULAI BUAT CV SEKARANG</span>
                     <ArrowRight className="w-4 h-4" />
@@ -325,22 +323,22 @@ export default function HomePage() {
         </section>
 
         {/* FINAL CALL TO ACTION */}
-        <section className="py-16 px-4 sm:px-6 bg-black text-[#FFF000] text-center">
+        <section className="py-16 px-4 sm:px-6 bg-black text-white text-center">
           <div className="max-w-3xl mx-auto space-y-6">
-            <BrutalistStar className="w-12 h-12 mx-auto text-[#FFF000]" />
+            <BrutalistStar className="w-12 h-12 mx-auto text-[#1D4ED8]" />
             <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
-              Siapkan CV Terbaik Anda Hari Ini.
+              Rapikan CV Anda Hari Ini, Raih Peluang Kerja Lebih Luas.
             </h2>
             <p className="font-mono text-sm sm:text-base text-white/80 max-w-xl mx-auto">
-              Tingkatkan peluang dipanggil wawancara kerja dengan dokumen yang rapi, profesional, dan mudah dipahami oleh tim rekruter.
+              Tingkatkan peluang dipanggil wawancara dengan susunan CV yang rapi, profesional, dan mudah dipahami oleh tim rekruter.
             </p>
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/analyzer"
-                className="brutal-btn bg-[#FFF000] text-black font-black px-8 py-3.5 text-sm font-mono uppercase inline-flex items-center gap-2"
+                className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-8 py-3.5 text-sm font-mono uppercase inline-flex items-center gap-2 shadow-[4px_4px_0px_#fff]"
               >
-                <span>CEK CV SAYA SEKARANG</span>
-                <DoubleArrow className="w-5 h-3 text-black" />
+                <span>RAPIKAN & CEK CV SAYA SEKARANG</span>
+                <DoubleArrow className="w-5 h-3 text-current" />
               </Link>
             </div>
           </div>

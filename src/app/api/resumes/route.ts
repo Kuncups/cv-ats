@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { saveUserResume, getUserResumes } from "@/lib/resume-store";
-
-export async function GET() {
-  const session = await auth();
-  if (!session?.user?.id && !session?.user?.email) {
-    return NextResponse.json({ error: "Silakan masuk terlebih dahulu." }, { status: 401 });
-  }
-
-  const userId = session.user.id || session.user.email!;
-  const resumes = await getUserResumes(userId);
-
-  return NextResponse.json({ success: true, data: resumes });
-}
+import { saveUserResume } from "@/lib/resume-store";
 
 export async function POST(req: NextRequest) {
   const session = await auth();

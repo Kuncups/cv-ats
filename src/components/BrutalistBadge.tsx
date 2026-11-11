@@ -37,13 +37,14 @@ export function Pill({
   className = "",
 }: {
   children: React.ReactNode;
-  variant?: "white" | "black" | "yellow";
+  variant?: "white" | "black" | "yellow" | "blue";
   className?: string;
 }) {
   const styles = {
     white: "bg-white text-black border-black shadow-[2px_2px_0px_#000]",
     black: "bg-black text-white border-black shadow-[2px_2px_0px_#fff]",
-    yellow: "bg-[#FFF000] text-black border-black shadow-[2px_2px_0px_#000]",
+    yellow: "bg-[#1D4ED8] text-white border-black shadow-[2px_2px_0px_#000]",
+    blue: "bg-[#1D4ED8] text-white border-black shadow-[2px_2px_0px_#000]",
   };
 
   return (

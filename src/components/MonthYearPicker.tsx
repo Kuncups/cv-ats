@@ -130,8 +130,8 @@ export function MonthYearPicker({
             setIsOpen(!isOpen);
           }}
           title={language === "en" ? "Open calendar" : "Buka kalender"}
-          className={`absolute right-1 p-1 hover:bg-[#FFF000] border border-black/40 text-black transition-colors cursor-pointer ${
-            isOpen ? "bg-[#FFF000]" : "bg-zinc-100"
+          className={`absolute right-1 p-1 hover:bg-blue-100 border border-black/40 text-black transition-colors cursor-pointer ${
+            isOpen ? "bg-[#1D4ED8] text-white" : "bg-zinc-100"
           }`}
         >
           <CalendarIcon className="w-3.5 h-3.5" />
@@ -150,7 +150,7 @@ export function MonthYearPicker({
               <button
                 type="button"
                 onClick={() => setViewMode(viewMode === "months" ? "calendar" : "months")}
-                className="px-1.5 py-0.5 border border-black text-[10px] font-mono hover:bg-[#FFF000] cursor-pointer"
+                className="px-1.5 py-0.5 border border-black text-[10px] font-mono hover:bg-blue-100 cursor-pointer"
                 title={viewMode === "months" ? "Mode Kalender Lengkap" : "Mode Grid Bulan"}
               >
                 {viewMode === "months" ? "Kalender 📅" : "Grid Bulan ⊞"}
@@ -172,8 +172,8 @@ export function MonthYearPicker({
               onClick={handleSelectPresent}
               className={`w-full mb-2 py-1 px-2 border border-black font-mono text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                 isPresentSelected
-                  ? "bg-[#FFF000] text-black shadow-[1px_1px_0px_#000]"
-                  : "bg-zinc-100 hover:bg-[#FFF000]"
+                  ? "bg-[#1D4ED8] text-white shadow-[1px_1px_0px_#000]"
+                  : "bg-zinc-100 hover:bg-blue-100"
               }`}
             >
               <Check className="w-3 h-3" />
@@ -191,7 +191,7 @@ export function MonthYearPicker({
                 <button
                   type="button"
                   onClick={() => setSelectedYear((y) => y - 1)}
-                  className="p-1 hover:bg-[#FFF000] border border-black/30 cursor-pointer"
+                  className="p-1 hover:bg-blue-100 border border-black/30 cursor-pointer"
                 >
                   <ChevronLeft className="w-3 h-3" />
                 </button>
@@ -209,7 +209,7 @@ export function MonthYearPicker({
                 <button
                   type="button"
                   onClick={() => setSelectedYear((y) => y + 1)}
-                  className="p-1 hover:bg-[#FFF000] border border-black/30 cursor-pointer"
+                  className="p-1 hover:bg-blue-100 border border-black/30 cursor-pointer"
                 >
                   <ChevronRight className="w-3 h-3" />
                 </button>
@@ -219,7 +219,7 @@ export function MonthYearPicker({
               <button
                 type="button"
                 onClick={() => handleSelectYearOnly(selectedYear)}
-                className="w-full py-1 bg-zinc-50 hover:bg-[#FFF000] border border-black text-[11px] font-mono font-bold text-center cursor-pointer transition-colors"
+                className="w-full py-1 bg-zinc-50 hover:bg-blue-100 border border-black text-[11px] font-mono font-bold text-center cursor-pointer transition-colors"
               >
                 {language === "en" ? `✓ Set Year Only (${selectedYear})` : `✓ Pilih Hanya Tahun (${selectedYear})`}
               </button>
@@ -238,7 +238,7 @@ export function MonthYearPicker({
                       onClick={() => handleSelectMonth(mIdx)}
                       className={`py-1.5 border border-black font-mono text-xs font-bold text-center transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-[#FFF000] text-black shadow-[2px_2px_0px_#000]"
+                          ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#000]"
                           : "bg-white hover:bg-zinc-100"
                       }`}
                       title={fullMonthNames[mIdx]}

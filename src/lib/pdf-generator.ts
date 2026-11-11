@@ -172,7 +172,7 @@ function wrapInlineText(
   return lines;
 }
 
-export async function generateResumePdfBlob(data: ResumeData): Promise<Blob> {
+export async function generateResumePdfBlob(data: ResumeData, isCompact = false): Promise<Blob> {
   const isEnglish = (data.language || "id") === "en";
 
   const pdfDoc = await PDFDocument.create();
@@ -185,7 +185,7 @@ export async function generateResumePdfBlob(data: ResumeData): Promise<Blob> {
   const fontBoldItalic = await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique);
 
   // Synchronize with the exact same pagination as the HTML preview
-  const pages: ResumePageContent[] = paginateResume(data);
+  const pages: ResumePageContent[] = paginateResume(data, isCompact ? 135 : 115);
 
   for (const pageContent of pages) {
     const page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);

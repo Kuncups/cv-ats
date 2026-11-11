@@ -54,7 +54,7 @@ export function StepReview({
             onClick={() => updateData({ ...data, language: "id" })}
             className={`flex-1 py-1.5 px-3 text-xs font-mono font-bold border-2 border-black uppercase transition-all cursor-pointer ${
               (data.language || "id") === "id"
-                ? "bg-[#FFF000] text-black shadow-[2px_2px_0px_#000]"
+                ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#000]"
                 : "bg-white text-zinc-600 hover:bg-zinc-100"
             }`}
           >
@@ -65,7 +65,7 @@ export function StepReview({
             onClick={() => updateData({ ...data, language: "en" })}
             className={`flex-1 py-1.5 px-3 text-xs font-mono font-bold border-2 border-black uppercase transition-all cursor-pointer ${
               data.language === "en"
-                ? "bg-[#FFF000] text-black shadow-[2px_2px_0px_#000]"
+                ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#000]"
                 : "bg-white text-zinc-600 hover:bg-zinc-100"
             }`}
           >
@@ -141,7 +141,7 @@ export function StepReview({
           type="button"
           disabled={isGeneratingPdf}
           onClick={onDownload}
-          className="w-full py-3 bg-black text-[#FFF000] font-mono font-black text-sm border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-[#FFF000] hover:text-black transition-colors shadow-[4px_4px_0px_#000] cursor-pointer disabled:opacity-50"
+          className="w-full py-3 bg-[#1D4ED8] text-white font-mono font-black text-sm border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-[#2563EB] transition-colors shadow-[4px_4px_0px_#000] cursor-pointer disabled:opacity-50"
         >
           <Download className="w-4 h-4" />
           <span>
@@ -154,7 +154,7 @@ export function StepReview({
         <button
           type="button"
           onClick={onBridgeToAnalyzer}
-          className="w-full py-2.5 bg-[#FFF000] text-black font-mono font-bold text-xs border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-white transition-colors shadow-[3px_3px_0px_#000] cursor-pointer"
+          className="w-full py-2.5 bg-white text-black font-mono font-bold text-xs border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-black hover:text-white transition-colors shadow-[3px_3px_0px_#000] cursor-pointer"
         >
           <FileSearch className="w-4 h-4" />
           <span>UJI KECOCOKAN DI ANALYZER KATA KUNCI</span>

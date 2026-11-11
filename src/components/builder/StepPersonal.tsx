@@ -27,7 +27,7 @@ export function StepPersonal({
         <button
           type="button"
           onClick={() => setIsAccordionOpen((prev) => !prev)}
-          className="w-full flex items-center justify-between p-2.5 bg-zinc-100 hover:bg-[#FFF000] text-xs font-mono font-bold uppercase transition-colors cursor-pointer"
+          className="w-full flex items-center justify-between p-2.5 bg-zinc-100 hover:bg-blue-50 text-xs font-mono font-bold uppercase transition-colors cursor-pointer"
         >
           <span className="flex items-center gap-2 text-black">
             <Sparkles className="w-4 h-4 text-black" />
@@ -53,7 +53,7 @@ export function StepPersonal({
                   onLoadPreset(preset.id);
                   setIsAccordionOpen(false);
                 }}
-                className="p-2 bg-zinc-50 hover:bg-[#FFF000] border-2 border-black font-mono text-[11px] font-bold text-center uppercase transition-all shadow-[2px_2px_0px_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none flex flex-col items-center justify-center gap-1 cursor-pointer"
+                className="p-2 bg-zinc-50 hover:bg-blue-50 hover:border-[#1D4ED8] border-2 border-black font-mono text-[11px] font-bold text-center uppercase transition-all shadow-[2px_2px_0px_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none flex flex-col items-center justify-center gap-1 cursor-pointer"
                 title={`Muat contoh ${preset.label} (${preset.field})`}
               >
                 <span className="font-black text-black">{preset.label}</span>
@@ -69,7 +69,7 @@ export function StepPersonal({
       <div className="pb-2 border-b-2 border-black">
         <h3 className="font-mono font-bold text-sm uppercase flex items-center justify-between">
           <span>1. Informasi Pribadi & Kontak</span>
-          <span className="text-[10px] bg-[#FFF000] px-2 py-0.5 border border-black">
+          <span className="text-[10px] bg-[#1D4ED8] text-white px-2 py-0.5 border border-black shadow-[1px_1px_0px_#000]">
             WAJIB ATS
           </span>
         </h3>
@@ -231,7 +231,7 @@ export function StepPersonal({
               : "Tuliskan pengalaman bertahun-tahun, bidang spesialisasi, dan 1 pencapaian utama dengan angka konkret (cth: Menaikkan omzet **35%**)..."
           }
         />
-        <div className="p-2 bg-[#FFF000]/15 border-2 border-black text-xs font-mono flex items-center justify-between">
+        <div className="p-2 bg-blue-50/70 border-2 border-black text-xs font-mono flex items-center justify-between">
           <span>
             <strong>TIPS ATS:</strong>{" "}
             {isEnglish
@@ -246,7 +246,7 @@ export function StepPersonal({
         <button
           type="button"
           onClick={onNext}
-          className="px-5 py-2.5 bg-black text-[#FFF000] font-mono text-xs font-bold border-2 border-black hover:bg-white hover:text-black flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="px-5 py-2.5 bg-[#1D4ED8] text-white font-mono text-xs font-bold border-2 border-black hover:bg-[#2563EB] flex items-center gap-1.5 transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
         >
           <span>SIMPAN & LANJUTKAN</span>
           <ArrowRight className="w-3.5 h-3.5" />

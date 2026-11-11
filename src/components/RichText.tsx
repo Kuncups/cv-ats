@@ -228,7 +228,7 @@ export function RichTextToolbar({
         type="button"
         title="Tebal / Bold (Ctrl+B)"
         onClick={() => applyRichFormat(inputRef.current, "bold", value, onChange)}
-        className="w-6 h-6 flex items-center justify-center font-bold font-serif bg-white border border-black hover:bg-[#FFF000] text-xs transition-colors"
+        className="w-6 h-6 flex items-center justify-center font-bold font-serif bg-white border border-black hover:bg-blue-100 text-xs transition-colors"
       >
         B
       </button>
@@ -236,7 +236,7 @@ export function RichTextToolbar({
         type="button"
         title="Miring / Italic (Ctrl+I)"
         onClick={() => applyRichFormat(inputRef.current, "italic", value, onChange)}
-        className="w-6 h-6 flex items-center justify-center italic font-serif bg-white border border-black hover:bg-[#FFF000] text-xs transition-colors"
+        className="w-6 h-6 flex items-center justify-center italic font-serif bg-white border border-black hover:bg-blue-100 text-xs transition-colors"
       >
         I
       </button>
@@ -244,7 +244,7 @@ export function RichTextToolbar({
         type="button"
         title="Garis Bawah / Underline (Ctrl+U)"
         onClick={() => applyRichFormat(inputRef.current, "underline", value, onChange)}
-        className="w-6 h-6 flex items-center justify-center underline font-serif bg-white border border-black hover:bg-[#FFF000] text-xs transition-colors"
+        className="w-6 h-6 flex items-center justify-center underline font-serif bg-white border border-black hover:bg-blue-100 text-xs transition-colors"
       >
         U
       </button>
@@ -253,7 +253,7 @@ export function RichTextToolbar({
           type="button"
           title="Tambah Poin Bullet"
           onClick={() => applyRichFormat(inputRef.current, "bullet", value, onChange)}
-          className="px-1.5 h-6 flex items-center justify-center bg-white border border-black hover:bg-[#FFF000] text-[11px] font-mono transition-colors"
+          className="px-1.5 h-6 flex items-center justify-center bg-white border border-black hover:bg-blue-100 text-[11px] font-mono transition-colors"
         >
           • List
         </button>
@@ -328,7 +328,7 @@ export function RichInput({
             setTimeout(updateFormatState, 10);
           }}
           className={`w-4 h-4 text-[10px] font-bold font-serif text-center leading-4 cursor-pointer transition-colors ${
-            activeFormat.bold ? "bg-[#FFF000] text-black font-black" : "hover:bg-[#FFF000]"
+            activeFormat.bold ? "bg-[#1D4ED8] text-white font-black" : "hover:bg-blue-100"
           }`}
         >
           B
@@ -342,7 +342,7 @@ export function RichInput({
             setTimeout(updateFormatState, 10);
           }}
           className={`w-4 h-4 text-[10px] italic font-serif text-center leading-4 cursor-pointer transition-colors ${
-            activeFormat.italic ? "bg-[#FFF000] text-black font-black" : "hover:bg-[#FFF000]"
+            activeFormat.italic ? "bg-[#1D4ED8] text-white font-black" : "hover:bg-blue-100"
           }`}
         >
           I
@@ -356,7 +356,7 @@ export function RichInput({
             setTimeout(updateFormatState, 10);
           }}
           className={`w-4 h-4 text-[10px] underline font-serif text-center leading-4 cursor-pointer transition-colors ${
-            activeFormat.underline ? "bg-[#FFF000] text-black font-black" : "hover:bg-[#FFF000]"
+            activeFormat.underline ? "bg-[#1D4ED8] text-white font-black" : "hover:bg-blue-100"
           }`}
         >
           U
@@ -421,7 +421,7 @@ export function RichTextarea({
               setTimeout(updateFormatState, 10);
             }}
             className={`px-2 py-0.5 border border-black font-bold font-serif text-xs transition-colors cursor-pointer ${
-              activeFormat.bold ? "bg-[#FFF000] text-black shadow-[1px_1px_0px_#000]" : "bg-white hover:bg-[#FFF000]"
+              activeFormat.bold ? "bg-[#1D4ED8] text-white shadow-[1px_1px_0px_#000]" : "bg-white hover:bg-blue-100"
             }`}
           >
             B
@@ -435,7 +435,7 @@ export function RichTextarea({
               setTimeout(updateFormatState, 10);
             }}
             className={`px-2 py-0.5 border border-black italic font-serif text-xs transition-colors cursor-pointer ${
-              activeFormat.italic ? "bg-[#FFF000] text-black shadow-[1px_1px_0px_#000]" : "bg-white hover:bg-[#FFF000]"
+              activeFormat.italic ? "bg-[#1D4ED8] text-white shadow-[1px_1px_0px_#000]" : "bg-white hover:bg-blue-100"
             }`}
           >
             I
@@ -449,7 +449,7 @@ export function RichTextarea({
               setTimeout(updateFormatState, 10);
             }}
             className={`px-2 py-0.5 border border-black underline font-serif text-xs transition-colors cursor-pointer ${
-              activeFormat.underline ? "bg-[#FFF000] text-black shadow-[1px_1px_0px_#000]" : "bg-white hover:bg-[#FFF000]"
+              activeFormat.underline ? "bg-[#1D4ED8] text-white shadow-[1px_1px_0px_#000]" : "bg-white hover:bg-blue-100"
             }`}
           >
             U
@@ -462,7 +462,7 @@ export function RichTextarea({
               applyRichFormat(textareaRef.current, "bullet", value, onChange);
               setTimeout(updateFormatState, 10);
             }}
-            className="px-2 py-0.5 bg-white border border-black hover:bg-[#FFF000] text-[11px] font-mono transition-colors cursor-pointer"
+            className="px-2 py-0.5 bg-white border border-black hover:bg-blue-100 text-[11px] font-mono transition-colors cursor-pointer"
           >
             • Bullet
           </button>

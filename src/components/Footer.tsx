@@ -4,35 +4,35 @@ import { SITE_CONFIG } from "@/config/site";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-black text-[#FFF000] border-t-4 border-black no-print">
+    <footer className="w-full bg-black text-white border-t-4 border-black no-print">
       {/* Marquee Banner */}
-      <div className="bg-[#FFF000] text-black py-2 overflow-hidden border-b-2 border-black font-mono font-black text-xs uppercase tracking-wider flex items-center whitespace-nowrap select-none">
+      <div className="bg-[#1D4ED8] text-white py-2 overflow-hidden border-b-2 border-black font-mono font-black text-xs uppercase tracking-wider flex items-center whitespace-nowrap select-none">
         <div className="flex gap-8 animate-marquee">
-          <span>DRAFT CV — CEK SKOR ATS & BUAT RESUME</span>
-          <BrutalistStar className="w-3 h-3 text-black" />
+          <span>DRAFT CV — RAPIKAN CV ANDA // TINGKATKAN PELUANG CARI KERJA</span>
+          <BrutalistStar className="w-3 h-3 text-white" />
           <span>FORMAT 1-KOLOM STANDAR RECRUITER</span>
-          <BrutalistStar className="w-3 h-3 text-black" />
+          <BrutalistStar className="w-3 h-3 text-white" />
           <span>MUDAH DIBACA SISTEM HRD</span>
-          <BrutalistStar className="w-3 h-3 text-black" />
+          <BrutalistStar className="w-3 h-3 text-white" />
           <span>GRATIS SELAMANYA</span>
-          <BrutalistStar className="w-3 h-3 text-black" />
+          <BrutalistStar className="w-3 h-3 text-white" />
           <span>PRIVASI TERJAGA 100%</span>
-          <BrutalistStar className="w-3 h-3 text-black" />
-          <span>SIAP MELAMAR KERJA</span>
-          <BrutalistStar className="w-3 h-3 text-black" />
+          <BrutalistStar className="w-3 h-3 text-white" />
+          <span>LEBIH DEKAT KE PANGGILAN KERJA</span>
+          <BrutalistStar className="w-3 h-3 text-white" />
         </div>
       </div>
 
       <div className="w-full px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-2 space-y-4">
           <div className="flex items-center gap-2">
-            <span className="font-black text-3xl tracking-tighter uppercase text-[#FFF000]">
+            <span className="font-black text-3xl tracking-tighter uppercase text-white">
               DRAFT CV
             </span>
-            <BrutalistStar className="w-5 h-5 text-[#FFF000]" />
+            <BrutalistStar className="w-5 h-5 text-[#1D4ED8]" />
           </div>
           <p className="text-white/80 font-mono text-sm max-w-md leading-relaxed">
-            Membantu pencari kerja dan profesional menyusun resume yang rapi, profesional, dan mudah dipindai oleh sistem ATS perusahaan besar.
+            Platform praktis untuk membantu pencari kerja merapikan susunan CV sesuai standar ATS industri dan meningkatkan peluang dipanggil wawancara kerja oleh tim rekruter.
           </p>
           <div className="flex items-center gap-2 text-xs font-mono text-white/50">
             <span>DIBUAT DENGAN NEXT.JS</span>
@@ -47,7 +47,7 @@ export function Footer() {
           <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-white/20 pb-1">
             MENU UTAMA
           </h4>
-          <ul className="space-y-2 text-sm">
+          <ul className="space-y-2 text-sm text-white/80">
             <li>
               <Link href="/analyzer" className="hover:text-white transition-colors">
                 {"->"} Cek Skor & Kata Kunci CV
@@ -79,7 +79,7 @@ export function Footer() {
             Dokumen Anda hanya dianalisis saat scanning dan langsung dihapus dari memori. Data pribadi Anda tidak pernah dijual atau disebarkan.
           </p>
           <div className="pt-2">
-            <span className="inline-block bg-[#FFF000] text-black font-bold text-[10px] px-2 py-0.5 border border-black uppercase">
+            <span className="inline-block bg-[#1D4ED8] text-white font-bold text-[10px] px-2 py-0.5 border border-white/20 uppercase shadow-[2px_2px_0px_#000]">
               DATA ANDA 100% AMAN
             </span>
           </div>

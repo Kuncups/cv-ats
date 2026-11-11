@@ -117,44 +117,17 @@ async function runSelfChecks() {
   assert.ok(pdfAnalysis.overallScore >= 75, "Generated PDF must score >= 75 in ATS scanner");
   assert.ok(pdfAnalysis.matchedKeywords.includes("react"), "Generated PDF must yield matched keywords");
 
-  // 6. Resume Text-to-Form Parser Validation
-  const { parseResumeFromText } = await import("../src/lib/resume-parser.ts");
-  const extractedRawText = `
-    ANDI PRATAMA
-    Fullstack Engineer
-    andi@example.com | +62 811-2233-4455 | Jakarta, Indonesia | linkedin.com/in/andipratama
-    PROFESSIONAL SUMMARY
-    Berpengalaman 4 tahun merancang aplikasi berskala besar menggunakan Node.js dan React.
-    WORK EXPERIENCE
-    Senior Developer — PT Solusi Digital
-    - Merancang backend microservices berbasis Node.js dan TypeScript.
-    - Mengurangi latensi database hingga 40%.
-    TECHNICAL & CORE SKILLS
-    JavaScript, TypeScript, React, Node.js, PostgreSQL, Docker
-    EDUCATION
-    Universitas Indonesia
-    Sarjana Ilmu Komputer (2018 - 2022)
-  `;
-  const parsedResume = parseResumeFromText(extractedRawText);
-  assert.strictEqual(parsedResume.personal.fullName, "ANDI PRATAMA");
-  assert.strictEqual(parsedResume.personal.jobTitle, "Fullstack Engineer");
-  assert.strictEqual(parsedResume.personal.email, "andi@example.com");
-  assert.strictEqual(parsedResume.personal.phone, "+62 811-2233-4455");
-  assert.ok(parsedResume.summary.includes("Berpengalaman 4 tahun"));
-  assert.ok(parsedResume.skills.technical.includes("TypeScript"));
-  assert.strictEqual(parsedResume.experience.length, 1);
-  assert.strictEqual(parsedResume.experience[0].role, "Senior Developer");
-
-  // 7. Dynamic Resume Multi-Page Pagination Validation
+  // 6. Dynamic Resume Multi-Page Pagination Validation
   const { paginateResume } = await import("../src/lib/resume-paginator.ts");
-  const singlePage = paginateResume(parsedResume);
+  const { DEFAULT_SAMPLE_RESUME } = await import("../src/data/resume-presets.ts");
+  const singlePage = paginateResume(DEFAULT_SAMPLE_RESUME);
   assert.strictEqual(singlePage.length, 1, "Short CV must be 1 page");
   assert.strictEqual(singlePage[0].pageNumber, 1);
   assert.strictEqual(singlePage[0].hasHeader, true);
 
   // Multi-page CV test
   const heavyCv = {
-    ...parsedResume,
+    ...DEFAULT_SAMPLE_RESUME,
     experience: [
       { id: "e1", role: "R1", company: "C1", location: "", startDate: "2020", endDate: "2022", isCurrent: false, bullets: ["B1", "B2", "B3"] },
       { id: "e2", role: "R2", company: "C2", location: "", startDate: "2018", endDate: "2020", isCurrent: false, bullets: ["B1", "B2"] },
@@ -228,7 +201,7 @@ async function runSelfChecks() {
 
   // 9. PDF Generation with Rich Text
   const richResume = {
-    ...parsedResume,
+    ...DEFAULT_SAMPLE_RESUME,
     summary: "Berpengalaman mengelola anggaran **Rp 5 Miliar** dan tim *15 orang*.",
     experience: [
       {

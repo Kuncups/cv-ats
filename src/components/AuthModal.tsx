@@ -50,13 +50,13 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-[#FFF000] border-4 border-black shadow-[10px_10px_0px_#000] max-w-md w-full p-6 sm:p-8 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="bg-[#F8F9FA] border-4 border-black shadow-[10px_10px_0px_#000] max-w-md w-full p-6 sm:p-8 relative animate-in zoom-in-95 duration-150 ease-out">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 bg-black text-[#FFF000] border-2 border-black flex items-center justify-center hover:bg-white hover:text-black transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 bg-black text-white border-2 border-black flex items-center justify-center hover:bg-[#1D4ED8] transition-colors cursor-pointer"
           aria-label="Tutup"
         >
           <X className="w-5 h-5" />
@@ -65,10 +65,10 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         {/* Modal Header */}
         <div className="space-y-2 mb-6">
           <div className="flex items-center gap-2">
-            <Pill variant="black">AKSES RESUME</Pill>
-            <BrutalistStar className="w-4 h-4 text-black" />
+            <Pill variant="blue">AKSES RESUME</Pill>
+            <BrutalistStar className="w-4 h-4 text-[#1D4ED8]" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-tight text-black">
             Simpan & Unduh CV Anda
           </h2>
           <p className="font-mono text-xs text-black/80 leading-relaxed">
@@ -82,7 +82,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             <span className="font-mono font-bold text-xs uppercase tracking-wider text-black">
               [ MASUK CEPAT GRATIS ]
             </span>
-            <span className="text-[10px] font-mono bg-[#FFF000] px-1.5 py-0.5 border border-black font-bold">
+            <span className="text-[10px] font-mono bg-[#1D4ED8] text-white px-1.5 py-0.5 border border-black font-bold shadow-[1px_1px_0px_#000]">
               1-KLIK
             </span>
           </div>
@@ -97,7 +97,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@email.com"
               required
-              className="w-full p-2 border-2 border-black text-sm font-sans focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full p-2 border-2 border-black text-sm font-sans focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]"
             />
           </div>
 
@@ -110,7 +110,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Nama Anda"
-              className="w-full p-2 border-2 border-black text-sm font-sans focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full p-2 border-2 border-black text-sm font-sans focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]"
             />
           </div>
 
@@ -123,14 +123,14 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full brutal-btn bg-black text-[#FFF000] font-black py-2.5 text-xs font-mono uppercase flex items-center justify-center gap-2 mt-2"
+            className="w-full brutal-btn bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black py-2.5 text-xs font-mono uppercase flex items-center justify-center gap-2 mt-2 shadow-[3px_3px_0px_#000]"
           >
             {loading ? (
               <span>MEMPROSES...</span>
             ) : (
               <>
                 <span>MASUK & UNDUH PDF</span>
-                <DoubleArrow className="w-5 h-3" />
+                <DoubleArrow className="w-5 h-3 text-current" />
               </>
             )}
           </button>

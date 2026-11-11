@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
@@ -30,8 +30,6 @@ import { AtsPreview } from "@/components/builder/AtsPreview";
 import {
   Trash2,
   Check,
-  LogOut,
-  UserCheck,
   Cloud,
 } from "lucide-react";
 
@@ -61,9 +59,10 @@ export default function BuilderPage() {
     "personal" | "experience" | "education" | "organizations" | "skills" | "review"
   >("personal");
   const [mobileView, setMobileView] = useState<"editor" | "preview">("editor");
+  const [isCompact, setIsCompact] = useState(false);
   const previewWrapperRef = useRef<HTMLDivElement>(null);
   const [previewScale, setPreviewScale] = useState(1);
-  const pages = paginateResume(data);
+  const pages = paginateResume(data, isCompact ? 135 : 115);
   const isEnglish = (data.language || "id") === "en";
 
   // Auto-scale A4 preview sheet to fit column width
@@ -157,7 +156,7 @@ export default function BuilderPage() {
 
     setIsGeneratingPdf(true);
     try {
-      const blob = await generateResumePdfBlob(data);
+      const blob = await generateResumePdfBlob(data, isCompact);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -265,7 +264,7 @@ export default function BuilderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-blueprint text-black flex flex-col font-mono selection:bg-[#FFF000] selection:text-black">
+    <div className="min-h-screen bg-blueprint text-black flex flex-col font-mono selection:bg-[#1D4ED8] selection:text-white">
       <Header />
 
       {/* Top Status & Fast Action Bar */}
@@ -274,7 +273,7 @@ export default function BuilderPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="text-[#FFF000] hover:underline font-bold flex items-center gap-1"
+              className="text-white hover:text-blue-200 hover:underline font-bold flex items-center gap-1"
             >
               <span>← Beranda</span>
             </Link>
@@ -293,8 +292,11 @@ export default function BuilderPage() {
               >
                 {cloudSyncStatus === "saving" ? (
                   <>
-                    <span className="w-2 h-2 rounded-full bg-[#FFF000] animate-ping" />
-                    <span className="text-[#FFF000]">Menyimpan...</span>
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1D4ED8] opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
+                    </span>
+                    <span className="text-blue-300 font-bold">Menyimpan...</span>
                   </>
                 ) : cloudSyncStatus === "error" ? (
                   <>
@@ -318,26 +320,8 @@ export default function BuilderPage() {
                 <Cloud className="w-3.5 h-3.5 text-zinc-400" />
                 <span>Tersimpan Lokal</span>
                 <span className="text-white/40">•</span>
-                <span className="text-[#FFF000] underline font-bold">MASUK</span>
+                <span className="text-blue-400 underline font-bold">MASUK</span>
               </button>
-            )}
-
-            {/* User Account Info when logged in */}
-            {session?.user && (
-              <div className="hidden sm:flex items-center gap-2 bg-white/10 px-2.5 py-1.5 border border-white/30 text-xs font-mono text-white">
-                <UserCheck className="w-3.5 h-3.5 text-[#FFF000]" />
-                <span className="font-bold truncate max-w-[120px]">
-                  {session.user.name || session.user.email}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => signOut()}
-                  className="text-white/60 hover:text-red-400 ml-1 cursor-pointer"
-                  title="Keluar"
-                >
-                  <LogOut className="w-3 h-3" />
-                </button>
-              </div>
             )}
 
             {/* Button Kosongkan CV */}
@@ -360,7 +344,7 @@ export default function BuilderPage() {
           type="button"
           onClick={() => setMobileView("editor")}
           className={`flex-1 py-2.5 text-xs font-mono font-bold text-center border-r-2 border-black uppercase cursor-pointer ${
-            mobileView === "editor" ? "bg-[#FFF000]" : "bg-white"
+            mobileView === "editor" ? "bg-[#1D4ED8] text-white" : "bg-white text-black"
           }`}
         >
           Formulir Editor
@@ -369,7 +353,7 @@ export default function BuilderPage() {
           type="button"
           onClick={() => setMobileView("preview")}
           className={`flex-1 py-2.5 text-xs font-mono font-bold text-center uppercase cursor-pointer flex items-center justify-center gap-1.5 ${
-            mobileView === "preview" ? "bg-[#FFF000]" : "bg-white"
+            mobileView === "preview" ? "bg-[#1D4ED8] text-white" : "bg-white text-black"
           }`}
         >
           <span>Pratinjau CV ATS</span>
@@ -403,7 +387,7 @@ export default function BuilderPage() {
                     onClick={() => updateData({ ...data, language: "id" })}
                     className={`px-3 py-1 font-mono text-xs font-bold border-2 border-black uppercase transition-all cursor-pointer ${
                       (data.language || "id") === "id"
-                        ? "bg-[#FFF000] text-black shadow-[2px_2px_0px_#000]"
+                        ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#000]"
                         : "bg-white text-zinc-600 hover:bg-zinc-100"
                     }`}
                   >
@@ -414,7 +398,7 @@ export default function BuilderPage() {
                     onClick={() => updateData({ ...data, language: "en" })}
                     className={`px-3 py-1 font-mono text-xs font-bold border-2 border-black uppercase transition-all cursor-pointer ${
                       data.language === "en"
-                        ? "bg-[#FFF000] text-black shadow-[2px_2px_0px_#000]"
+                        ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#000]"
                         : "bg-white text-zinc-600 hover:bg-zinc-100"
                     }`}
                   >
@@ -450,14 +434,14 @@ export default function BuilderPage() {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`text-xs font-mono font-bold px-2.5 py-1.5 border border-black uppercase transition-all flex items-center gap-1.5 cursor-pointer ${
                     activeTab === tab.id
-                      ? "bg-[#FFF000] text-black shadow-[2px_2px_0px_#fff]"
+                      ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#fff]"
                       : "bg-black text-white hover:bg-white/20"
                   }`}
                 >
                   <span
                     className={`w-4 h-4 rounded-full text-center text-[10px] leading-4 font-mono font-black ${
                       activeTab === tab.id
-                        ? "bg-black text-[#FFF000]"
+                        ? "bg-white text-[#1D4ED8]"
                         : "bg-white/20 text-white"
                     }`}
                   >
@@ -537,7 +521,13 @@ export default function BuilderPage() {
               mobileView === "preview" ? "block w-full" : "hidden lg:flex"
             }`}
           >
-            <AtsPreview data={data} pages={pages} previewScale={previewScale} />
+            <AtsPreview
+              data={data}
+              pages={pages}
+              previewScale={previewScale}
+              isCompact={isCompact}
+              onToggleCompact={() => setIsCompact(!isCompact)}
+            />
           </div>
         </div>
       </main>
@@ -550,7 +540,7 @@ export default function BuilderPage() {
           className={`flex items-center gap-2 px-3.5 py-2 border-2 border-black shadow-[4px_4px_0px_#000] font-mono text-xs font-bold transition-transform active:translate-x-0.5 active:translate-y-0.5 cursor-pointer ${
             pages.length > 1
               ? "bg-red-400 text-black hover:bg-red-300"
-              : "bg-[#FFF000] text-black hover:bg-yellow-300"
+              : "bg-[#1D4ED8] text-white hover:bg-[#2563EB]"
           }`}
           title={
             pages.length > 1

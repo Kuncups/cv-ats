@@ -93,7 +93,7 @@ export function StepSkills({
         <button
           type="button"
           onClick={onNext}
-          className="px-5 py-2.5 bg-black text-[#FFF000] font-mono text-xs font-bold border-2 border-black hover:bg-white hover:text-black flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="px-5 py-2.5 bg-[#1D4ED8] text-white font-mono text-xs font-bold border-2 border-black hover:bg-[#2563EB] flex items-center gap-1.5 transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
         >
           <span>SELESAI & TINJAU CV</span>
           <ArrowRight className="w-3.5 h-3.5" />
