@@ -386,7 +386,10 @@ export async function generateResumePdfBlob(data: ResumeData, isCompact = false)
         const instLine = edu.location
           ? `${edu.institution} - ${edu.location}`
           : edu.institution || (isEnglish ? "Institution" : "Institusi");
-        const yearText = formatLocalizedDate(edu.year || "", isEnglish ? "en" : "id");
+        const yearText =
+          edu.startDate && edu.endDate
+            ? formatLocalizedDateRange(edu.startDate, edu.endDate, isEnglish ? "en" : "id")
+            : formatLocalizedDate(edu.year || edu.endDate || edu.startDate || "", isEnglish ? "en" : "id");
         const yearWidth = fontRegular.widthOfTextAtSize(yearText, 9);
 
         // Line 1 Left: Institution - Location (Bold)

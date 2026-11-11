@@ -24,6 +24,8 @@ export function StepEducation({
       degree: "",
       institution: "",
       location: "",
+      startDate: "",
+      endDate: "",
       year: "",
       details: "",
     };
@@ -33,6 +35,18 @@ export function StepEducation({
   const updateEducation = (index: number, field: keyof EducationItem, value: string) => {
     const updated = [...data.education];
     updated[index] = { ...updated[index], [field]: value };
+    updateData({ ...data, education: updated });
+  };
+
+  const updateEducationDates = (index: number, start: string, end: string) => {
+    const formatted = start && end ? `${start} - ${end}` : (end || start || "");
+    const updated = [...data.education];
+    updated[index] = {
+      ...updated[index],
+      startDate: start,
+      endDate: end,
+      year: formatted,
+    };
     updateData({ ...data, education: updated });
   };
 
@@ -64,50 +78,111 @@ export function StepEducation({
         </button>
       </div>
 
-      {data.education.map((edu, idx) => (
-        <div key={edu.id || idx} className="p-3 border-2 border-black bg-zinc-50 space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="font-mono text-xs font-bold">PENDIDIKAN #{idx + 1}</span>
-            <button
-              type="button"
-              onClick={() => removeEducation(idx)}
-              className="text-red-600 text-xs font-mono flex items-center gap-1 cursor-pointer hover:underline"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Hapus</span>
-            </button>
+      {data.education.map((edu, idx) => {
+        const yearStr = edu.year || "";
+        const hasRange = yearStr.includes(" - ");
+        const defaultStart = edu.startDate || (hasRange ? yearStr.split(" - ")[0] : "");
+        const defaultEnd = edu.endDate || (hasRange ? yearStr.split(" - ")[1] : yearStr);
+
+        return (
+          <div key={edu.id || idx} className="p-3 border-2 border-black bg-zinc-50 space-y-3">
+            <div className="flex justify-between items-center border-b border-black/20 pb-2">
+              <span className="font-mono text-xs font-bold uppercase">PENDIDIKAN #{idx + 1}</span>
+              <button
+                type="button"
+                onClick={() => removeEducation(idx)}
+                className="text-red-600 hover:text-red-800 text-xs font-mono flex items-center gap-1 cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Hapus</span>
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono font-bold uppercase mb-1">
+                {isEnglish ? "Degree & Major" : "Gelar & Jurusan"}
+              </label>
+              <input
+                type="text"
+                value={edu.degree}
+                onChange={(e) => updateEducation(idx, "degree", e.target.value)}
+                placeholder={
+                  isEnglish
+                    ? "e.g. Bachelor of Computer Science"
+                    : "Gelar & Jurusan (cth: D3 Sistem Informasi / S.Kom. - Teknik Informatika)"
+                }
+                className="w-full p-1.5 border border-black text-xs font-sans bg-white"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-mono font-bold uppercase mb-1">
+                  {isEnglish ? "University / Institution" : "Nama Universitas / Institusi"}
+                </label>
+                <input
+                  type="text"
+                  value={edu.institution}
+                  onChange={(e) => updateEducation(idx, "institution", e.target.value)}
+                  placeholder={isEnglish ? "University Name" : "Nama Perguruan Tinggi / Sekolah"}
+                  className="w-full p-1.5 border border-black text-xs font-sans bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-mono font-bold uppercase mb-1">
+                  {isEnglish ? "Location" : "Kota / Lokasi"}
+                </label>
+                <input
+                  type="text"
+                  value={edu.location || ""}
+                  onChange={(e) => updateEducation(idx, "location", e.target.value)}
+                  placeholder={isEnglish ? "City, Country" : "cth: Jakarta Selatan, ID"}
+                  className="w-full p-1.5 border border-black text-xs font-sans bg-white"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-mono font-bold uppercase mb-1">
+                  {isEnglish ? "Start Date" : "Bulan & Tahun Mulai"}
+                </label>
+                <MonthYearPicker
+                  value={defaultStart}
+                  onChange={(val) => updateEducationDates(idx, val, defaultEnd)}
+                  placeholder={isEnglish ? "Aug 2017" : "Agu 2017"}
+                  language={isEnglish ? "en" : "id"}
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-mono font-bold uppercase mb-1">
+                  {isEnglish ? "End Date / Graduation" : "Bulan & Tahun Selesai / Lulus"}
+                </label>
+                <MonthYearPicker
+                  value={defaultEnd}
+                  onChange={(val) => updateEducationDates(idx, defaultStart, val)}
+                  placeholder={isEnglish ? "Present / Jul 2020" : "Sekarang / Jul 2020"}
+                  canBePresent={true}
+                  language={isEnglish ? "en" : "id"}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono font-bold uppercase mb-1">
+                {isEnglish ? "GPA & Additional Information" : "IPK & Keterangan Tambahan"}
+              </label>
+              <input
+                type="text"
+                value={edu.details}
+                onChange={(e) => updateEducation(idx, "details", e.target.value)}
+                placeholder={isEnglish ? "e.g. GPA 3.85 / 4.00, Cum Laude" : "cth: IPK 3.85 / 4.00, Lulusan Terbaik"}
+                className="w-full p-1.5 border border-black text-xs font-sans bg-white"
+              />
+            </div>
           </div>
-          <input
-            type="text"
-            value={edu.degree}
-            onChange={(e) => updateEducation(idx, "degree", e.target.value)}
-            placeholder="Gelar & Jurusan (cth: Sarjana Manajemen / S.M. - Manajemen SDM)"
-            className="w-full p-1.5 border border-black text-xs font-sans"
-          />
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="text"
-              value={edu.institution}
-              onChange={(e) => updateEducation(idx, "institution", e.target.value)}
-              placeholder={isEnglish ? "University / Institution" : "Nama Universitas / Institusi"}
-              className="w-full p-1.5 border border-black text-xs font-sans"
-            />
-            <MonthYearPicker
-              value={edu.year}
-              onChange={(val) => updateEducation(idx, "year", val)}
-              placeholder={isEnglish ? "Year / Period (2018 - 2022)" : "Bulan & Tahun (2018 - 2022)"}
-              language={isEnglish ? "en" : "id"}
-            />
-          </div>
-          <input
-            type="text"
-            value={edu.details}
-            onChange={(e) => updateEducation(idx, "details", e.target.value)}
-            placeholder="Keterangan tambahan (cth: IPK 3.75 / 4.00, Lulusan Terbaik)"
-            className="w-full p-1.5 border border-black text-xs font-sans"
-          />
-        </div>
-      ))}
+        );
+      })}
 
       {/* Step Navigation Bottom */}
       <div className="pt-3 border-t-2 border-black flex justify-between">

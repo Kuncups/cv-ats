@@ -14,7 +14,9 @@ export interface EducationItem {
   degree: string;
   institution: string;
   location: string;
-  year: string;
+  year?: string;
+  startDate?: string;
+  endDate?: string;
   details: string;
 }
 

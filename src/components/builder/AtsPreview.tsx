@@ -169,7 +169,9 @@ export function AtsPreview({ data, pages, previewScale, isCompact = false, onTog
                               {edu.location ? ` - ${edu.location}` : ""}
                             </span>
                             <span className="font-normal text-black text-[12px] shrink-0">
-                              {formatLocalizedDate(edu.year, isEnglish ? "en" : "id")}
+                              {edu.startDate && edu.endDate
+                                ? formatLocalizedDateRange(edu.startDate, edu.endDate, isEnglish ? "en" : "id")
+                                : formatLocalizedDate(edu.year || edu.endDate || edu.startDate || "", isEnglish ? "en" : "id")}
                             </span>
                           </div>
                           <div className="italic text-[12px] text-black">
