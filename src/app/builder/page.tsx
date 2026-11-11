@@ -8,7 +8,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import { AuthModal } from "@/components/AuthModal";
-import { generateResumePdfBlob } from "@/lib/pdf-generator";
 import { paginateResume } from "@/lib/resume-paginator";
 import { ResumeData } from "@/types/resume";
 import {
@@ -63,6 +62,7 @@ export default function BuilderPage() {
   const [editingDraftId, setEditingDraftId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState("");
   const isInitialMount = useRef(true);
+  const lastSavedPayloadRef = useRef<string>("");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [data, setData] = useState<ResumeData>(DEFAULT_SAMPLE_RESUME);
   const [activeTab, setActiveTab] = useState<
@@ -104,6 +104,7 @@ export default function BuilderPage() {
         const parsed = JSON.parse(saved);
         if (!parsed.language) parsed.language = "id";
         setData(parsed);
+        lastSavedPayloadRef.current = JSON.stringify(parsed);
       } catch (e) {
         console.error("Failed to parse saved resume", e);
       }
@@ -152,6 +153,7 @@ export default function BuilderPage() {
         if (json.data?.content) {
           setData(json.data.content);
           setResumeCloudId(draftId);
+          lastSavedPayloadRef.current = JSON.stringify(json.data.content);
           localStorage.setItem("roster_resume_draft", JSON.stringify(json.data.content));
           localStorage.setItem("roster_resume_id", draftId);
           setShowDraftMenu(false);
@@ -196,6 +198,7 @@ export default function BuilderPage() {
         if (json.data?.id) {
           setData(newResume);
           setResumeCloudId(json.data.id);
+          lastSavedPayloadRef.current = JSON.stringify(newResume);
           localStorage.setItem("roster_resume_draft", JSON.stringify(newResume));
           localStorage.setItem("roster_resume_id", json.data.id);
           setShowDraftMenu(false);
@@ -295,7 +298,7 @@ export default function BuilderPage() {
     localStorage.setItem("roster_resume_draft", JSON.stringify(newData));
   };
 
-  // Auto-save to cloud with debounce
+  // Auto-save to cloud with debounce and dirty check
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -304,6 +307,11 @@ export default function BuilderPage() {
 
     if (!session?.user) {
       setCloudSyncStatus("idle");
+      return;
+    }
+
+    const currentPayload = JSON.stringify(data);
+    if (lastSavedPayloadRef.current === currentPayload) {
       return;
     }
 
@@ -321,6 +329,7 @@ export default function BuilderPage() {
         });
 
         if (!res.ok) throw new Error("Gagal menyimpan ke cloud");
+        lastSavedPayloadRef.current = currentPayload;
         const json = (await res.json()) as { data?: { id?: string } };
         if (json.data?.id) {
           const savedId = json.data.id;
@@ -361,6 +370,7 @@ export default function BuilderPage() {
 
     setIsGeneratingPdf(true);
     try {
+      const { generateResumePdfBlob } = await import("@/lib/pdf-generator");
       const blob = await generateResumePdfBlob(data, isCompact);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");

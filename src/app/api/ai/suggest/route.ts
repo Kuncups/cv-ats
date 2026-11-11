@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sanitizeText } from "@/lib/security";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { getBulletSuggestions, SentenceSuggestion } from "@/lib/sentence-suggestions";
 
 async function getAiBinding(): Promise<any> {
@@ -36,6 +37,27 @@ async function getAiBinding(): Promise<any> {
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp =
+      req.headers.get("cf-connecting-ip") ||
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "127.0.0.1";
+
+    const rateLimit = checkRateLimit(`ai_${clientIp}`, 20, 60);
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        {
+          error: `Batas permintaan saran AI tercapai. Mohon tunggu ${rateLimit.resetSec} detik sebelum mencoba lagi.`,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.resetSec),
+            "X-RateLimit-Remaining": "0",
+          },
+        }
+      );
+    }
+
     const body = (await req.json()) as {
       text?: string;
       role?: string;

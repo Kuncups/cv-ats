@@ -24,3 +24,7 @@ CREATE TABLE IF NOT EXISTS scans (
   missing_keywords_json TEXT NOT NULL,
   created_at INTEGER NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS idx_resumes_user_id ON resumes(user_id);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_scans_user_id ON scans(user_id);

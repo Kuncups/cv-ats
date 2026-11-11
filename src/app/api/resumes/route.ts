@@ -55,6 +55,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Silakan masuk terlebih dahulu." }, { status: 401 });
   }
 
+  const contentLength = req.headers.get("content-length");
+  if (contentLength && parseInt(contentLength, 10) > 300 * 1024) {
+    return NextResponse.json(
+      { error: "Ukuran data resume melebihi batas (maks. 300KB)." },
+      { status: 413 }
+    );
+  }
+
   try {
     const body = (await req.json()) as {
       title?: string;
@@ -63,8 +71,16 @@ export async function POST(req: NextRequest) {
     };
     const { title, content, id } = body;
 
-    if (!content) {
-      return NextResponse.json({ error: "Data resume tidak boleh kosong." }, { status: 400 });
+    if (!content || typeof content !== "object") {
+      return NextResponse.json({ error: "Data resume tidak valid." }, { status: 400 });
+    }
+
+    const contentStr = JSON.stringify(content);
+    if (contentStr.length > 300 * 1024) {
+      return NextResponse.json(
+        { error: "Ukuran konten resume melebihi batas (maks. 300KB)." },
+        { status: 413 }
+      );
     }
 
     const saved = await saveUserResume(userId, title || "Draf CV", content, id);
