@@ -30,6 +30,7 @@ export interface ProjectItem {
 
 export interface ResumeData {
   language?: "id" | "en";
+  fontFamily?: "sans" | "serif";
   personal: {
     fullName: string;
     jobTitle: string;

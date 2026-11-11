@@ -179,10 +179,19 @@ export async function generateResumePdfBlob(data: ResumeData, isCompact = false)
   pdfDoc.setTitle(`Resume - ${data.personal.fullName || (isEnglish ? "Draft CV" : "Draf CV")}`);
   pdfDoc.setAuthor(data.personal.fullName || (isEnglish ? "Draft CV" : "Draf CV"));
 
-  const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-  const fontItalic = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
-  const fontBoldItalic = await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique);
+  const isSerif = data.fontFamily === "serif";
+  const fontRegular = await pdfDoc.embedFont(
+    isSerif ? StandardFonts.TimesRoman : StandardFonts.Helvetica
+  );
+  const fontBold = await pdfDoc.embedFont(
+    isSerif ? StandardFonts.TimesRomanBold : StandardFonts.HelveticaBold
+  );
+  const fontItalic = await pdfDoc.embedFont(
+    isSerif ? StandardFonts.TimesRomanItalic : StandardFonts.HelveticaOblique
+  );
+  const fontBoldItalic = await pdfDoc.embedFont(
+    isSerif ? StandardFonts.TimesRomanBoldItalic : StandardFonts.HelveticaBoldOblique
+  );
 
   // Synchronize with the exact same pagination as the HTML preview
   const pages: ResumePageContent[] = paginateResume(data, isCompact ? 135 : 115);

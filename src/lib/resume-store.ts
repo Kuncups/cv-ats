@@ -1,6 +1,6 @@
 import { ResumeData } from "@/types/resume";
 import { getDb } from "@/db";
-import { resumes, users } from "@/db/schema";
+import { resumes, users, scans } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
 export interface StoredResumeRecord {
@@ -12,8 +12,19 @@ export interface StoredResumeRecord {
   updatedAt: string;
 }
 
+export interface StoredScanRecord {
+  id: string;
+  userId: string;
+  targetJobTitle: string;
+  score: number;
+  matchedKeywords: string[];
+  missingKeywords: string[];
+  createdAt: string;
+}
+
 // In-memory fallback store when D1 binding is not yet attached
 const fallbackStore = new Map<string, StoredResumeRecord>();
+const fallbackScansStore = new Map<string, StoredScanRecord>();
 
 async function getD1Binding(): Promise<D1Database | undefined> {
   try {
@@ -279,4 +290,93 @@ export async function saveUserResume(
 
   fallbackStore.set(id, record);
   return record;
+}
+
+export async function saveScanRecord(
+  userId: string,
+  targetJobTitle: string,
+  score: number,
+  matchedKeywords: string[],
+  missingKeywords: string[]
+): Promise<StoredScanRecord> {
+  const id = `scan_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  const now = new Date();
+  const nowIso = now.toISOString();
+
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+
+  if (db) {
+    try {
+      await db.insert(scans).values({
+        id,
+        userId,
+        targetJobTitle: targetJobTitle.trim() || "Posisi Umum",
+        score,
+        matchedKeywordsJson: JSON.stringify(matchedKeywords),
+        missingKeywordsJson: JSON.stringify(missingKeywords),
+        createdAt: now,
+      });
+
+      return {
+        id,
+        userId,
+        targetJobTitle: targetJobTitle.trim() || "Posisi Umum",
+        score,
+        matchedKeywords,
+        missingKeywords,
+        createdAt: nowIso,
+      };
+    } catch (e) {
+      console.warn("[resume-store] D1 save scan failed, using fallback:", e);
+    }
+  }
+
+  const record: StoredScanRecord = {
+    id,
+    userId,
+    targetJobTitle: targetJobTitle.trim() || "Posisi Umum",
+    score,
+    matchedKeywords,
+    missingKeywords,
+    createdAt: nowIso,
+  };
+  fallbackScansStore.set(id, record);
+  return record;
+}
+
+export async function getUserScans(
+  userId: string,
+  limit = 8
+): Promise<StoredScanRecord[]> {
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+
+  if (db) {
+    try {
+      const records = await db
+        .select()
+        .from(scans)
+        .where(eq(scans.userId, userId))
+        .orderBy(desc(scans.createdAt))
+        .limit(limit);
+
+      return records.map((r) => ({
+        id: r.id,
+        userId: r.userId || userId,
+        targetJobTitle: r.targetJobTitle,
+        score: r.score,
+        matchedKeywords: JSON.parse(r.matchedKeywordsJson || "[]"),
+        missingKeywords: JSON.parse(r.missingKeywordsJson || "[]"),
+        createdAt: r.createdAt.toISOString(),
+      }));
+    } catch (e) {
+      console.warn("[resume-store] D1 get scans failed:", e);
+    }
+  }
+
+  return Array.from(fallbackScansStore.values())
+    .filter((s) => s.userId === userId)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, limit);
 }

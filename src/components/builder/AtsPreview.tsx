@@ -10,10 +10,38 @@ interface AtsPreviewProps {
   previewScale: number;
   isCompact?: boolean;
   onToggleCompact?: () => void;
+  manualZoom?: number | null;
+  onManualZoomChange?: (newZoom: number | null) => void;
 }
 
-export function AtsPreview({ data, pages, previewScale, isCompact = false, onToggleCompact }: AtsPreviewProps) {
+export function AtsPreview({
+  data,
+  pages,
+  previewScale,
+  isCompact = false,
+  onToggleCompact,
+  manualZoom = null,
+  onManualZoomChange,
+}: AtsPreviewProps) {
   const isEnglish = (data.language || "id") === "en";
+  const isSerif = data.fontFamily === "serif";
+  const effectiveScale = manualZoom !== null ? manualZoom : previewScale;
+
+  const handleZoomIn = () => {
+    const current = manualZoom !== null ? manualZoom : previewScale;
+    const next = Math.min(1.5, Math.round((current + 0.1) * 10) / 10);
+    onManualZoomChange?.(next);
+  };
+
+  const handleZoomOut = () => {
+    const current = manualZoom !== null ? manualZoom : previewScale;
+    const next = Math.max(0.4, Math.round((current - 0.1) * 10) / 10);
+    onManualZoomChange?.(next);
+  };
+
+  const handleZoomFit = () => {
+    onManualZoomChange?.(null);
+  };
 
   return (
     <>
@@ -23,7 +51,40 @@ export function AtsPreview({ data, pages, previewScale, isCompact = false, onTog
           <span className="hidden sm:inline">[ PRATINJAU DOKUMEN // FORMAT RESMI STANDAR ATS ]</span>
           <span className="sm:hidden">[ PRATINJAU ATS ]</span>
         </span>
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {/* Zoom controls */}
+          <div className="hidden sm:flex items-center border border-white font-mono text-[10px] bg-white/10">
+            <button
+              type="button"
+              onClick={handleZoomOut}
+              className="px-1.5 py-0.5 hover:bg-white hover:text-black font-bold transition-colors cursor-pointer"
+              title="Perkecil pratinjau"
+            >
+              -
+            </button>
+            <span className="px-1.5 py-0.5 text-zinc-300 min-w-[38px] text-center font-bold">
+              {Math.round(effectiveScale * 100)}%
+            </span>
+            <button
+              type="button"
+              onClick={handleZoomIn}
+              className="px-1.5 py-0.5 hover:bg-white hover:text-black font-bold transition-colors cursor-pointer"
+              title="Perbesar pratinjau"
+            >
+              +
+            </button>
+            {manualZoom !== null && (
+              <button
+                type="button"
+                onClick={handleZoomFit}
+                className="px-1.5 py-0.5 bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-bold transition-colors cursor-pointer border-l border-white"
+                title="Kembalikan ke ukuran pas layar"
+              >
+                FIT
+              </button>
+            )}
+          </div>
+
           {onToggleCompact && (
             <button
               type="button"
@@ -62,9 +123,11 @@ export function AtsPreview({ data, pages, previewScale, isCompact = false, onTog
             {/* A4 Page Canvas Sheet - Exact 210mm x 297mm (794px x 1123px at 96 DPI) */}
             <div
               style={{
-                zoom: previewScale < 1 ? previewScale : undefined,
+                zoom: effectiveScale < 1 || manualZoom !== null ? effectiveScale : undefined,
               }}
               className={`cv-preview-container cv-page relative bg-white border-2 sm:border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[8px_8px_0px_#000] w-[794px] min-h-[1123px] text-black leading-normal print:border-none print:shadow-none print:p-0 print:m-0 print:w-full print:min-h-0 print:[zoom:1] ${
+                isSerif ? "font-serif" : "font-sans"
+              } ${
                 isCompact ? "p-[26px]" : "p-[38px]"
               }`}
             >

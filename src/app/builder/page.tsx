@@ -26,6 +26,7 @@ import { StepOrganizations } from "@/components/builder/StepOrganizations";
 import { StepSkills } from "@/components/builder/StepSkills";
 import { StepReview } from "@/components/builder/StepReview";
 import { AtsPreview } from "@/components/builder/AtsPreview";
+import { CoverLetterModal } from "@/components/builder/CoverLetterModal";
 import {
   Trash2,
   Check,
@@ -36,6 +37,8 @@ import {
   Pencil,
   X,
   Download,
+  Copy,
+  Sparkles,
 } from "lucide-react";
 
 // Backwards compatibility re-exports
@@ -61,6 +64,8 @@ export default function BuilderPage() {
   const [showDraftMenu, setShowDraftMenu] = useState(false);
   const [editingDraftId, setEditingDraftId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState("");
+  const [showCoverLetterModal, setShowCoverLetterModal] = useState(false);
+  const [manualZoom, setManualZoom] = useState<number | null>(null);
   const isInitialMount = useRef(true);
   const lastSavedPayloadRef = useRef<string>("");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
@@ -243,6 +248,51 @@ export default function BuilderPage() {
       }
     } catch (err) {
       console.error("Gagal menghapus draf:", err);
+    }
+  };
+
+  // Clone draft
+  const handleCloneDraft = async (
+    draftId: string,
+    draftTitle: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+    if (!session?.user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/resumes?id=${draftId}`);
+      if (!res.ok) throw new Error("Gagal mengambil data draf");
+      const json = (await res.json()) as any;
+      const contentToClone: ResumeData = json.data?.content || data;
+      const newClonedTitle = `${draftTitle || "Draf CV"} (Salinan)`;
+
+      const saveRes = await fetch("/api/resumes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: newClonedTitle,
+          content: contentToClone,
+        }),
+      });
+
+      if (saveRes.ok) {
+        const savedJson = (await saveRes.json()) as any;
+        if (savedJson.data?.id) {
+          setData(contentToClone);
+          setResumeCloudId(savedJson.data.id);
+          lastSavedPayloadRef.current = JSON.stringify(contentToClone);
+          localStorage.setItem("roster_resume_draft", JSON.stringify(contentToClone));
+          localStorage.setItem("roster_resume_id", savedJson.data.id);
+          setShowDraftMenu(false);
+          await fetchUserDrafts();
+        }
+      }
+    } catch (err) {
+      console.error("Gagal menduplikasi draf:", err);
     }
   };
 
@@ -620,6 +670,14 @@ export default function BuilderPage() {
                                   >
                                     <Pencil className="w-3.5 h-3.5" />
                                   </button>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => handleCloneDraft(d.id, d.title, e)}
+                                    className="text-black/60 hover:text-[#1D4ED8] p-1 hover:bg-black/5 rounded cursor-pointer"
+                                    title="Duplikat draf ini"
+                                  >
+                                    <Copy className="w-3.5 h-3.5" />
+                                  </button>
                                   {!isActive && (
                                     <button
                                       type="button"
@@ -738,11 +796,11 @@ export default function BuilderPage() {
               mobileView === "editor" ? "block" : "hidden lg:block"
             }`}
           >
-            {/* Top Toolbar: Language Switcher */}
+            {/* Top Toolbar: Language & Font Switcher */}
             <div className="p-3 bg-white border-3 border-black shadow-[3px_3px_0px_#000] sm:shadow-[4px_4px_0px_#000] space-y-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs font-mono font-bold uppercase text-black">
-                  BAHASA DOKUMEN CV:
+                  BAHASA DOKUMEN:
                 </span>
                 <div className="flex gap-1.5">
                   <button
@@ -754,7 +812,7 @@ export default function BuilderPage() {
                         : "bg-white text-zinc-600 hover:bg-zinc-100"
                     }`}
                   >
-                    🇮🇩 Bahasa Indonesia
+                    🇮🇩 ID
                   </button>
                   <button
                     type="button"
@@ -765,7 +823,37 @@ export default function BuilderPage() {
                         : "bg-white text-zinc-600 hover:bg-zinc-100"
                     }`}
                   >
-                    🇬🇧 English
+                    🇬🇧 EN
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-black/15">
+                <span className="text-xs font-mono font-bold uppercase text-black">
+                  FONT STANDAR ATS:
+                </span>
+                <div className="flex gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => updateData({ ...data, fontFamily: "sans" })}
+                    className={`px-2.5 py-1 font-sans text-xs font-bold border-2 border-black uppercase transition-all cursor-pointer ${
+                      (data.fontFamily || "sans") === "sans"
+                        ? "bg-black text-white shadow-[2px_2px_0px_#000]"
+                        : "bg-white text-zinc-600 hover:bg-zinc-100"
+                    }`}
+                  >
+                    Sans (Modern)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateData({ ...data, fontFamily: "serif" })}
+                    className={`px-2.5 py-1 font-serif text-xs font-bold border-2 border-black uppercase transition-all cursor-pointer ${
+                      data.fontFamily === "serif"
+                        ? "bg-black text-white shadow-[2px_2px_0px_#000]"
+                        : "bg-white text-zinc-600 hover:bg-zinc-100"
+                    }`}
+                  >
+                    Serif (Formal)
                   </button>
                 </div>
               </div>
@@ -870,6 +958,7 @@ export default function BuilderPage() {
                   onDownload={handleDownloadPdf}
                   onBridgeToAnalyzer={handleBridgeToAnalyzer}
                   onViewMobilePreview={() => setMobileView("preview")}
+                  onOpenCoverLetter={() => setShowCoverLetterModal(true)}
                   isGeneratingPdf={isGeneratingPdf}
                 />
               )}
@@ -889,6 +978,8 @@ export default function BuilderPage() {
               previewScale={previewScale}
               isCompact={isCompact}
               onToggleCompact={() => setIsCompact(!isCompact)}
+              manualZoom={manualZoom}
+              onManualZoomChange={setManualZoom}
             />
           </div>
         </div>
@@ -974,6 +1065,12 @@ export default function BuilderPage() {
             handleDownloadPdf();
           }
         }}
+      />
+
+      <CoverLetterModal
+        isOpen={showCoverLetterModal}
+        onClose={() => setShowCoverLetterModal(false)}
+        data={data}
       />
 
       <Footer />

@@ -19,6 +19,8 @@ import {
   Check,
   RotateCcw,
   Copy,
+  History,
+  ArrowUpRight,
 } from "lucide-react";
 
 function ScoreTicker({ target }: { target: number }) {
@@ -55,6 +57,30 @@ export default function AnalyzerPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AtsAnalysisResult | null>(null);
   const [copiedReport, setCopiedReport] = useState(false);
+  const [userScans, setUserScans] = useState<
+    Array<{
+      id: string;
+      targetJobTitle: string;
+      score: number;
+      createdAt: string;
+      matchedKeywords: string[];
+      missingKeywords: string[];
+    }>
+  >([]);
+
+  const fetchUserScans = async () => {
+    try {
+      const res = await fetch("/api/scans");
+      if (res.ok) {
+        const json = (await res.json()) as any;
+        if (json.data) setUserScans(json.data);
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    fetchUserScans();
+  }, []);
 
   const handleCopyReport = async () => {
     if (!result) return;
@@ -201,6 +227,24 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
 
       if (json.data) {
         setResult(json.data);
+
+        // Auto-save scan result to cloud history
+        const inferredTitle =
+          jobDescription.trim().split("\n")[0]?.replace(/^[^a-zA-Z0-9]+/, "").slice(0, 50) ||
+          "Posisi Target";
+
+        fetch("/api/scans", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            targetJobTitle: inferredTitle,
+            score: json.data.overallScore,
+            matchedKeywords: json.data.matchedKeywords,
+            missingKeywords: json.data.missingKeywords,
+          }),
+        })
+          .then(() => fetchUserScans())
+          .catch(() => {});
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan koneksi.");
@@ -392,6 +436,63 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
             </div>
           </div>
         </div>
+
+        {/* Recent Scans History Section for authenticated user */}
+        {userScans.length > 0 && !result && (
+          <div className="mb-8 bg-white border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] p-4 sm:p-6 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-black">
+              <div className="flex items-center gap-2">
+                <History className="w-5 h-5 text-[#1D4ED8]" />
+                <h3 className="font-mono font-bold text-sm uppercase">
+                  RIWAYAT PEMINDAIAN CV ANDA ({userScans.length})
+                </h3>
+              </div>
+              <span className="text-[10px] font-mono bg-blue-100 text-blue-900 border border-black px-2 py-0.5 font-bold">
+                TERSINKRONISASI KE CLOUD
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono">
+              {userScans.map((scan) => (
+                <div
+                  key={scan.id}
+                  className="p-3 border-2 border-black bg-zinc-50 hover:bg-blue-50/50 transition-colors space-y-2 flex flex-col justify-between"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-black/50">
+                        {new Date(scan.createdAt).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                      <span
+                        className={`text-xs font-black px-2 py-0.5 border border-black ${
+                          scan.score >= 80
+                            ? "bg-green-300 text-black"
+                            : scan.score >= 60
+                            ? "bg-amber-300 text-black"
+                            : "bg-red-300 text-black"
+                        }`}
+                      >
+                        {scan.score}%
+                      </span>
+                    </div>
+                    <span className="block font-bold text-xs truncate" title={scan.targetJobTitle}>
+                      {scan.targetJobTitle}
+                    </span>
+                  </div>
+
+                  <div className="text-[10px] text-black/60 pt-1.5 border-t border-black/10 flex items-center justify-between">
+                    <span>{scan.matchedKeywords.length} cocok</span>
+                    <span>{scan.missingKeywords.length} saran</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Scan Results Section */}
         {result && (

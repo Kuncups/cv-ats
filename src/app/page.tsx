@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
+import { AtsChecklistGuide } from "@/components/home/AtsChecklistGuide";
 import {
   FileSearch,
   PenTool,
@@ -268,6 +269,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* INTERACTIVE ATS CHECKLIST & GUIDE */}
+        <AtsChecklistGuide />
 
         {/* FAQ SECTION */}
         <section id="faq" className="border-b-4 border-black py-16 px-4 sm:px-6 bg-white">

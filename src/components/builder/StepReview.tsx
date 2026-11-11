@@ -4,6 +4,7 @@ import {
   Download,
   FileSearch,
   CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 
 interface StepReviewProps {
@@ -13,6 +14,7 @@ interface StepReviewProps {
   onDownload: () => void;
   onBridgeToAnalyzer: () => void;
   onViewMobilePreview: () => void;
+  onOpenCoverLetter?: () => void;
   isGeneratingPdf: boolean;
 }
 
@@ -23,6 +25,7 @@ export function StepReview({
   onDownload,
   onBridgeToAnalyzer,
   onViewMobilePreview,
+  onOpenCoverLetter,
   isGeneratingPdf,
 }: StepReviewProps) {
   return (
@@ -155,6 +158,17 @@ export function StepReview({
           <FileSearch className="w-4 h-4" />
           <span>UJI KECOCOKAN DI ANALYZER KATA KUNCI</span>
         </button>
+
+        {onOpenCoverLetter && (
+          <button
+            type="button"
+            onClick={onOpenCoverLetter}
+            className="w-full py-2.5 bg-yellow-300 hover:bg-yellow-400 text-black font-mono font-bold text-xs border-2 border-black uppercase flex items-center justify-center gap-2 transition-colors shadow-[3px_3px_0px_#000] cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>BUAT SURAT LAMARAN (COVER LETTER AI)</span>
+          </button>
+        )}
 
         {/* Mobile Only: Switch to Preview Tab */}
         <button
