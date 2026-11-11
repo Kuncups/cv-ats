@@ -11,7 +11,7 @@ interface CoverLetterModalProps {
 }
 
 export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProps) {
-  const [targetRole, setTargetRole] = useState(data.personal?.jobTitle || "");
+  const [targetRole, setTargetRole] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [language, setLanguage] = useState<"id" | "en">(data.language || "id");
@@ -22,15 +22,10 @@ export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProp
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isOpen) {
-      if (!targetRole && data.personal?.jobTitle) {
-        setTargetRole(data.personal.jobTitle);
-      }
-      if (data.language) {
-        setLanguage(data.language);
-      }
+    if (isOpen && data.language) {
+      setLanguage(data.language);
     }
-  }, [isOpen, data]);
+  }, [isOpen, data.language]);
 
   if (!isOpen) return null;
 
@@ -125,7 +120,7 @@ export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProp
                 type="text"
                 value={targetRole}
                 onChange={(e) => setTargetRole(e.target.value)}
-                placeholder="Contoh: Digital Marketing Specialist"
+                placeholder="Contoh: Human Resources & Administration Specialist"
                 className="w-full p-2 border-2 border-black bg-white focus:outline-none focus:ring-1 focus:ring-[#1D4ED8] text-xs font-sans"
               />
             </div>
