@@ -84,6 +84,22 @@ body {
   box-shadow: 10px 10px 0px #000000 !important;
 }
 
+/* Infinite Marquee */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 35s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
 /* Scanner Laser Animation */
 @keyframes laser-sweep {
   0% { top: 4%; opacity: 0.85; }

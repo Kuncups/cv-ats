@@ -110,14 +110,9 @@ export function JobPortalSection() {
                   <ArrowUpRight className="w-4 h-4 text-black/40 group-hover:text-[#1D4ED8] transition-colors shrink-0" />
                 </div>
 
-                <div>
-                  <h3 className="font-mono font-black text-sm uppercase tracking-tight">
-                    {portal.name}
-                  </h3>
-                  <p className="font-sans text-[11px] leading-relaxed text-zinc-600 mt-1">
-                    {portal.description}
-                  </p>
-                </div>
+                <p className="font-sans text-[11px] leading-relaxed text-zinc-600">
+                  {portal.description}
+                </p>
               </div>
 
               <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase text-[#1D4ED8] pt-2 border-t border-black/10">

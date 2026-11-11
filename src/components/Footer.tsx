@@ -1,25 +1,37 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { BrutalistStar } from "./BrutalistBadge";
 import { SITE_CONFIG } from "@/config/site";
+
+const MARQUEE_ITEMS = [
+  "DRAFT CV — RAPIKAN CV ANDA // TINGKATKAN PELUANG CARI KERJA",
+  "FORMAT 1-KOLOM STANDAR RECRUITER",
+  "MUDAH DIBACA SISTEM HRD",
+  "GRATIS SELAMANYA",
+  "PRIVASI TERJAGA 100%",
+  "LEBIH DEKAT KE PANGGILAN KERJA",
+];
 
 export function Footer() {
   return (
     <footer className="w-full bg-black text-white border-t-4 border-black no-print">
       {/* Marquee Banner */}
-      <div className="bg-[#1D4ED8] text-white py-2 overflow-hidden border-b-2 border-black font-mono font-black text-xs uppercase tracking-wider flex items-center whitespace-nowrap select-none">
-        <div className="flex gap-8 animate-marquee">
-          <span>DRAFT CV — RAPIKAN CV ANDA // TINGKATKAN PELUANG CARI KERJA</span>
-          <BrutalistStar className="w-3 h-3 text-white" />
-          <span>FORMAT 1-KOLOM STANDAR RECRUITER</span>
-          <BrutalistStar className="w-3 h-3 text-white" />
-          <span>MUDAH DIBACA SISTEM HRD</span>
-          <BrutalistStar className="w-3 h-3 text-white" />
-          <span>GRATIS SELAMANYA</span>
-          <BrutalistStar className="w-3 h-3 text-white" />
-          <span>PRIVASI TERJAGA 100%</span>
-          <BrutalistStar className="w-3 h-3 text-white" />
-          <span>LEBIH DEKAT KE PANGGILAN KERJA</span>
-          <BrutalistStar className="w-3 h-3 text-white" />
+      <div className="bg-[#1D4ED8] text-white py-2 overflow-hidden border-b-2 border-black font-mono font-black text-xs uppercase tracking-wider select-none">
+        <div className="flex w-max animate-marquee">
+          {[0, 1].map((copy) => (
+            <div
+              key={copy}
+              className="flex items-center gap-8 pr-8 whitespace-nowrap"
+              aria-hidden={copy === 1}
+            >
+              {MARQUEE_ITEMS.map((item) => (
+                <Fragment key={item}>
+                  <span>{item}</span>
+                  <BrutalistStar className="w-3 h-3 text-white shrink-0" />
+                </Fragment>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
 
