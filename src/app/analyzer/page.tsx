@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -596,52 +595,6 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Recommendations & Actionable Rewrites */}
-            <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6">
-              <div className="pb-3 mb-4 border-b-2 border-black flex items-center gap-2">
-                <FileCheck className="w-5 h-5 text-black" />
-                <h3 className="font-mono font-bold text-sm uppercase">
-                  Saran Praktis untuk Memperbaiki CV Anda
-                </h3>
-              </div>
-
-              <div className="space-y-4">
-                {result.recommendations.map((rec, i) => (
-                  <div key={i} className="p-4 bg-black text-white border-2 border-black space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono bg-[#1D4ED8] text-white px-2 py-0.5 font-bold uppercase">
-                        {rec.type === "keyword" ? "Kata Kunci" : rec.type === "impact" ? "Pencapaian" : "Format"}
-                      </span>
-                      <h4 className="font-bold text-sm uppercase text-white">
-                        {rec.title}
-                      </h4>
-                    </div>
-                    <p className="text-xs font-mono text-white/80 leading-relaxed">
-                      {rec.advice}
-                    </p>
-                    {rec.example && (
-                      <div className="mt-2 p-2.5 bg-white/10 border border-white/20 text-xs font-mono text-blue-200">
-                        {rec.example}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Next Step CTA */}
-              <div className="mt-6 pt-4 border-t-2 border-black flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-xs font-mono text-black/70">
-                  Ingin format yang pasti 100% rapi dan lolos pembacaan sistem rekruter?
-                </div>
-                <Link
-                  href="/builder"
-                  className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-6 py-2.5 text-xs font-mono uppercase inline-flex items-center shadow-[3px_3px_0px_#000]"
-                >
-                  <span>SUSUN CV DI RESUME BUILDER</span>
-                </Link>
               </div>
             </div>
           </div>
