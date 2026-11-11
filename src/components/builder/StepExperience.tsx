@@ -10,7 +10,6 @@ import {
   ChevronDown,
   Lightbulb,
 } from "lucide-react";
-import { getBulletSuggestions } from "@/lib/sentence-suggestions";
 import { SentenceSuggestionBox } from "@/components/builder/SentenceSuggestionBox";
 
 interface StepExperienceProps {
@@ -353,13 +352,10 @@ export function StepExperience({
                   {/* Inline Suggestion Box */}
                   {isOpen && (
                     <SentenceSuggestionBox
-                      suggestions={getBulletSuggestions({
-                        text: bullet,
-                        role: exp.role,
-                        company: exp.company,
-                        language: data.language,
-                      })}
                       currentText={bullet}
+                      role={exp.role}
+                      company={exp.company}
+                      language={data.language}
                       onApply={(newSentence) => {
                         updateExpBullet(expIdx, bIdx, newSentence);
                         setActiveSuggestionKey(null);
