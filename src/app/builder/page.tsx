@@ -77,9 +77,13 @@ export default function BuilderPage() {
       }
     };
 
+    const timer = setTimeout(handleResize, 60);
     handleResize();
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [mobileView]);
 
   // Load from localStorage on mount if available
@@ -367,8 +371,8 @@ export default function BuilderPage() {
         </button>
       </div>
 
-      <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 print:p-0 print:m-0 print:max-w-none print:w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start print:block print:w-full">
+      <main className="flex-1 w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-8 print:p-0 print:m-0 print:max-w-none print:w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start print:block print:w-full">
           {/* Left Side: Form Editor (5 cols on lg+) */}
           <div
             className={`lg:col-span-5 space-y-4 no-print ${
@@ -376,8 +380,8 @@ export default function BuilderPage() {
             }`}
           >
             {/* Top Toolbar: Language Switcher */}
-            <div className="p-3 bg-white border-3 border-black shadow-[4px_4px_0px_#000] space-y-2.5">
-              <div className="flex items-center justify-between">
+            <div className="p-3 bg-white border-3 border-black shadow-[3px_3px_0px_#000] sm:shadow-[4px_4px_0px_#000] space-y-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs font-mono font-bold uppercase text-black">
                   BAHASA DOKUMEN CV:
                 </span>
@@ -409,7 +413,7 @@ export default function BuilderPage() {
             </div>
 
             {/* ATS Form Stepper */}
-            <div className="flex flex-wrap gap-1 border-b-3 border-black pb-2 bg-black p-2">
+            <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1 border-b-3 border-black pb-2 bg-black p-2">
               {(isEnglish
                 ? [
                     { id: "personal", step: "1", label: "Personal Info" },
@@ -432,7 +436,7 @@ export default function BuilderPage() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`text-xs font-mono font-bold px-2.5 py-1.5 border border-black uppercase transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`text-xs font-mono font-bold px-2.5 py-1.5 border border-black uppercase transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === tab.id
                       ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#fff]"
                       : "bg-black text-white hover:bg-white/20"
@@ -453,7 +457,7 @@ export default function BuilderPage() {
             </div>
 
             {/* Modular Step Form Panels */}
-            <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6 space-y-4">
+            <div className="bg-white border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] p-4 sm:p-6 space-y-4">
               {activeTab === "personal" && (
                 <StepPersonal
                   data={data}

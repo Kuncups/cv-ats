@@ -215,27 +215,27 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
     <div className="min-h-screen bg-blueprint text-black flex flex-col font-sans">
       <Header />
 
-      <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main className="flex-1 w-full px-3 sm:px-6 lg:px-8 py-6 sm:py-12">
         {/* Page Header */}
-        <div className="mb-8">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-3">
             <Pill variant="black">CEK SKOR CV</Pill>
             <Pill variant="white">ANALISIS KATA KUNCI</Pill>
             <Pill variant="blue">STANDAR ATS RESMI</Pill>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-tight mb-2">
+          <h1 className="text-2xl sm:text-5xl font-black uppercase tracking-tight leading-tight mb-2 break-words">
             Cek Skor & Kesesuaian Kata Kunci CV Anda
           </h1>
-          <p className="font-mono text-sm sm:text-base text-black/80 max-w-2xl leading-relaxed">
+          <p className="font-mono text-xs sm:text-base text-black/80 max-w-2xl leading-relaxed">
             Ketahui seberapa cocok CV Anda dengan lowongan yang dituju, temukan keahlian penting yang belum Anda cantumkan, dan rapikan isi CV agar peluang dipanggil wawancara kerja meningkat pesat.
           </p>
         </div>
 
         {/* Input Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* File Upload Dropzone or Bridged Text (5 cols) */}
           <div className="lg:col-span-5 flex flex-col">
-            <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6 flex-1 flex flex-col">
+            <div className="bg-white border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] p-4 sm:p-6 flex-1 flex flex-col">
               <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-black">
                 <span className="font-mono font-bold text-xs uppercase tracking-wider">
                   [ LANGKAH 1: DOKUMEN RESUME ]
@@ -402,10 +402,10 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
         {result && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
             {/* Main Score Hero Card */}
-            <div className="bg-black text-white border-4 border-black shadow-[8px_8px_0px_#000] p-6 sm:p-8">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b-2 border-white/20">
+            <div className="bg-black text-white border-3 sm:border-4 border-black shadow-[4px_4px_0px_#000] sm:shadow-[8px_8px_0px_#000] p-4 sm:p-8">
+              <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6 pb-6 border-b-2 border-white/20">
                 <div>
-                  <div className="flex flex-wrap items-center gap-3 mb-1">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-xs uppercase tracking-wider text-white/60">
                         HASIL PEMINDAIAN
@@ -431,20 +431,20 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                       )}
                     </button>
                   </div>
-                  <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
+                  <h2 className="text-xl sm:text-4xl font-black uppercase tracking-tight text-white mt-1 break-words">
                     {result.summary}
                   </h2>
                 </div>
 
                 {/* Score Number Display */}
-                <div className="bg-[#1D4ED8] text-white border-3 border-black shadow-[4px_4px_0px_#fff] p-4 text-center shrink-0 min-w-[160px]">
+                <div className="bg-[#1D4ED8] text-white border-2 sm:border-3 border-black shadow-[3px_3px_0px_#fff] sm:shadow-[4px_4px_0px_#fff] p-3 sm:p-4 text-center shrink-0 w-full md:w-auto md:min-w-[160px]">
                   <span className="block font-mono text-[10px] font-bold uppercase tracking-wider text-blue-100">
                     SKOR KECOCOKAN
                   </span>
-                  <span className="text-5xl sm:text-6xl font-black font-mono tracking-tighter">
+                  <span className="text-4xl sm:text-6xl font-black font-mono tracking-tighter">
                     <ScoreTicker target={result.overallScore} />%
                   </span>
-                  <span className="block text-[11px] font-bold uppercase mt-1">
+                  <span className="block text-[10px] sm:text-[11px] font-bold uppercase mt-1">
                     {result.overallScore >= 80
                       ? "SANGAT SIAP SCREENING"
                       : result.overallScore >= 60

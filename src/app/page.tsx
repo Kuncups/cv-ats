@@ -37,8 +37,8 @@ export default function HomePage() {
 
             {/* Main Headline */}
             <div className="space-y-3 mb-8">
-              <div className="flex items-center gap-4">
-                <span className="font-mono text-xl sm:text-2xl font-black bg-[#1D4ED8] text-white px-3 py-1 border-2 border-black shadow-[3px_3px_0px_#000]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                <span className="font-mono text-lg sm:text-2xl font-black bg-[#1D4ED8] text-white px-3 py-1 border-2 border-black shadow-[3px_3px_0px_#000]">
                   DRAFT CV
                 </span>
                 <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-black/80">
@@ -46,30 +46,30 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-[1.0] text-black">
+              <h1 className="text-3xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-[1.05] sm:leading-[1.0] text-black break-words">
                 Rapikan CV Anda. Tingkatkan Peluang Dapat Kerja.
               </h1>
 
-              <p className="font-mono text-base sm:text-lg text-black/85 max-w-3xl pt-2 leading-relaxed">
+              <p className="font-mono text-sm sm:text-lg text-black/85 max-w-3xl pt-2 leading-relaxed">
                 Banyak kandidat hebat gagal dipanggil wawancara hanya karena susunan CV yang berantakan dan sulit dibaca sistem rekrutmen. Draft CV membantu Anda merapikan struktur resume ke standar 1-kolom ATS profesional dan memastikan isi pengalaman Anda menarik perhatian recruiter.
               </p>
             </div>
 
             {/* Call to Actions */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
               <Link
                 href="/analyzer"
-                className="brutal-btn bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-3 transition-colors shadow-[4px_4px_0px_#000]"
+                className="brutal-btn w-full sm:w-auto justify-center bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center gap-3 transition-colors shadow-[4px_4px_0px_#000]"
               >
                 <span>CEK SKOR CV SAYA (GRATIS)</span>
-                <DoubleArrow className="w-6 h-3 text-current" />
+                <DoubleArrow className="w-5 sm:w-6 h-3 text-current" />
               </Link>
               <Link
                 href="/builder"
-                className="brutal-btn bg-white hover:bg-black hover:text-white text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-2 transition-colors shadow-[4px_4px_0px_#000]"
+                className="brutal-btn w-full sm:w-auto justify-center bg-white hover:bg-black hover:text-white text-black font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center gap-2 transition-colors shadow-[4px_4px_0px_#000]"
               >
                 <span>BUAT CV DENGAN BUILDER</span>
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
               </Link>
             </div>
 

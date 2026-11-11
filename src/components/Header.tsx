@@ -17,20 +17,20 @@ export function Header() {
     <>
       <header className="w-full bg-white border-b-3 border-black sticky top-0 z-50 no-print">
         {/* Main Navigation Bar */}
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+        <div className="w-full px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-[#1D4ED8] text-white flex items-center justify-center font-black text-xl border-2 border-black shadow-[3px_3px_0px_#000] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#1D4ED8] text-white flex items-center justify-center font-black text-lg sm:text-xl border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
               [D]
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-black text-2xl tracking-tighter uppercase text-black leading-none">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-black text-xl sm:text-2xl tracking-tighter uppercase text-black leading-none">
                   Draft CV
                 </span>
-                <BrutalistStar className="w-4 h-4 text-[#1D4ED8]" />
+                <BrutalistStar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#1D4ED8]" />
               </div>
-              <span className="text-[10px] font-mono font-bold tracking-wider text-black/70">
+              <span className="hidden sm:block text-[10px] font-mono font-bold tracking-wider text-black/70">
                 BANTU RAPIKAN CV & TINGKATKAN PELUANG KERJA
               </span>
             </div>
@@ -50,13 +50,13 @@ export function Header() {
           </nav>
 
           {/* Auth Action Button & Mobile Menu Toggle */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {status === "loading" ? (
-              <div className="h-9 w-28 bg-zinc-100 border-2 border-black animate-pulse" />
+              <div className="h-8 sm:h-9 w-20 sm:w-28 bg-zinc-100 border-2 border-black animate-pulse" />
             ) : session?.user ? (
-              <div className="inline-flex items-center gap-2 bg-white text-black font-bold px-3 py-1.5 border-2 border-black shadow-[3px_3px_0px_#000] text-xs font-mono">
-                <UserCheck className="w-3.5 h-3.5 text-[#1D4ED8]" />
-                <span className="font-black uppercase max-w-[100px] sm:max-w-[160px] truncate">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white text-black font-bold px-2 sm:px-3 py-1 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] text-[11px] sm:text-xs font-mono">
+                <UserCheck className="w-3.5 h-3.5 text-[#1D4ED8] shrink-0" />
+                <span className="font-black uppercase max-w-[80px] xs:max-w-[110px] sm:max-w-[160px] truncate">
                   {session.user.name || session.user.email?.split("@")[0]}
                 </span>
                 <span className="text-black/30">|</span>
@@ -74,10 +74,11 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setShowAuthModal(true)}
-                className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-3 sm:px-4 py-2 border-2 border-black shadow-[3px_3px_0px_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all text-xs font-mono uppercase cursor-pointer"
+                className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-2.5 sm:px-4 py-1.5 sm:py-2 border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all text-[11px] sm:text-xs font-mono uppercase cursor-pointer shrink-0"
               >
                 <User className="w-3.5 h-3.5" />
-                <span>LOGIN / REGISTER</span>
+                <span className="hidden xs:inline">LOGIN / REGISTER</span>
+                <span className="xs:hidden">MASUK</span>
               </button>
             )}
 
@@ -85,7 +86,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 bg-white text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+              className="md:hidden p-1.5 sm:p-2 bg-white text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
               aria-label="Menu Navigasi"
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}

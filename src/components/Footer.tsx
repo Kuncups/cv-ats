@@ -23,18 +23,18 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
         <div className="md:col-span-2 space-y-4">
           <div className="flex items-center gap-2">
-            <span className="font-black text-3xl tracking-tighter uppercase text-white">
+            <span className="font-black text-2xl sm:text-3xl tracking-tighter uppercase text-white">
               DRAFT CV
             </span>
-            <BrutalistStar className="w-5 h-5 text-[#1D4ED8]" />
+            <BrutalistStar className="w-4 sm:w-5 h-4 sm:h-5 text-[#1D4ED8]" />
           </div>
-          <p className="text-white/80 font-mono text-sm max-w-md leading-relaxed">
+          <p className="text-white/80 font-mono text-xs sm:text-sm max-w-md leading-relaxed">
             Platform praktis untuk membantu pencari kerja merapikan susunan CV sesuai standar ATS industri dan meningkatkan peluang dipanggil wawancara kerja oleh tim rekruter.
           </p>
-          <div className="flex items-center gap-2 text-xs font-mono text-white/50">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-white/50">
             <span>DIBUAT DENGAN NEXT.JS</span>
             <span>•</span>
             <span>CLOUDFLARE EDGE</span>
