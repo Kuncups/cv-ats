@@ -15,7 +15,6 @@ import {
   CheckCircle2,
   XCircle,
   Sparkles,
-  ArrowRight,
   RefreshCw,
   Info,
   Check,
@@ -639,10 +638,9 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                 </div>
                 <Link
                   href="/builder"
-                  className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-6 py-2.5 text-xs font-mono uppercase inline-flex items-center gap-2 shadow-[3px_3px_0px_#000]"
+                  className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-6 py-2.5 text-xs font-mono uppercase inline-flex items-center shadow-[3px_3px_0px_#000]"
                 >
                   <span>SUSUN CV DI RESUME BUILDER</span>
-                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>

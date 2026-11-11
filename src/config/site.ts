@@ -4,7 +4,7 @@ export const SITE_CONFIG = {
   tagline: "Bantu Rapikan CV & Tingkatkan Peluang Kerja",
   description:
     "Bantu merapikan format dan struktur CV Anda agar sesuai standar ATS, terbaca sempurna oleh recruiter, dan meningkatkan peluang lolos panggilan kerja.",
-  url: "https://draftcv.pages.dev",
+  url: "https://draftcv.my.id",
   version: "2024.11.0",
   year: "2024 -> 2026",
   security: {

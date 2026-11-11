@@ -5,7 +5,6 @@ import {
   FileSearch,
   Printer,
   CheckCircle2,
-  ArrowLeft,
 } from "lucide-react";
 
 interface StepReviewProps {
@@ -184,9 +183,8 @@ export function StepReview({
         <button
           type="button"
           onClick={onBack}
-          className="px-4 py-2 border-2 border-black font-mono text-xs font-bold hover:bg-black hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="px-4 py-2 border-2 border-black font-mono text-xs font-bold hover:bg-black hover:text-white flex items-center justify-center transition-colors cursor-pointer"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
           <span>KEMBALI EDIT</span>
         </button>
       </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ResumeData } from "@/types/resume";
 import { RESUME_PRESETS } from "@/data/resume-presets";
 import { RichTextarea } from "@/components/RichText";
-import { ArrowRight, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
+import { Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 
 interface StepPersonalProps {
   data: ResumeData;
@@ -246,10 +246,9 @@ export function StepPersonal({
         <button
           type="button"
           onClick={onNext}
-          className="px-5 py-2.5 bg-[#1D4ED8] text-white font-mono text-xs font-bold border-2 border-black hover:bg-[#2563EB] flex items-center gap-1.5 transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
+          className="px-5 py-2.5 bg-[#1D4ED8] text-white font-mono text-xs font-bold border-2 border-black hover:bg-[#2563EB] flex items-center justify-center transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
         >
           <span>SIMPAN & LANJUTKAN</span>
-          <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>

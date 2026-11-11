@@ -11,7 +11,6 @@ import {
   ShieldCheck,
   Zap,
   Cpu,
-  ArrowRight,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -65,10 +64,9 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/builder"
-                className="brutal-btn w-full sm:w-auto justify-center bg-white hover:bg-black hover:text-white text-black font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center gap-2 transition-colors shadow-[4px_4px_0px_#000]"
+                className="brutal-btn w-full sm:w-auto justify-center bg-white hover:bg-black hover:text-white text-black font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center transition-colors shadow-[4px_4px_0px_#000]"
               >
                 <span>BUAT CV DENGAN BUILDER</span>
-                <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
               </Link>
             </div>
 
@@ -234,10 +232,9 @@ export default function HomePage() {
                 <div className="pt-6 mt-6 border-t-2 border-black">
                   <Link
                     href="/analyzer"
-                    className="brutal-btn w-full bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2 transition-colors shadow-[3px_3px_0px_#000]"
+                    className="brutal-btn w-full bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black py-3 text-xs font-mono uppercase flex items-center justify-center transition-colors shadow-[3px_3px_0px_#000]"
                   >
                     <span>CEK SKOR CV SAYA SEKARANG</span>
-                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -265,10 +262,9 @@ export default function HomePage() {
                 <div className="pt-6 mt-6 border-t-2 border-black">
                   <Link
                     href="/builder"
-                    className="brutal-btn w-full bg-black hover:bg-[#1D4ED8] text-white font-black py-3 text-xs font-mono uppercase flex items-center justify-center gap-2 transition-colors shadow-[3px_3px_0px_#000]"
+                    className="brutal-btn w-full bg-black hover:bg-[#1D4ED8] text-white font-black py-3 text-xs font-mono uppercase flex items-center justify-center transition-colors shadow-[3px_3px_0px_#000]"
                   >
                     <span>MULAI BUAT CV SEKARANG</span>
-                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>

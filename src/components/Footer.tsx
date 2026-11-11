@@ -43,22 +43,22 @@ export function Footer() {
           <ul className="space-y-2 text-sm text-white/80">
             <li>
               <Link href="/analyzer" className="hover:text-white transition-colors">
-                {"->"} Cek Skor & Kata Kunci CV
+                Cek Skor & Kata Kunci CV
               </Link>
             </li>
             <li>
               <Link href="/builder" className="hover:text-white transition-colors">
-                {"->"} Buat CV Standar ATS
+                Buat CV Standar ATS
               </Link>
             </li>
             <li>
               <Link href="/#standard" className="hover:text-white transition-colors">
-                {"->"} Panduan Format Standar
+                Panduan Format Standar
               </Link>
             </li>
             <li>
               <Link href="/#faq" className="hover:text-white transition-colors">
-                {"->"} Pertanyaan Umum (FAQ)
+                Pertanyaan Umum (FAQ)
               </Link>
             </li>
           </ul>

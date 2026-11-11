@@ -288,6 +288,16 @@ export function analyzeCvText(
   // 9. Generate Contextual Recommendations
   const recommendations: AtsAnalysisResult["recommendations"] = [];
 
+  if (wordCount < 30 || cleanText.length < 100) {
+    recommendations.unshift({
+      type: "format",
+      title: "CV Terindikasi Format Scan / Gambar",
+      advice:
+        "Teks yang diekstrak dari dokumen sangat sedikit. Sistem ATS tidak dapat membaca teks di dalam gambar atau hasil scan. Gunakan Resume Builder untuk membuat CV berbasis teks asli yang 100% terbaca sistem rekrutmen.",
+      example: "Hindari menyimpan CV dari Canva sebagai 'PDF Print (Flattened)' atau hasil foto kamera.",
+    });
+  }
+
   if (missingKeywords.length > 0) {
     const topMissing = missingKeywords.slice(0, 6).join(", ");
     recommendations.push({
@@ -303,7 +313,7 @@ export function analyzeCvText(
       type: "impact",
       title: "Kuantifikasi Dampak dengan Angka",
       advice: "Sistem ATS dan recruiter memprioritaskan pencapaian terukur daripada daftar tugas pasif.",
-      example: "Ubah: 'Bertanggung jawab atas laporan operasional' -> Menjadi: 'Mengelola laporan operasional bulanan dengan akurasi 99% dan mempercepat waktu penyusunan hingga 3 hari kerja'.",
+      example: "Ubah: 'Bertanggung jawab atas laporan operasional' menjadi: 'Mengelola laporan operasional bulanan dengan akurasi 99% dan mempercepat waktu penyusunan hingga 3 hari kerja'.",
     });
   }
 

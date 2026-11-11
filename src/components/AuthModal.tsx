@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
-import { BrutalistStar, DoubleArrow, Pill } from "./BrutalistBadge";
-import { X, Lock, CheckCircle2, ArrowRight } from "lucide-react";
+import { BrutalistStar, Pill } from "./BrutalistBadge";
+import { X, Lock, CheckCircle2 } from "lucide-react";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -128,10 +128,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             {loading ? (
               <span>MEMPROSES...</span>
             ) : (
-              <>
-                <span>MASUK & UNDUH PDF</span>
-                <DoubleArrow className="w-5 h-3 text-current" />
-              </>
+              <span>MASUK & UNDUH PDF</span>
             )}
           </button>
         </form>

@@ -56,6 +56,13 @@ async function runSelfChecks() {
   assert.ok(analysis.matchedKeywords.includes("react"), "React must be matched");
   assert.ok(analysis.matchedKeywords.includes("typescript"), "TypeScript must be matched");
 
+  // 4b. Scanned / Low Word Count Guard Check
+  const scannedAnalysis = analyzeCvText("CV Scan image only", "Frontend Developer React");
+  assert.ok(
+    scannedAnalysis.recommendations.some((r) => r.title.includes("Scan / Gambar")),
+    "Scanned/empty text must trigger scan recommendation"
+  );
+
   // 5. PDF Generator & ATS Parser Validation
   const sampleData = {
     personal: {

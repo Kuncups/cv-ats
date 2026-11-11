@@ -3,8 +3,6 @@ import { ResumeData, ExperienceItem } from "@/types/resume";
 import { RichInput } from "@/components/RichText";
 import { MonthYearPicker } from "@/components/MonthYearPicker";
 import {
-  ArrowLeft,
-  ArrowRight,
   Plus,
   Trash2,
   GripVertical,
@@ -318,18 +316,16 @@ export function StepExperience({
         <button
           type="button"
           onClick={onBack}
-          className="px-4 py-2 border-2 border-black font-mono text-xs font-bold hover:bg-black hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="px-4 py-2 border-2 border-black font-mono text-xs font-bold hover:bg-black hover:text-white flex items-center justify-center transition-colors cursor-pointer"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
           <span>SEBELUMNYA</span>
         </button>
         <button
           type="button"
           onClick={onNext}
-          className="px-5 py-2.5 bg-[#1D4ED8] text-white font-mono text-xs font-bold border-2 border-black hover:bg-[#2563EB] flex items-center gap-1.5 transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
+          className="px-5 py-2.5 bg-[#1D4ED8] text-white font-mono text-xs font-bold border-2 border-black hover:bg-[#2563EB] flex items-center justify-center transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
         >
           <span>SIMPAN & LANJUTKAN</span>
-          <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>
