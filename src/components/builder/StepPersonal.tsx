@@ -252,10 +252,20 @@ export function StepPersonal({
               onClick={handleGenerateSummary}
               disabled={isGeneratingSummary}
               className="px-2.5 py-1 bg-[#1D4ED8] hover:bg-[#2563EB] text-white text-[11px] font-mono font-bold border border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-              title="Tuliskan ringkasan profesional otomatis dengan AI"
+              title={
+                data.summary.trim()
+                  ? (isEnglish ? "Refine your written summary with AI" : "Sempurnakan tulisan ringkasanmu dengan AI")
+                  : (isEnglish ? "Generate professional summary with AI" : "Buat ringkasan profesional dengan AI")
+              }
             >
               <Sparkles className={`w-3.5 h-3.5 ${isGeneratingSummary ? "animate-spin" : ""}`} />
-              <span>{isGeneratingSummary ? "AI MENULIS..." : "BUAT DENGAN AI"}</span>
+              <span>
+                {isGeneratingSummary
+                  ? (isEnglish ? "POLISHING..." : "MENYEMPURNAKAN...")
+                  : data.summary.trim()
+                  ? (isEnglish ? "REFINE WITH AI" : "SEMPURNAKAN DENGAN AI")
+                  : (isEnglish ? "CREATE WITH AI" : "BUAT DENGAN AI")}
+              </span>
             </button>
           </div>
         </div>

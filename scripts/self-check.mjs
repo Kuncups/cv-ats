@@ -230,25 +230,29 @@ async function runSelfChecks() {
   assert.ok(richPdfBlob instanceof Blob);
   assert.ok(richPdfBlob.size > 2000, "Rich text PDF should generate valid vector bytes");
 
-  // 10. AI Enhancement Service Validation (with Heuristic Fallback)
+  // 10. AI Enhancement Service Validation (with Contextual Heuristic Refinement)
   const { enhanceResumeContent } = await import("../src/lib/ai-service.ts");
   const polishedBullet = await enhanceResumeContent({
     mode: "bullet",
-    text: "membuat web untuk toko",
-    role: "Frontend Developer",
+    text: "saya bantu bikin laporan keuangan harian dan cek stok barang di gudang",
+    role: "Staff Administrasi",
     language: "id",
   });
-  assert.ok(polishedBullet.length > 10, "Polished bullet must be non-empty string");
-  assert.match(polishedBullet, /^[A-Z]/, "Polished bullet must start with a capitalized action verb");
+  assert.ok(polishedBullet.length > 20, "Polished bullet must be non-empty string");
+  assert.ok(!polishedBullet.startsWith("saya bantu bikin"), "Must strip informal conversational prefix");
+  assert.match(polishedBullet, /^(Mengelola|Menyusun|Mengoptimalkan|Mengembangkan)/, "Must start with strong action verb");
+  assert.ok(polishedBullet.includes("laporan keuangan"), "Must preserve user's authentic task/domain");
 
-  const generatedSummary = await enhanceResumeContent({
+  const refinedSummary = await enhanceResumeContent({
     mode: "summary",
-    text: "",
-    role: "Accountant",
-    skills: "Taxation, Excel",
+    text: "saya punya pengalaman 2 tahun di bidang marketing dan sering riset tren sosial media",
+    role: "Marketing Specialist",
+    skills: "Meta Ads, TikTok Content",
     language: "id",
   });
-  assert.ok(generatedSummary.includes("Accountant") || generatedSummary.includes("Profesional"), "Summary must reflect role");
+  assert.ok(!refinedSummary.includes("saya punya pengalaman"), "Must elevate informal pronoun");
+  assert.ok(refinedSummary.includes("Marketing Specialist") || refinedSummary.includes("marketing"), "Must retain domain & role");
+  assert.ok(refinedSummary.includes("sosial media"), "Must preserve user draft context");
 
   console.log("✓ All self-checks passed successfully!");
 }
