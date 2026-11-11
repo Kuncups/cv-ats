@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, DoubleArrow, Pill } from "@/components/BrutalistBadge";
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 
 export default function AnalyzerPage() {
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [bridgedText, setBridgedText] = useState<string | null>(null);
   const [bridgedTitle, setBridgedTitle] = useState<string | null>(null);
@@ -29,6 +31,32 @@ export default function AnalyzerPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AtsAnalysisResult | null>(null);
+
+  const handleApplyKeywordsToBuilder = () => {
+    if (!result?.missingKeywords || result.missingKeywords.length === 0) return;
+    try {
+      const saved = localStorage.getItem("roster_resume_draft");
+      const draft = saved ? JSON.parse(saved) : null;
+      if (draft && draft.skills) {
+        const existingTech = draft.skills.technical
+          ? draft.skills.technical.split(",").map((s: string) => s.trim().toLowerCase())
+          : [];
+        const toAdd = result.missingKeywords.filter(
+          (kw) => !existingTech.includes(kw.toLowerCase())
+        );
+        if (toAdd.length > 0) {
+          draft.skills.technical = draft.skills.technical
+            ? `${draft.skills.technical}, ${toAdd.join(", ")}`
+            : toAdd.join(", ");
+          localStorage.setItem("roster_resume_draft", JSON.stringify(draft));
+        }
+      }
+      sessionStorage.setItem("draftcv_keywords_applied", JSON.stringify(result.missingKeywords));
+      router.push("/builder");
+    } catch {
+      router.push("/builder");
+    }
+  };
 
   // Check if user came from Builder with preloaded resume text
   useEffect(() => {
@@ -137,7 +165,7 @@ export default function AnalyzerPage() {
     <div className="min-h-screen bg-[#FFF000] text-black flex flex-col font-sans">
       <Header />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -262,16 +290,16 @@ export default function AnalyzerPage() {
                 <span className="text-[11px] font-mono font-bold text-black/70 mr-1">
                   PILIH CONTOH LOKER:
                 </span>
-                {SITE_CONFIG.sampleJobs.map((sample, idx) => (
-                  <button
-                    key={sample.title}
-                    type="button"
-                    onClick={() => handleSelectSampleJob(idx)}
-                    className="text-[11px] font-mono font-bold px-2 py-1 bg-[#FFF000] border border-black hover:bg-black hover:text-[#FFF000] transition-colors"
-                  >
-                    {sample.title}
-                  </button>
-                ))}
+                  {SITE_CONFIG.sampleJobs.map((sample: any, idx: number) => (
+                    <button
+                      key={sample.title}
+                      type="button"
+                      onClick={() => handleSelectSampleJob(idx)}
+                      className="text-[11px] font-mono font-bold px-2 py-1 bg-[#FFF000] border border-black hover:bg-black hover:text-[#FFF000] transition-colors"
+                    >
+                      {sample.shortTitle || sample.title}
+                    </button>
+                  ))}
               </div>
 
               <textarea
@@ -294,9 +322,9 @@ export default function AnalyzerPage() {
                 <button
                   type="button"
                   onClick={handleAnalyze}
-                  disabled={isAnalyzing || !file}
+                  disabled={isAnalyzing || (!file && !bridgedText)}
                   className={`w-full sm:w-auto brutal-btn font-black px-8 py-3 text-sm font-mono uppercase flex items-center justify-center gap-2 ${
-                    isAnalyzing || !file
+                    isAnalyzing || (!file && !bridgedText)
                       ? "bg-black/20 text-black/50 cursor-not-allowed border-black/30 shadow-none"
                       : "bg-black text-[#FFF000]"
                   }`}
@@ -416,13 +444,24 @@ export default function AnalyzerPage() {
 
               {/* Missing Keywords */}
               <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6">
-                <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-black">
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <XCircle className="w-5 h-5 text-red-600" />
                     <h3 className="font-mono font-bold text-sm uppercase">
                       Saran Kata Kunci Ditambahkan ({result.missingKeywords.length})
                     </h3>
                   </div>
+                  {result.missingKeywords.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleApplyKeywordsToBuilder}
+                      className="px-3 py-1.5 bg-black text-[#FFF000] hover:bg-[#FFF000] hover:text-black font-mono font-bold text-xs border-2 border-black transition-colors flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000]"
+                      title="Salin kata kunci langsung ke draf CV Anda"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Terapkan di CV Builder →</span>
+                    </button>
+                  )}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {result.missingKeywords.length > 0 ? (

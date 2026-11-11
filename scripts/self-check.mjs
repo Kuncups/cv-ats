@@ -172,6 +172,84 @@ async function runSelfChecks() {
   assert.strictEqual(multiPage[1].pageNumber, 2);
   assert.strictEqual(multiPage[1].hasHeader, false, "Subsequent pages should use continuation header");
 
+  // 8. Rich Text Tokens & Date Localization Check
+  const {
+    parseRichTextTokens,
+    stripRichText,
+    formatLocalizedDate,
+    formatLocalizedDateRange,
+  } = await import("../src/lib/rich-text-utils.ts");
+
+  const formattedStr = "Menaikkan efisiensi **35%** dan *mengurangi* biaya <u>operasional</u>.";
+  const tokens = parseRichTextTokens(formattedStr);
+  assert.ok(tokens.some((t) => t.text === "35%" && t.bold === true));
+  assert.ok(tokens.some((t) => t.text === "mengurangi" && t.italic === true));
+  assert.ok(tokens.some((t) => t.text === "operasional" && t.underline === true));
+
+  // Nested combinations test (***<u>...</u>***)
+  const nestedStr = "***<u>Memimpin operasional HR & General Affair untuk 150+ karyawan</u>***";
+  const nestedTokens = parseRichTextTokens(nestedStr);
+  assert.strictEqual(nestedTokens.length, 1);
+  assert.strictEqual(nestedTokens[0].text, "Memimpin operasional HR & General Affair untuk 150+ karyawan");
+  assert.strictEqual(nestedTokens[0].bold, true);
+  assert.strictEqual(nestedTokens[0].italic, true);
+  assert.strictEqual(nestedTokens[0].underline, true);
+
+  const strippedNested = stripRichText(nestedStr);
+  assert.strictEqual(strippedNested, "Memimpin operasional HR & General Affair untuk 150+ karyawan");
+
+  // Toggle formatting tests
+  const { toggleRichFormat } = await import("../src/components/RichText.tsx");
+  const t1 = toggleRichFormat("teks", 0, 4, "bold");
+  assert.strictEqual(t1.newValue, "**teks**");
+  const t2 = toggleRichFormat(t1.newValue, 0, t1.newValue.length, "bold");
+  assert.strictEqual(t2.newValue, "teks"); // Toggled off!
+
+  const tU = toggleRichFormat("***<u>teks</u>***", 0, 15, "underline");
+  assert.strictEqual(tU.newValue, "***teks***"); // Underline removed without breaking bold/italic!
+
+  const tB = toggleRichFormat("***teks***", 0, 10, "bold");
+  assert.strictEqual(tB.newValue, "*teks*"); // Bold removed, italic preserved!
+
+  const stripped = stripRichText(formattedStr);
+  assert.strictEqual(stripped, "Menaikkan efisiensi 35% dan mengurangi biaya operasional.");
+
+  // Test date localization
+  assert.strictEqual(formatLocalizedDate("Jan 2022 - Sekarang", "en"), "Jan 2022 - Present");
+  assert.strictEqual(formatLocalizedDate("May 2020", "id"), "Mei 2020");
+  assert.strictEqual(
+    formatLocalizedDateRange("Jan 2020", "Sekarang", "en"),
+    "Jan 2020 - Present"
+  );
+  assert.strictEqual(
+    formatLocalizedDateRange("Agu 2019", "Des 2021", "en"),
+    "Aug 2019 - Dec 2021"
+  );
+
+  // 9. PDF Generation with Rich Text
+  const richResume = {
+    ...parsedResume,
+    summary: "Berpengalaman mengelola anggaran **Rp 5 Miliar** dan tim *15 orang*.",
+    experience: [
+      {
+        id: "e1",
+        role: "Head of Marketing",
+        company: "PT Maju Bersama",
+        location: "Jakarta",
+        startDate: "Jan 2020",
+        endDate: "Sekarang",
+        isCurrent: true,
+        bullets: [
+          "Mencapai target pertumbuhan **150% YoY**.",
+          "Memimpin kampanye *brand awareness* di <u>3 kota besar</u>.",
+        ],
+      },
+    ],
+  };
+  const richPdfBlob = await generateResumePdfBlob(richResume);
+  assert.ok(richPdfBlob instanceof Blob);
+  assert.ok(richPdfBlob.size > 2000, "Rich text PDF should generate valid vector bytes");
+
   console.log("✓ All self-checks passed successfully!");
 }
 

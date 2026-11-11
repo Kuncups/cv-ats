@@ -27,37 +27,51 @@ export const SITE_CONFIG = {
   ],
   sampleJobs: [
     {
-      title: "Senior Fullstack Engineer",
-      company: "Tech Corp",
-      text: `Looking for a Senior Fullstack Engineer proficient in TypeScript, React, Next.js, Node.js, and PostgreSQL. 
-Requirements:
-- 4+ years building high-scale web applications with Next.js and React.
-- Strong proficiency in TypeScript, Tailwind CSS, and REST/GraphQL APIs.
-- Deep experience with PostgreSQL, Drizzle ORM or Prisma, and Redis caching.
-- Familiarity with Cloudflare Workers, Docker, CI/CD, and AWS infrastructure.
-- Demonstrated experience improving page performance, Core Web Vitals, and system reliability.
-- Excellent communication and technical leadership skills.`,
+      title: "Human Resources & Administration Staff",
+      shortTitle: "HR & Administrasi",
+      company: "PT Prima Solusi Nusantara",
+      text: `Dibutuhkan Staff Human Resources & Administrasi Perkantoran untuk mengelola operasional personalia harian.
+Kualifikasi & Tanggung Jawab:
+- Pengalaman minimal 1-3 tahun di bidang administrasi HR / General Affair / Operasional Perkantoran.
+- Menguasai administrasi personalia, pengelolaan absensi karyawan, cuti, dan pengarsipan dokumen kerja.
+- Terbiasa membantu proses rekrutmen: sourcing kandidat, screening CV, penjadwalan interview, dan onboarding.
+- Mahir mengoperasikan Microsoft Office (terutama Excel untuk rekapitulasi data) dan Google Workspace.
+- Memiliki kemampuan komunikasi yang baik, teliti, terorganisir, dan menjaga kerahasiaan data perusahaan.`,
     },
     {
-      title: "Frontend Developer (React / Next.js)",
-      company: "Digital Studio",
-      text: `We are hiring a Frontend Developer to craft pixel-perfect, accessible user interfaces.
-Requirements:
-- Proven experience with React, Next.js (App Router), TypeScript, and Tailwind CSS.
-- Expertise in responsive web design, semantic HTML5, and web performance optimization.
-- Experience with state management (Zustand, React Query/TanStack Query).
-- Understanding of Web Accessibility (WCAG 2.1) and cross-browser compatibility.
-- Unit and integration testing with Vitest or Playwright.`,
+      title: "Digital Marketing & Social Media Specialist",
+      shortTitle: "Marketing & Medsos",
+      company: "PT Global Retail Kreatif",
+      text: `Mencari Digital Marketing Specialist untuk merancang dan mengeksekusi strategi pemasaran multi-channel.
+Kualifikasi & Tanggung Jawab:
+- Pengalaman 2+ tahun dalam digital marketing, pengelolaan media sosial, atau brand campaign.
+- Terbiasa mengelola iklan berbayar (Meta Ads, TikTok Ads, atau Google Ads) dengan optimasi budget dan ROAS.
+- Memahami konsep Search Engine Optimization (SEO/SEM), content marketing, dan riset kata kunci.
+- Kemampuan copywriting yang persuasif, perencanaan kalender konten, dan analisis performa metrik (Google Analytics / Meta Business Suite).
+- Kreatif, adaptif terhadap tren media sosial terkini, dan mampu bekerja sama dengan tim kreatif.`,
     },
     {
-      title: "Product Manager (Technical)",
-      company: "Fintech Venture",
-      text: `Seeking a Technical Product Manager to lead product discovery and execution for our core payments platform.
+      title: "Staff Akuntansi & Perpajakan (Accounting & Tax)",
+      shortTitle: "Akuntansi & Pajak",
+      company: "PT Surya Abadi Mandiri",
+      text: `Dibutuhkan Staff Akuntansi & Perpajakan yang teliti untuk menyusun laporan keuangan dan kepatuhan pajak perusahaan.
+Kualifikasi & Tanggung Jawab:
+- Lulusan D3/S1 Akuntansi atau Manajemen Keuangan dengan pengalaman 1-3 tahun di bidang terkait.
+- Menguasai penyusunan jurnal umum, buku besar, neraca saldo, dan laporan laba rugi.
+- Memahami regulasi perpajakan Indonesia (PPh 21, PPh 23, PPN) dan operasional aplikasi e-Faktur / e-Bupot.
+- Terbiasa melakukan rekonsiliasi bank dan verifikasi invoice vendor secara teliti.
+- Mahir Microsoft Excel (VLOOKUP, HLOOKUP, Pivot Table) dan memiliki nilai tambah jika menguasai software akuntansi (Accurate / SAP).`,
+    },
+    {
+      title: "Software Engineer / Web Developer",
+      shortTitle: "Software & IT",
+      company: "Tech Nusantara Studio",
+      text: `Looking for a Software Engineer proficient in modern web technologies to build responsive and scalable applications.
 Requirements:
-- 3+ years experience as PM in fintech, SaaS, or high-growth tech startup.
-- Data-driven mindset: proficient in SQL, amplitude, analytics, and A/B testing frameworks.
-- Deep understanding of payment gateways, API integrations, and checkout conversion funnel.
-- Strong stakeholder management and agile sprint planning leadership.`,
+- 2+ years experience building web applications using JavaScript/TypeScript, React, Next.js, and Node.js.
+- Solid understanding of REST APIs, database design (PostgreSQL/MySQL), and responsive UI styling (Tailwind CSS).
+- Familiarity with version control (Git), deployment workflows, and clean code practices.
+- Strong analytical mindset, problem-solving skills, and proactive communication.`,
     },
   ],
 } as const;

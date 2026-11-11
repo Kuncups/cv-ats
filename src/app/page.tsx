@@ -21,13 +21,13 @@ export default function HomePage() {
 
       <main className="flex-1 w-full">
         {/* HERO SECTION */}
-        <section className="border-b-4 border-black py-12 sm:py-20 px-4 sm:px-6 relative overflow-hidden">
+        <section className="border-b-4 border-black py-12 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           {/* Decorative Background Elements */}
           <div className="absolute top-8 right-8 hidden lg:block opacity-20 pointer-events-none">
             <BrutalistStar className="w-48 h-48 text-black" />
           </div>
 
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full">
             {/* Pill Badges Row */}
             <div className="flex flex-wrap items-center gap-2 mb-6">
               <Pill variant="black">BARU & GRATIS</Pill>
@@ -110,8 +110,8 @@ export default function HomePage() {
         </section>
 
         {/* COMPARISON: GRAPHIC TEMPLATE VS STANDARD ATS */}
-        <section id="standard" className="border-b-4 border-black py-16 px-4 sm:px-6 bg-white">
-          <div className="max-w-7xl mx-auto">
+        <section id="standard" className="border-b-4 border-black py-16 px-4 sm:px-6 lg:px-8 bg-white">
+          <div className="w-full">
             <div className="mb-12">
               <Pill variant="yellow" className="mb-2">
                 PENTING UNTUK DIKETAHUI
@@ -201,8 +201,8 @@ export default function HomePage() {
         </section>
 
         {/* DUAL TOOLS SECTION */}
-        <section className="border-b-4 border-black py-16 px-4 sm:px-6 bg-[#FFF000]">
-          <div className="max-w-7xl mx-auto space-y-12">
+        <section className="border-b-4 border-black py-16 px-4 sm:px-6 lg:px-8 bg-[#FFF000]">
+          <div className="w-full space-y-12">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <Pill variant="black">FITUR UTAMA</Pill>
               <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">

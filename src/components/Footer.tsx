@@ -23,7 +23,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-2 space-y-4">
           <div className="flex items-center gap-2">
             <span className="font-black text-3xl tracking-tighter uppercase text-[#FFF000]">
@@ -86,7 +86,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-white/60 gap-2">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-white/60 gap-2">
         <div>© {SITE_CONFIG.year} DRAFT CV. HAK CIPTA DILINDUNGI.</div>
         <div className="flex items-center gap-4">
           <span>BEBAS IKLAN</span>

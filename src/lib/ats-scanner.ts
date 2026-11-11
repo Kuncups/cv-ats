@@ -39,23 +39,32 @@ const COMMON_STOP_WORDS = new Set([
   "kami", "anda", "saya", "akan", "dapat", "bisa", "harus", "tentang", "serta",
   "years", "year", "month", "experience", "looking", "candidate", "requirements",
   "responsibilities", "skills", "ability", "strong", "proven", "proficient", "role",
-  "team", "work", "working", "good", "knowledge", "must", "plus", "understanding"
+  "team", "work", "working", "good", "knowledge", "must", "plus", "understanding",
+  "dan", "di", "ke", "oleh", "ini", "itu", "juga", "bagi", "secara", "kualifikasi",
+  "dibutuhkan", "mampu", "memiliki", "minimal", "posisi", "bidang", "mencari"
 ]);
 
 const ACTION_VERBS = [
   "spearheaded", "architected", "developed", "engineered", "built", "designed",
   "implemented", "optimized", "increased", "reduced", "scaled", "orchestrated",
   "deployed", "refactored", "migrated", "automated", "mentored", "launched",
+  "managed", "coordinated", "oversaw", "directed", "evaluated", "established",
+  "executed", "negotiated", "assisted", "planned", "delivered", "produced",
+  "administered", "achieved", "analyzed", "resolved", "trained", "organized",
+  "generated", "handled", "facilitated", "supervised", "improved",
   "mengembangkan", "merancang", "membangun", "mengoptimalkan", "meningkatkan",
-  "mengurangi", "mengotomasi", "memimpin", "mengimplementasikan"
+  "mengurangi", "mengotomasi", "memimpin", "mengimplementasikan", "mengelola",
+  "mengoordinasikan", "menyusun", "merencanakan", "menganalisis", "menghasilkan",
+  "memelihara", "mengawasi", "melatih", "mengevaluasi", "memfasilitasi",
+  "melayani", "menegosiasikan", "membantu", "memproses", "menjalankan"
 ];
 
 const STANDARD_SECTIONS = [
-  { name: "Experience", patterns: [/experience/i, /pengalaman/i, /employment/i, /work history/i] },
-  { name: "Education", patterns: [/education/i, /pendidikan/i, /academic/i] },
-  { name: "Skills", patterns: [/skills/i, /keahlian/i, /kompetensi/i, /technologies/i, /tech stack/i] },
-  { name: "Summary", patterns: [/summary/i, /ringkasan/i, /profile/i, /about/i, /tentang/i] },
-  { name: "Projects", patterns: [/projects/i, /proyek/i, /portfolio/i, /portofolio/i] },
+  { name: "Experience", patterns: [/experience/i, /pengalaman/i, /employment/i, /work history/i, /riwayat kerja/i] },
+  { name: "Education", patterns: [/education/i, /pendidikan/i, /academic/i, /latar belakang pendidikan/i] },
+  { name: "Skills", patterns: [/skills/i, /keahlian/i, /kompetensi/i, /technologies/i, /tech stack/i, /keterampilan/i] },
+  { name: "Summary", patterns: [/summary/i, /ringkasan/i, /profile/i, /about/i, /tentang/i, /profil/i] },
+  { name: "Projects", patterns: [/projects/i, /proyek/i, /portfolio/i, /portofolio/i, /organis/i, /organization/i, /kegiatan/i, /sertifikasi/i, /certifications/i] },
 ];
 
 /**
@@ -64,9 +73,9 @@ const STANDARD_SECTIONS = [
 function extractMeaningfulKeywords(text: string): string[] {
   const tokens = text
     .toLowerCase()
-    .replace(/[^a-z0-9#+.\s-]/g, " ")
+    .replace(/[.,;:!?()[\]{}"'’“”/\\|<>@#$%^&*~`]/g, " ")
     .split(/\s+/)
-    .map((t) => t.trim())
+    .map((t) => t.trim().replace(/^[-+.]+|[-+.]+$/g, ""))
     .filter((t) => t.length > 2 && !COMMON_STOP_WORDS.has(t) && !/^\d+$/.test(t));
 
   const freq = new Map<string, number>();
@@ -171,8 +180,8 @@ export function analyzeCvText(
     status: hasLinkedIn || hasGithub ? "pass" : "warn",
     detail:
       hasLinkedIn || hasGithub
-        ? "Link profil profesional (LinkedIn/GitHub) terdeteksi."
-        : "Disarankan menyertakan tautan LinkedIn atau GitHub aktif.",
+        ? "Link profil profesional (LinkedIn/portofolio/website) terdeteksi."
+        : "Disarankan menyertakan tautan profil profesional aktif (LinkedIn atau portofolio).",
   });
 
   // 4. Section Structure Checks
@@ -285,7 +294,7 @@ export function analyzeCvText(
       type: "keyword",
       title: "Tambahkan Kata Kunci yang Hilang",
       advice: `Lowongan kerja menekankan kualifikasi: ${topMissing}. Integrasikan kata kunci ini ke ringkasan atau bullet point pengalaman Anda jika Anda memang menguasainya.`,
-      example: `Contoh: "Mengembangkan arsitektur backend menggunakan ${missingKeywords[0] || "TypeScript"} yang meningkatkan performa sistem sebesar 35%."`,
+      example: `Contoh: "Mengaplikasikan keahlian dalam ${missingKeywords[0] || "bidang terkait"} untuk meningkatkan efisiensi dan hasil kerja tim."`,
     });
   }
 
@@ -294,7 +303,7 @@ export function analyzeCvText(
       type: "impact",
       title: "Kuantifikasi Dampak dengan Angka",
       advice: "Sistem ATS dan recruiter memprioritaskan pencapaian terukur daripada daftar tugas pasif.",
-      example: "Ubah: 'Bertanggung jawab atas efisiensi query DB' -> Menjadi: 'Mengoptimasi query PostgreSQL hingga memotong latency p99 sebesar 40%'.",
+      example: "Ubah: 'Bertanggung jawab atas laporan operasional' -> Menjadi: 'Mengelola laporan operasional bulanan dengan akurasi 99% dan mempercepat waktu penyusunan hingga 3 hari kerja'.",
     });
   }
 

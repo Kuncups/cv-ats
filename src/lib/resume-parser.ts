@@ -1,4 +1,4 @@
-import { ResumeData } from "@/app/builder/page";
+import { ResumeData } from "@/types/resume";
 
 const SECTION_HEADERS = {
   summary: /^(?:(?:professional\s+)?(?:summary|ringkasan|profile|profil|about(?:\s+me)?|tentang(?:\s+saya)?))$/i,
@@ -18,6 +18,7 @@ export function parseResumeFromText(rawText: string): ResumeData {
     .filter(Boolean);
 
   const result: ResumeData = {
+    language: "id",
     personal: {
       fullName: "",
       jobTitle: "",
