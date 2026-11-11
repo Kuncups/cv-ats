@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import { AtsChecklistGuide } from "@/components/home/AtsChecklistGuide";
+import { FaqSection } from "@/components/home/FaqSection";
 import {
   FileSearch,
   PenTool,
@@ -274,49 +275,7 @@ export default function HomePage() {
         <AtsChecklistGuide />
 
         {/* FAQ SECTION */}
-        <section id="faq" className="border-b-4 border-black py-16 px-4 sm:px-6 bg-white">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="text-center space-y-2">
-              <Pill variant="black">TANYA JAWAB</Pill>
-              <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
-                Pertanyaan yang Sering Diajukan
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              {[
-                {
-                  q: "Mengapa CV standar ATS disarankan memakai format 1-kolom bersih?",
-                  a: "Karena mesin pembaca CV (sistem ATS) mengubah dokumen menjadi teks mentah secara berurutan. Format 1-kolom menjamin tulisan dibaca runtut tanpa ada pengalaman kerja yang terpotong atau tercampur dengan kolom lain.",
-                },
-                {
-                  q: "Apakah data dan dokumen CV saya aman?",
-                  a: "Sangat aman. File CV Anda hanya dianalisis sementara di memori server dan langsung dihapus setelah hasil keluar. Kami tidak menyimpan atau menyebarkan dokumen Anda.",
-                },
-                {
-                  q: "Apakah layanan ini berbayar atau ada batasan download?",
-                  a: "Tidak, layanan ini 100% gratis. Anda bisa mengecek skor CV dan mengunduh hasil PDF tanpa batas dan tanpa watermark.",
-                },
-                {
-                  q: "Apakah draft CV saya bisa hilang jika tab browser tertutup?",
-                  a: "Tidak. Draft CV Anda otomatis tersimpan di browser perangkat Anda, sehingga Anda bisa melanjutkan pengisian kapan saja.",
-                },
-              ].map((faq, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 border-2 border-black bg-zinc-50 shadow-[4px_4px_0px_#000] space-y-2"
-                >
-                  <h4 className="font-bold text-base uppercase font-sans text-black">
-                    {faq.q}
-                  </h4>
-                  <p className="font-mono text-xs sm:text-sm text-zinc-700 leading-relaxed">
-                    {faq.a}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FaqSection />
 
         {/* FINAL CALL TO ACTION */}
         <section className="py-16 px-4 sm:px-6 bg-black text-white text-center">
