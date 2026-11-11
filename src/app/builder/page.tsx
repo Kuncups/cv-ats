@@ -38,7 +38,6 @@ import {
   X,
   Download,
   Copy,
-  Sparkles,
 } from "lucide-react";
 
 // Backwards compatibility re-exports
@@ -796,8 +795,8 @@ export default function BuilderPage() {
               mobileView === "editor" ? "block" : "hidden lg:block"
             }`}
           >
-            {/* Top Toolbar: Language & Font Switcher */}
-            <div className="p-3 bg-white border-3 border-black shadow-[3px_3px_0px_#000] sm:shadow-[4px_4px_0px_#000] space-y-2.5">
+            {/* Top Toolbar: Language Switcher */}
+            <div className="p-3 bg-white border-3 border-black shadow-[3px_3px_0px_#000] sm:shadow-[4px_4px_0px_#000]">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs font-mono font-bold uppercase text-black">
                   BAHASA DOKUMEN:
@@ -826,51 +825,6 @@ export default function BuilderPage() {
                     🇬🇧 EN
                   </button>
                 </div>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-black/15">
-                <span className="text-xs font-mono font-bold uppercase text-black">
-                  FONT STANDAR ATS:
-                </span>
-                <div className="flex gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => updateData({ ...data, fontFamily: "sans" })}
-                    className={`px-2.5 py-1 font-sans text-xs font-bold border-2 border-black uppercase transition-all cursor-pointer ${
-                      (data.fontFamily || "sans") === "sans"
-                        ? "bg-black text-white shadow-[2px_2px_0px_#000]"
-                        : "bg-white text-zinc-600 hover:bg-zinc-100"
-                    }`}
-                  >
-                    Sans (Modern)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateData({ ...data, fontFamily: "serif" })}
-                    className={`px-2.5 py-1 font-serif text-xs font-bold border-2 border-black uppercase transition-all cursor-pointer ${
-                      data.fontFamily === "serif"
-                        ? "bg-black text-white shadow-[2px_2px_0px_#000]"
-                        : "bg-white text-zinc-600 hover:bg-zinc-100"
-                    }`}
-                  >
-                    Serif (Formal)
-                  </button>
-                </div>
-              </div>
-
-              <div className="pt-2 border-t border-black/15 flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-mono font-bold uppercase text-black">
-                  SURAT LAMARAN KERJA:
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowCoverLetterModal(true)}
-                  className="px-2.5 py-1 bg-yellow-300 hover:bg-yellow-400 text-black font-mono font-bold text-xs border-2 border-black flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000] transition-colors"
-                  title="Buat Cover Letter resmi diselaraskan dengan data CV"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>BUAT COVER LETTER (AI)</span>
-                </button>
               </div>
             </div>
 

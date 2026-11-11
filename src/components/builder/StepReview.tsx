@@ -42,35 +42,38 @@ export function StepReview({
         </p>
       </div>
 
-      {/* Language Options Toggle */}
+      {/* Font Standard ATS */}
       <div className="p-3 bg-zinc-50 border-2 border-black space-y-1.5">
         <span className="block text-xs font-mono font-bold uppercase">
-          Bahasa Judul Dokumen CV:
+          Font Standar ATS:
         </span>
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => updateData({ ...data, language: "id" })}
+            onClick={() => updateData({ ...data, fontFamily: "sans" })}
             className={`flex-1 py-1.5 px-3 text-xs font-mono font-bold border-2 border-black uppercase transition-all cursor-pointer ${
-              (data.language || "id") === "id"
-                ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#000]"
+              (data.fontFamily || "sans") === "sans"
+                ? "bg-black text-white shadow-[2px_2px_0px_#000]"
                 : "bg-white text-zinc-600 hover:bg-zinc-100"
             }`}
           >
-            🇮🇩 Bahasa Indonesia
+            Sans (Modern)
           </button>
           <button
             type="button"
-            onClick={() => updateData({ ...data, language: "en" })}
+            onClick={() => updateData({ ...data, fontFamily: "serif" })}
             className={`flex-1 py-1.5 px-3 text-xs font-mono font-bold border-2 border-black uppercase transition-all cursor-pointer ${
-              data.language === "en"
-                ? "bg-[#1D4ED8] text-white shadow-[2px_2px_0px_#000]"
+              data.fontFamily === "serif"
+                ? "bg-black text-white shadow-[2px_2px_0px_#000]"
                 : "bg-white text-zinc-600 hover:bg-zinc-100"
             }`}
           >
-            🇬🇧 English
+            Serif (Formal)
           </button>
         </div>
+        <span className="block text-[10px] font-sans text-zinc-600">
+          Keduanya merupakan font standar PDF yang aman dibaca sistem ATS.
+        </span>
       </div>
 
       {/* Document Completeness Checklist */}
@@ -140,41 +143,41 @@ export function StepReview({
           type="button"
           disabled={isGeneratingPdf}
           onClick={onDownload}
-          className="w-full py-3 bg-[#1D4ED8] text-white font-mono font-black text-sm border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-[#2563EB] transition-colors shadow-[4px_4px_0px_#000] cursor-pointer disabled:opacity-50"
+          className="w-full py-2.5 bg-[#1D4ED8] text-white font-mono font-black text-xs sm:text-sm border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-[#2563EB] transition-colors shadow-[3px_3px_0px_#000] cursor-pointer disabled:opacity-50"
         >
           <Download className="w-4 h-4" />
           <span>
-            {isGeneratingPdf
-              ? "MEMPROSES PDF..."
-              : "UNDUH PDF VEKTOR (STANDAR ATS)"}
+            {isGeneratingPdf ? "MEMPROSES PDF..." : "UNDUH PDF VEKTOR (ATS)"}
           </span>
         </button>
 
-        <button
-          type="button"
-          onClick={onBridgeToAnalyzer}
-          className="w-full py-2.5 bg-white text-black font-mono font-bold text-xs border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-black hover:text-white transition-colors shadow-[3px_3px_0px_#000] cursor-pointer"
-        >
-          <FileSearch className="w-4 h-4" />
-          <span>UJI KECOCOKAN DI ANALYZER KATA KUNCI</span>
-        </button>
-
-        {onOpenCoverLetter && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <button
             type="button"
-            onClick={onOpenCoverLetter}
-            className="w-full py-2.5 bg-yellow-300 hover:bg-yellow-400 text-black font-mono font-bold text-xs border-2 border-black uppercase flex items-center justify-center gap-2 transition-colors shadow-[3px_3px_0px_#000] cursor-pointer"
+            onClick={onBridgeToAnalyzer}
+            className="py-2 px-2 bg-white text-black font-mono font-bold text-[10px] sm:text-[11px] border-2 border-black uppercase flex items-center justify-center gap-1.5 hover:bg-black hover:text-white transition-colors shadow-[2px_2px_0px_#000] cursor-pointer"
           >
-            <Sparkles className="w-4 h-4" />
-            <span>BUAT SURAT LAMARAN (COVER LETTER AI)</span>
+            <FileSearch className="w-3.5 h-3.5 shrink-0" />
+            <span>UJI DI ANALYZER</span>
           </button>
-        )}
+
+          {onOpenCoverLetter && (
+            <button
+              type="button"
+              onClick={onOpenCoverLetter}
+              className="py-2 px-2 bg-yellow-300 hover:bg-yellow-400 text-black font-mono font-bold text-[10px] sm:text-[11px] border-2 border-black uppercase flex items-center justify-center gap-1.5 transition-colors shadow-[2px_2px_0px_#000] cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
+              <span>COVER LETTER AI</span>
+            </button>
+          )}
+        </div>
 
         {/* Mobile Only: Switch to Preview Tab */}
         <button
           type="button"
           onClick={onViewMobilePreview}
-          className="lg:hidden w-full py-2 bg-zinc-100 text-black font-mono font-bold text-xs border border-black uppercase cursor-pointer"
+          className="lg:hidden w-full py-1.5 bg-zinc-100 text-black font-mono font-bold text-[10px] border border-black uppercase cursor-pointer"
         >
           LIHAT PRATINJAU DOKUMEN (A4)
         </button>
