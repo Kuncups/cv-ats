@@ -8,7 +8,10 @@ import {
   GripVertical,
   ChevronUp,
   ChevronDown,
+  Lightbulb,
 } from "lucide-react";
+import { getBulletSuggestions } from "@/lib/sentence-suggestions";
+import { SentenceSuggestionBox } from "@/components/builder/SentenceSuggestionBox";
 
 interface StepExperienceProps {
   data: ResumeData;
@@ -27,6 +30,7 @@ export function StepExperience({
   // ponytail: HTML5 drag & drop + direct array swap. Upgrade to @dnd-kit if touch sensor needed.
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+  const [activeSuggestionKey, setActiveSuggestionKey] = useState<string | null>(null);
 
   const handleDragStart = (index: number) => {
     setDraggedIdx(index);
@@ -284,31 +288,89 @@ export function StepExperience({
               </button>
             </div>
 
-            {exp.bullets.map((bullet, bIdx) => (
-              <div key={bIdx} className="flex items-center gap-2">
-                <span className="font-mono text-xs text-black/60 shrink-0">•</span>
-                <div className="flex-1">
-                  <RichInput
-                    value={bullet}
-                    onChange={(val) => updateExpBullet(expIdx, bIdx, val)}
-                    placeholder={
-                      isEnglish
-                        ? "Formula: Action Verb + Task + Quantifiable Result (e.g. Led **15** team members...)"
-                        : "Gunakan formula: Action Verb + Task + Hasil Terukur (cth: Memimpin **15** staf...)"
-                    }
-                  />
+            {exp.bullets.map((bullet, bIdx) => {
+              const suggestionKey = `${expIdx}-${bIdx}`;
+              const isOpen = activeSuggestionKey === suggestionKey;
+
+              return (
+                <div key={bIdx} className="space-y-1">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <span className="font-mono text-xs text-black/60 shrink-0">•</span>
+                    <div className="flex-1">
+                      <RichInput
+                        value={bullet}
+                        onChange={(val) => updateExpBullet(expIdx, bIdx, val)}
+                        placeholder={
+                          isEnglish
+                            ? "Formula: Action Verb + Task + Quantifiable Result (e.g. Led **15** team members...)"
+                            : "Gunakan formula: Action Verb + Task + Hasil Terukur (cth: Memimpin **15** staf...)"
+                        }
+                      />
+                    </div>
+
+                    {/* Button Buka Saran Kalimat */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setActiveSuggestionKey(isOpen ? null : suggestionKey)
+                      }
+                      title={
+                        isEnglish
+                          ? "Get ATS sentence recommendations"
+                          : "Beri alternatif kalimat standar ATS jika ragu"
+                      }
+                      className={`px-2 py-1.5 text-[10px] font-mono font-bold flex items-center gap-1 shrink-0 border border-black cursor-pointer shadow-[1px_1px_0px_#000] transition-colors ${
+                        isOpen
+                          ? "bg-black text-white"
+                          : "bg-white hover:bg-blue-50 text-black"
+                      }`}
+                    >
+                      <Lightbulb
+                        className={`w-3 h-3 ${
+                          isOpen ? "text-yellow-300" : "text-[#1D4ED8]"
+                        }`}
+                      />
+                      <span className="hidden sm:inline">
+                        {isEnglish ? "SUGGEST" : "SARAN"}
+                      </span>
+                    </button>
+
+                    {exp.bullets.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (isOpen) setActiveSuggestionKey(null);
+                          removeExpBullet(expIdx, bIdx);
+                        }}
+                        className="text-red-500 hover:text-red-800 text-sm px-1 cursor-pointer shrink-0 font-bold"
+                        title="Hapus poin"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Inline Suggestion Box */}
+                  {isOpen && (
+                    <SentenceSuggestionBox
+                      suggestions={getBulletSuggestions({
+                        text: bullet,
+                        role: exp.role,
+                        company: exp.company,
+                        language: data.language,
+                      })}
+                      currentText={bullet}
+                      onApply={(newSentence) => {
+                        updateExpBullet(expIdx, bIdx, newSentence);
+                        setActiveSuggestionKey(null);
+                      }}
+                      onClose={() => setActiveSuggestionKey(null)}
+                      isEnglish={isEnglish}
+                    />
+                  )}
                 </div>
-                {exp.bullets.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeExpBullet(expIdx, bIdx)}
-                    className="text-red-500 hover:text-red-800 text-sm px-1 cursor-pointer shrink-0 font-bold"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ))}

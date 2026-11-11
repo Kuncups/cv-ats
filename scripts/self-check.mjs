@@ -230,6 +230,31 @@ async function runSelfChecks() {
   assert.ok(richPdfBlob instanceof Blob);
   assert.ok(richPdfBlob.size > 2000, "Rich text PDF should generate valid vector bytes");
 
+  // 10. Sentence Suggestions Engine Validation
+  const { getBulletSuggestions } = await import("../src/lib/sentence-suggestions.ts");
+  const suggestions = getBulletSuggestions({
+    text: "bantu bikin laporan keuangan harian dan cek stok barang di gudang",
+    role: "Staff Administrasi & Gudang",
+    company: "PT Logistik Sentosa",
+    language: "id",
+  });
+  assert.strictEqual(suggestions.length, 3, "Must return exactly 3 distinct suggestion variations");
+  assert.ok(suggestions.some((s) => s.category === "efisiensi"));
+  assert.ok(suggestions.some((s) => s.category === "skala"));
+  assert.ok(suggestions.some((s) => s.category === "lugas"));
+  assert.ok(suggestions[0].sentence.includes("laporan keuangan"), "Must preserve user's domain/task");
+  assert.ok(!suggestions[0].sentence.includes("bantu bikin"), "Must strip informal conversational starter");
+  assert.ok(suggestions[0].sentence.includes("**"), "Must format metrics with markdown bold");
+
+  // Empty draft starter test
+  const emptyStarters = getBulletSuggestions({
+    text: "",
+    role: "Accountant",
+    language: "en",
+  });
+  assert.strictEqual(emptyStarters.length, 3);
+  assert.ok(emptyStarters[0].sentence.includes("Accountant"));
+
   console.log("✓ All self-checks passed successfully!");
 }
 
