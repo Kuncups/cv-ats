@@ -34,13 +34,6 @@ export function Footer() {
           <p className="text-white/80 font-mono text-xs sm:text-sm max-w-md leading-relaxed">
             Platform praktis untuk membantu pencari kerja merapikan susunan CV sesuai standar ATS industri dan meningkatkan peluang dipanggil wawancara kerja oleh tim rekruter.
           </p>
-          <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-white/50">
-            <span>DIBUAT DENGAN NEXT.JS</span>
-            <span>•</span>
-            <span>CLOUDFLARE EDGE</span>
-            <span>•</span>
-            <span>GRATIS & TERBUKA</span>
-          </div>
         </div>
 
         <div className="space-y-3 font-mono">
