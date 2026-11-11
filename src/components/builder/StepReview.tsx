@@ -3,7 +3,6 @@ import { ResumeData } from "@/types/resume";
 import {
   Download,
   FileSearch,
-  Printer,
   CheckCircle2,
 } from "lucide-react";
 
@@ -13,7 +12,6 @@ interface StepReviewProps {
   onBack: () => void;
   onDownload: () => void;
   onBridgeToAnalyzer: () => void;
-  onPrint: () => void;
   onViewMobilePreview: () => void;
   isGeneratingPdf: boolean;
 }
@@ -24,7 +22,6 @@ export function StepReview({
   onBack,
   onDownload,
   onBridgeToAnalyzer,
-  onPrint,
   onViewMobilePreview,
   isGeneratingPdf,
 }: StepReviewProps) {
@@ -157,15 +154,6 @@ export function StepReview({
         >
           <FileSearch className="w-4 h-4" />
           <span>UJI KECOCOKAN DI ANALYZER KATA KUNCI</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={onPrint}
-          className="w-full py-2 bg-white text-black font-mono font-bold text-xs border-2 border-black uppercase flex items-center justify-center gap-2 hover:bg-zinc-100 transition-colors cursor-pointer"
-        >
-          <Printer className="w-3.5 h-3.5" />
-          <span>CETAK DOKUMEN / PRINT BROWSER</span>
         </button>
 
         {/* Mobile Only: Switch to Preview Tab */}

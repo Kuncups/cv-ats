@@ -512,7 +512,6 @@ export default function BuilderPage() {
                   onBack={() => setActiveTab("skills")}
                   onDownload={handleDownloadPdf}
                   onBridgeToAnalyzer={handleBridgeToAnalyzer}
-                  onPrint={() => window.print()}
                   onViewMobilePreview={() => setMobileView("preview")}
                   isGeneratingPdf={isGeneratingPdf}
                 />
