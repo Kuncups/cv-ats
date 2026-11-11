@@ -6,6 +6,7 @@ import {
   deleteUserResume,
   getResumeById,
   renameUserResume,
+  syncUserToDb,
 } from "@/lib/resume-store";
 
 export async function GET(req: NextRequest) {
@@ -13,6 +14,15 @@ export async function GET(req: NextRequest) {
   const userId = session?.user?.id || session?.user?.email;
   if (!userId) {
     return NextResponse.json({ error: "Silakan masuk terlebih dahulu." }, { status: 401 });
+  }
+
+  if (session?.user?.email) {
+    syncUserToDb({
+      id: userId,
+      name: session.user.name,
+      email: session.user.email,
+      avatarUrl: session.user.image,
+    }).catch(() => {});
   }
 
   const { searchParams } = new URL(req.url);

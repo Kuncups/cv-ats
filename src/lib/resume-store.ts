@@ -1,6 +1,6 @@
 import { ResumeData } from "@/types/resume";
 import { getDb } from "@/db";
-import { resumes } from "@/db/schema";
+import { resumes, users } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
 export interface StoredResumeRecord {
@@ -42,6 +42,45 @@ async function getD1Binding(): Promise<D1Database | undefined> {
   }
 
   return undefined;
+}
+
+export async function syncUserToDb(user: {
+  id: string;
+  name?: string | null;
+  email: string;
+  avatarUrl?: string | null;
+}): Promise<void> {
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+  if (!db) return;
+
+  try {
+    const existing = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, user.email))
+      .get();
+
+    if (existing) {
+      await db
+        .update(users)
+        .set({
+          name: user.name || existing.name,
+          avatarUrl: user.avatarUrl || existing.avatarUrl,
+        })
+        .where(eq(users.id, existing.id));
+    } else {
+      await db.insert(users).values({
+        id: user.id,
+        name: user.name || null,
+        email: user.email,
+        avatarUrl: user.avatarUrl || null,
+        createdAt: new Date(),
+      });
+    }
+  } catch (e) {
+    console.warn("[resume-store] Failed to sync user to D1:", e);
+  }
 }
 
 export async function getUserResumes(userId: string): Promise<StoredResumeRecord[]> {

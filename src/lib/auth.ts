@@ -3,6 +3,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { getEnv } from "@/lib/env";
+import { syncUserToDb } from "@/lib/resume-store";
 
 const env = getEnv();
 
@@ -50,6 +51,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   trustHost: true,
   callbacks: {
+    async signIn({ user }) {
+      if (user?.email) {
+        try {
+          await syncUserToDb({
+            id: (user.id as string) || (user.email as string),
+            name: user.name,
+            email: user.email,
+            avatarUrl: user.image,
+          });
+        } catch (e) {
+          console.warn("[NextAuth] signIn syncUserToDb failed:", e);
+        }
+      }
+      return true;
+    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
