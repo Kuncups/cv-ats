@@ -17,7 +17,7 @@ export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProp
   const [language, setLanguage] = useState<"id" | "en">(data.language || "id");
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultLetter, setResultLetter] = useState("");
-  const [letterSource, setLetterSource] = useState<string | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +50,6 @@ export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProp
 
       if (json.data) {
         setResultLetter(json.data);
-        setLetterSource(json.source === "ai" ? "Cloudflare AI" : "Format Baku HRD");
       }
     } catch (err: any) {
       setError(err.message || "Terjadi kendala jaringan saat membuat surat lamaran.");
@@ -66,18 +65,31 @@ export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProp
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDownloadTxt = () => {
-    if (!resultLetter) return;
-    const blob = new Blob([resultLetter], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    const sanitizedRole = (targetRole || "posisi").toLowerCase().replace(/[^a-z0-9]/g, "-");
-    a.download = `cover-letter-${sanitizedRole}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const handleDownloadPdf = async () => {
+    if (!resultLetter || isDownloading) return;
+    setIsDownloading(true);
+    try {
+      const { generateCoverLetterPdfBlob } = await import("@/lib/pdf-generator");
+      const blob = await generateCoverLetterPdfBlob(resultLetter, {
+        candidateName: data.personal?.fullName || "Draft CV",
+        language,
+      });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const sanitizedRole = (targetRole || "posisi").toLowerCase().replace(/[^a-z0-9]/g, "-");
+      a.download = `surat-lamaran-${sanitizedRole}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Gagal mengunduh PDF surat lamaran:", err);
+      setError("Gagal membuat PDF surat lamaran. Silakan coba lagi.");
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -210,11 +222,6 @@ export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProp
                   <span className="text-[11px] font-bold uppercase text-black/70">
                     HASIL SURAT LAMARAN:
                   </span>
-                  {letterSource && (
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 bg-blue-100 text-blue-900 border border-blue-300 font-bold">
-                      {letterSource}
-                    </span>
-                  )}
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button
@@ -227,11 +234,16 @@ export function CoverLetterModal({ isOpen, onClose, data }: CoverLetterModalProp
                   </button>
                   <button
                     type="button"
-                    onClick={handleDownloadTxt}
-                    className="px-2.5 py-1 bg-black text-white hover:bg-zinc-800 border border-black text-[11px] font-bold flex items-center gap-1 cursor-pointer shadow-[1px_1px_0px_#000]"
+                    onClick={handleDownloadPdf}
+                    disabled={isDownloading}
+                    className="px-2.5 py-1 bg-black text-white hover:bg-zinc-800 border border-black text-[11px] font-bold flex items-center gap-1 cursor-pointer shadow-[1px_1px_0px_#000] disabled:opacity-60"
                   >
-                    <Download className="w-3 h-3" />
-                    <span>UNDUH (.TXT)</span>
+                    {isDownloading ? (
+                      <RefreshCw className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Download className="w-3 h-3" />
+                    )}
+                    <span>{isDownloading ? "MEMBUAT PDF..." : "UNDUH (.PDF)"}</span>
                   </button>
                 </div>
               </div>

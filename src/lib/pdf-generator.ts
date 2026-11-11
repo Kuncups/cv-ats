@@ -597,3 +597,76 @@ export async function generateResumePdfBlob(data: ResumeData, isCompact = false)
   const pdfBytes = await pdfDoc.save();
   return new Blob([pdfBytes as Uint8Array<ArrayBuffer>], { type: "application/pdf" });
 }
+
+/**
+ * Generates a formal A4 PDF cover letter from plain text.
+ * Keeps fonts as standard PDF fonts so the output stays ATS-friendly.
+ */
+export async function generateCoverLetterPdfBlob(
+  text: string,
+  options: { candidateName?: string; language?: "id" | "en" } = {}
+): Promise<Blob> {
+  const { candidateName = "Draft CV", language = "id" } = options;
+  const isEnglish = language === "en";
+
+  const pdfDoc = await PDFDocument.create();
+  pdfDoc.setTitle(`${isEnglish ? "Cover Letter" : "Surat Lamaran"} - ${candidateName}`);
+  pdfDoc.setAuthor(candidateName);
+
+  const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+  const bodySize = 10.5;
+  const lineHeight = 15.5;
+  const paragraphGap = 7;
+  const maxWidth = CONTENT_WIDTH;
+
+  const cleanText = (text || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\t/g, "    ")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\u2026/g, "...")
+    .replace(/[\u2022\u25CF]/g, "-")
+    // Standard PDF fonts only support WinAnsi; drop anything outside it
+    .replace(/[^\u0000-\u00FF\n]/g, "")
+    .trim();
+  const rawLines = cleanText.split("\n");
+
+  let page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+  let y = PAGE_HEIGHT - MARGIN_TOP;
+
+  const newPage = () => {
+    page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+    y = PAGE_HEIGHT - MARGIN_TOP;
+  };
+
+  for (const rawLine of rawLines) {
+    const line = rawLine.trim();
+
+    if (!line) {
+      y -= paragraphGap;
+      continue;
+    }
+
+    const isSubjectLine = /^(perihal|subject|hal)\s*:/i.test(line);
+    const font = isSubjectLine ? fontBold : fontRegular;
+
+    const wrapped = wrapText(line, maxWidth, bodySize, font);
+    for (const segment of wrapped) {
+      if (y - lineHeight < MARGIN_BOTTOM) newPage();
+      page.drawText(segment, {
+        x: MARGIN_X,
+        y: y - bodySize,
+        size: bodySize,
+        font,
+        color: rgb(0.1, 0.1, 0.1),
+      });
+      y -= lineHeight;
+    }
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  return new Blob([pdfBytes as Uint8Array<ArrayBuffer>], { type: "application/pdf" });
+}
