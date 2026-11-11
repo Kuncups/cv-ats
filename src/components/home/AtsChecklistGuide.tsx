@@ -80,8 +80,8 @@ export function AtsChecklistGuide() {
   const scorePercentage = Math.round((checkedIds.length / CHECKLIST_ITEMS.length) * 100);
 
   return (
-    <section id="guide" className="border-b-4 border-black py-16 px-4 sm:px-6 lg:px-8 bg-zinc-50">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <section id="guide" className="border-b-4 border-black py-12 sm:py-16 px-3 sm:px-6 lg:px-8 bg-zinc-50">
+      <div className="w-full space-y-6 sm:space-y-8">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b-2 border-black">
           <div>
@@ -91,13 +91,13 @@ export function AtsChecklistGuide() {
             <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
               Checklist Kesiapan Lolos Screening ATS
             </h2>
-            <p className="font-mono text-sm sm:text-base text-zinc-700 mt-2 max-w-2xl">
+            <p className="font-mono text-sm sm:text-base text-zinc-700 mt-2 max-w-3xl">
               Centang poin-poin berikut untuk menguji apakah format CV Anda saat ini sudah memenuhi standar penyaringan rekrutmen modern.
             </p>
           </div>
 
           {/* Live Readiness Counter */}
-          <div className="bg-white border-2 border-black p-3.5 shadow-[4px_4px_0px_#000] min-w-[220px]">
+          <div className="bg-white border-2 border-black p-3.5 shadow-[4px_4px_0px_#000] min-w-[240px]">
             <div className="flex items-center justify-between font-mono text-xs font-bold uppercase mb-1">
               <span>KESIAPAN CV:</span>
               <span className="text-[#1D4ED8]">{scorePercentage}%</span>
@@ -121,7 +121,7 @@ export function AtsChecklistGuide() {
         </div>
 
         {/* Interactive Checklist Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {CHECKLIST_ITEMS.map((item) => {
             const isChecked = checkedIds.includes(item.id);
             const isExpanded = expandedId === item.id;
@@ -129,10 +129,8 @@ export function AtsChecklistGuide() {
             return (
               <div
                 key={item.id}
-                className={`border-2 border-black p-4 transition-all ${
-                  isChecked
-                    ? "bg-blue-50/50 shadow-[3px_3px_0px_#000]"
-                    : "bg-white shadow-[2px_2px_0px_#000]"
+                className={`border-3 border-black p-4 sm:p-5 transition-all shadow-[4px_4px_0px_#000] ${
+                  isChecked ? "bg-blue-50/60" : "bg-white"
                 }`}
               >
                 <div className="flex items-start gap-3">
