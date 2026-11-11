@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import { AtsChecklistGuide } from "@/components/home/AtsChecklistGuide";
 import { FaqSection } from "@/components/home/FaqSection";
+import { JobPortalSection } from "@/components/home/JobPortalSection";
 import {
   FileSearch,
   PenTool,
@@ -277,26 +278,8 @@ export default function HomePage() {
         {/* FAQ SECTION */}
         <FaqSection />
 
-        {/* FINAL CALL TO ACTION */}
-        <section className="py-16 px-4 sm:px-6 bg-black text-white text-center">
-          <div className="max-w-3xl mx-auto space-y-6">
-            <BrutalistStar className="w-12 h-12 mx-auto text-[#1D4ED8]" />
-            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
-              Rapikan CV Anda Hari Ini, Raih Peluang Kerja Lebih Luas.
-            </h2>
-            <p className="font-mono text-sm sm:text-base text-white/80 max-w-xl mx-auto">
-              Tingkatkan peluang dipanggil wawancara dengan susunan CV yang rapi, profesional, dan mudah dipahami oleh tim rekruter.
-            </p>
-            <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-              <Link
-                href="/analyzer"
-                className="brutal-btn bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-black px-8 py-3.5 text-sm font-mono uppercase inline-flex items-center shadow-[4px_4px_0px_#fff]"
-              >
-                <span>RAPIKAN & CEK CV SAYA SEKARANG</span>
-              </Link>
-            </div>
-          </div>
-        </section>
+        {/* JOB PORTAL RECOMMENDATIONS */}
+        <JobPortalSection />
       </main>
 
       <Footer />
