@@ -189,7 +189,7 @@ export function StepPersonal({
         </div>
         <div>
           <label className="block text-xs font-mono font-bold uppercase mb-1">
-            Portofolio / URL Website (Opsional)
+            {isEnglish ? "Portfolio URL (Optional)" : "URL Portofolio (Opsional)"}
           </label>
           <input
             type="text"
@@ -200,7 +200,7 @@ export function StepPersonal({
                 personal: { ...data.personal, github: e.target.value },
               })
             }
-            placeholder="portofolio, website, atau tautan profil"
+            placeholder={isEnglish ? "portfolio, website, or profile link" : "portofolio atau tautan profil"}
             className="w-full p-2 border-2 border-black text-sm font-sans focus:outline-none focus:ring-2 focus:ring-black"
           />
         </div>
