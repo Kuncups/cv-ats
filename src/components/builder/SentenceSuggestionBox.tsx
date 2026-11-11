@@ -79,8 +79,8 @@ export function SentenceSuggestionBox({
           <Lightbulb className="w-3.5 h-3.5 text-[#1D4ED8]" />
           <span>
             {isEnglish
-              ? "Dynamic AI Sentence Suggestions"
-              : "Saran Alternatif Kalimat ATS (AI Dinamis)"}
+              ? "ATS Sentence Suggestions"
+              : "Saran Alternatif Kalimat ATS"}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -114,8 +114,8 @@ export function SentenceSuggestionBox({
           <div className="w-5 h-5 border-2 border-black border-t-[#1D4ED8] rounded-full animate-spin" />
           <span className="font-mono text-xs font-bold uppercase tracking-wider text-black">
             {isEnglish
-              ? "AI is analyzing your context & generating 3 distinct options..."
-              : "AI sedang menganalisis konteks dan merancang 3 variasi kalimat..."}
+              ? "Analyzing your context & generating 3 distinct options..."
+              : "Sedang menganalisis konteks dan merancang 3 variasi kalimat..."}
           </span>
           <span className="font-mono text-[10px] text-black/60">
             {isEnglish
