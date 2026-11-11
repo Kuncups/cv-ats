@@ -80,7 +80,7 @@ export function Footer() {
       </div>
 
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-white/60 gap-2">
-        <div>© {SITE_CONFIG.year} DRAFT CV. HAK CIPTA DILINDUNGI.</div>
+        <div>© 2026 dibuat oleh Muhammad Yusuf Danan Risdianto</div>
         <div className="flex items-center gap-4">
           <span>BEBAS IKLAN</span>
           <span>•</span>
