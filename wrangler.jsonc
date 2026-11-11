@@ -7,21 +7,5 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "cv_ats_db",
-      "database_id": "xxxx-xxxx-xxxx"
-    }
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "KV",
-      "id": "xxxx-xxxx-xxxx"
-    }
-  ],
-  "ai": {
-    "binding": "AI"
   }
 }
