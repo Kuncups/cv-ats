@@ -18,11 +18,12 @@ export function AtsPreview({ data, pages, previewScale, isCompact = false, onTog
   return (
     <>
       {/* Preview Banner */}
-      <div className="w-full flex flex-wrap items-center justify-between gap-2 bg-black text-white px-4 py-2 border-3 border-black no-print mb-4">
-        <span className="font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-          <span>[ PRATINJAU DOKUMEN // FORMAT RESMI STANDAR ATS ]</span>
+      <div className="w-full flex flex-wrap items-center justify-between gap-2 bg-black text-white px-3 py-2 sm:px-4 border-2 sm:border-3 border-black no-print mb-4">
+        <span className="font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
+          <span className="hidden sm:inline">[ PRATINJAU DOKUMEN // FORMAT RESMI STANDAR ATS ]</span>
+          <span className="sm:hidden">[ PRATINJAU ATS ]</span>
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {onToggleCompact && (
             <button
               type="button"
@@ -37,7 +38,7 @@ export function AtsPreview({ data, pages, previewScale, isCompact = false, onTog
               {isCompact ? "SPASI PADAT: ON" : "PADATKAN SPASI"}
             </button>
           )}
-          <span className="text-[10px] font-mono bg-white text-black px-2 py-0.5 font-bold">
+          <span className="text-[10px] font-mono bg-white text-black px-1.5 sm:px-2 py-0.5 font-bold">
             {pages.length === 1 ? "1 HALAMAN A4 (IDEAL)" : `${pages.length} HALAMAN A4`}
           </span>
         </div>
@@ -63,7 +64,7 @@ export function AtsPreview({ data, pages, previewScale, isCompact = false, onTog
               style={{
                 zoom: previewScale < 1 ? previewScale : undefined,
               }}
-              className={`cv-preview-container cv-page relative bg-white border-3 border-black shadow-[8px_8px_0px_#000] w-[794px] min-h-[1123px] text-black leading-normal print:border-none print:shadow-none print:p-0 print:m-0 print:w-full print:min-h-0 print:[zoom:1] ${
+              className={`cv-preview-container cv-page relative bg-white border-2 sm:border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[8px_8px_0px_#000] w-[794px] min-h-[1123px] text-black leading-normal print:border-none print:shadow-none print:p-0 print:m-0 print:w-full print:min-h-0 print:[zoom:1] ${
                 isCompact ? "p-[26px]" : "p-[38px]"
               }`}
             >

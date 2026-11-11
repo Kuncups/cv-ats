@@ -36,6 +36,7 @@ import {
   ChevronDown,
   Pencil,
   X,
+  Download,
 } from "lucide-react";
 
 // Backwards compatibility re-exports
@@ -472,9 +473,9 @@ export default function BuilderPage() {
       <Header />
 
       {/* Top Status & Fast Action Bar */}
-      <div className="bg-black text-white border-b-2 border-black px-4 py-2.5 sm:px-6 lg:px-8 no-print">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-          <div className="flex items-center gap-3">
+      <div className="bg-black text-white border-b-2 border-black px-3 py-2 sm:px-6 lg:px-8 no-print">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-xs font-mono">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/"
               className="text-white hover:text-blue-200 hover:underline font-bold flex items-center gap-1"
@@ -487,18 +488,18 @@ export default function BuilderPage() {
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Multi-Draft Selector for Authenticated User */}
             {session?.user && (
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setShowDraftMenu((prev) => !prev)}
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white text-black font-bold border-2 border-black hover:bg-zinc-100 text-xs font-mono transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
+                  className="flex items-center gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1.5 bg-white text-black font-bold border-2 border-black hover:bg-zinc-100 text-xs font-mono transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
                   title="Buka daftar draf CV Anda"
                 >
                   <FolderOpen className="w-3.5 h-3.5 text-[#1D4ED8]" />
-                  <span className="max-w-[120px] xs:max-w-[160px] truncate">
+                  <span className="max-w-[90px] xs:max-w-[130px] sm:max-w-[160px] truncate">
                     {userDrafts.find((d) => d.id === resumeCloudId)?.title ||
                       data.personal.jobTitle ||
                       "Draf CV"}
@@ -516,7 +517,7 @@ export default function BuilderPage() {
                       className="fixed inset-0 z-40"
                       onClick={() => setShowDraftMenu(false)}
                     />
-                    <div className="absolute right-0 top-full mt-1.5 w-72 bg-white text-black border-3 border-black shadow-[4px_4px_0px_#000] z-50 p-2 space-y-2">
+                    <div className="absolute right-0 top-full mt-1.5 w-[calc(100vw-24px)] sm:w-72 max-w-sm bg-white text-black border-3 border-black shadow-[4px_4px_0px_#000] z-50 p-2 space-y-2">
                       <div className="flex items-center justify-between pb-1.5 border-b border-black text-[11px] font-mono font-bold uppercase">
                         <span>DRAF CV SAYA</span>
                         <button
@@ -634,7 +635,7 @@ export default function BuilderPage() {
             {/* Debounced Cloud Auto-Save Status */}
             {session?.user ? (
               <div
-                className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 border border-white/20 text-xs font-mono select-none"
+                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 sm:py-1.5 bg-white/10 border border-white/20 text-[11px] sm:text-xs font-mono select-none"
                 title="Perubahan disimpan otomatis ke cloud saat Anda mengetik"
               >
                 {cloudSyncStatus === "saving" ? (
@@ -643,17 +644,19 @@ export default function BuilderPage() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1D4ED8] opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
                     </span>
-                    <span className="text-blue-300 font-bold">Menyimpan...</span>
+                    <span className="text-blue-300 font-bold hidden sm:inline">Menyimpan...</span>
+                    <span className="text-blue-300 font-bold sm:hidden">Simpan</span>
                   </>
                 ) : cloudSyncStatus === "error" ? (
                   <>
                     <span className="w-2 h-2 rounded-full bg-red-400" />
-                    <span className="text-red-300">Gagal Sinkron</span>
+                    <span className="text-red-300">Gagal</span>
                   </>
                 ) : (
                   <>
                     <Check className="w-3.5 h-3.5 text-green-400" />
-                    <span className="text-zinc-300">Tersimpan di Cloud</span>
+                    <span className="text-zinc-300 hidden sm:inline">Tersimpan di Cloud</span>
+                    <span className="text-zinc-300 sm:hidden">Cloud</span>
                   </>
                 )}
               </div>
@@ -661,12 +664,12 @@ export default function BuilderPage() {
               <button
                 type="button"
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 text-white border border-white/30 text-xs font-mono transition-colors cursor-pointer"
+                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 sm:py-1.5 bg-white/10 hover:bg-white/20 text-white border border-white/30 text-[11px] sm:text-xs font-mono transition-colors cursor-pointer"
                 title="Masuk untuk menyimpan CV otomatis ke cloud"
               >
                 <Cloud className="w-3.5 h-3.5 text-zinc-400" />
-                <span>Tersimpan Lokal</span>
-                <span className="text-white/40">•</span>
+                <span className="hidden sm:inline">Tersimpan Lokal</span>
+                <span className="hidden sm:inline text-white/40">•</span>
                 <span className="text-blue-400 underline font-bold">MASUK</span>
               </button>
             )}
@@ -675,11 +678,12 @@ export default function BuilderPage() {
             <button
               type="button"
               onClick={handleClear}
-              className="px-3.5 py-1.5 bg-black hover:bg-red-950/50 text-red-400 hover:text-red-200 font-mono text-xs font-bold border border-red-500/60 hover:border-red-400 transition-colors flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_rgba(239,68,68,0.4)] active:translate-x-[1px] active:translate-y-[1px]"
+              className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-black hover:bg-red-950/50 text-red-400 hover:text-red-200 font-mono text-[11px] sm:text-xs font-bold border border-red-500/60 hover:border-red-400 transition-colors flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-[2px_2px_0px_rgba(239,68,68,0.4)] active:translate-x-[1px] active:translate-y-[1px]"
               title="Kosongkan seluruh data form CV"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>Kosongkan CV</span>
+              <span className="hidden sm:inline">Kosongkan CV</span>
+              <span className="sm:hidden">Reset</span>
             </button>
           </div>
         </div>
@@ -880,38 +884,73 @@ export default function BuilderPage() {
         </div>
       </main>
 
-      {/* Mobile Floating Page Budget Indicator with Overflow Alert */}
-      <div className="lg:hidden fixed bottom-4 right-4 z-40 no-print animate-in fade-in slide-in-from-bottom-2">
-        <button
-          type="button"
-          onClick={() => setMobileView(mobileView === "editor" ? "preview" : "editor")}
-          className={`flex items-center gap-2 px-3.5 py-2 border-2 border-black shadow-[4px_4px_0px_#000] font-mono text-xs font-bold transition-transform active:translate-x-0.5 active:translate-y-0.5 cursor-pointer ${
-            pages.length > 1
-              ? "bg-red-400 text-black hover:bg-red-300"
-              : "bg-[#1D4ED8] text-white hover:bg-[#2563EB]"
-          }`}
-          title={
-            pages.length > 1
-              ? "Perhatian: Format CV melebihi 1 halaman A4!"
-              : "Panjang CV ideal: Tepat 1 Halaman A4"
-          }
-        >
-          {pages.length > 1 ? (
-            <>
-              <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
-              <span>⚠️ {pages.length} Halaman (Overflow!)</span>
-            </>
-          ) : (
-            <>
-              <span className="w-2 h-2 rounded-full bg-green-600" />
-              <span>✓ 1 Halaman (Ideal)</span>
-            </>
-          )}
-          <span className="text-[10px] underline ml-0.5">
-            {mobileView === "editor" ? "Lihat" : "Edit"}
+      {/* Mobile Floating Action / Sticky Bar */}
+      {mobileView === "preview" ? (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-md text-white border-t-2 border-black p-2.5 px-3 flex items-center justify-between gap-2 shadow-[0_-4px_12px_rgba(0,0,0,0.4)] no-print">
+          <button
+            type="button"
+            onClick={() => setMobileView("editor")}
+            className="py-2 px-3 bg-white hover:bg-zinc-100 text-black font-mono font-bold text-xs border border-black uppercase text-center cursor-pointer shadow-[2px_2px_0px_#000] shrink-0"
+          >
+            ← Formulir
+          </button>
+
+          <span
+            className={`text-[10px] px-2 py-1 font-mono font-bold border border-black truncate ${
+              pages.length > 1 ? "bg-red-500 text-white" : "bg-green-600 text-white"
+            }`}
+          >
+            {pages.length > 1 ? `⚠️ ${pages.length} Hlm` : "✓ 1 Hlm"}
           </span>
-        </button>
-      </div>
+
+          <button
+            type="button"
+            onClick={handleDownloadPdf}
+            disabled={isGeneratingPdf}
+            className="flex-1 py-2 px-3 bg-[#1D4ED8] hover:bg-[#2563EB] text-white font-mono font-bold text-xs border border-black uppercase flex items-center justify-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000] disabled:opacity-50"
+          >
+            {isGeneratingPdf ? (
+              <span>Memproses...</span>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5" />
+                <span>Unduh PDF</span>
+              </>
+            )}
+          </button>
+        </div>
+      ) : (
+        /* Mobile Floating Page Budget Indicator with Overflow Alert */
+        <div className="lg:hidden fixed bottom-4 right-4 z-40 no-print animate-in fade-in slide-in-from-bottom-2">
+          <button
+            type="button"
+            onClick={() => setMobileView("preview")}
+            className={`flex items-center gap-2 px-3.5 py-2 border-2 border-black shadow-[4px_4px_0px_#000] font-mono text-xs font-bold transition-transform active:translate-x-0.5 active:translate-y-0.5 cursor-pointer ${
+              pages.length > 1
+                ? "bg-red-400 text-black hover:bg-red-300"
+                : "bg-[#1D4ED8] text-white hover:bg-[#2563EB]"
+            }`}
+            title={
+              pages.length > 1
+                ? "Perhatian: Format CV melebihi 1 halaman A4!"
+                : "Panjang CV ideal: Tepat 1 Halaman A4"
+            }
+          >
+            {pages.length > 1 ? (
+              <>
+                <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
+                <span>⚠️ {pages.length} Halaman (Overflow!)</span>
+              </>
+            ) : (
+              <>
+                <span className="w-2 h-2 rounded-full bg-green-600" />
+                <span>✓ 1 Halaman (Ideal)</span>
+              </>
+            )}
+            <span className="text-[10px] underline ml-0.5">Lihat</span>
+          </button>
+        </div>
+      )}
 
       <AuthModal
         isOpen={showAuthModal}

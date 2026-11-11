@@ -17,7 +17,7 @@ export default function HomePage() {
 
       <main className="flex-1 w-full">
         {/* HERO SECTION */}
-        <section className="border-b-4 border-black py-12 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="border-b-4 border-black py-8 sm:py-20 px-3 sm:px-6 lg:px-8 relative overflow-hidden">
           {/* Decorative Background Elements */}
           <div className="absolute top-8 right-8 hidden lg:block opacity-10 pointer-events-none">
             <BrutalistStar className="w-48 h-48 text-[#1D4ED8]" />
@@ -25,77 +25,77 @@ export default function HomePage() {
 
           <div className="w-full">
             {/* Pill Badges Row */}
-            <div className="flex flex-wrap items-center gap-2 mb-6">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">
               <Pill variant="black">100% GRATIS</Pill>
               <Pill variant="blue">RAPIKAN FORMAT CV</Pill>
               <Pill variant="white">TINGKATKAN PELUANG KERJA</Pill>
             </div>
 
             {/* Main Headline */}
-            <div className="space-y-3 mb-8">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                <span className="font-mono text-lg sm:text-2xl font-black bg-[#1D4ED8] text-white px-3 py-1 border-2 border-black shadow-[3px_3px_0px_#000]">
+            <div className="space-y-3 mb-6 sm:mb-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-4">
+                <span className="font-mono text-base sm:text-2xl font-black bg-[#1D4ED8] text-white px-2.5 sm:px-3 py-1 border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000]">
                   DRAFT CV
                 </span>
-                <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-black/80">
+                <span className="font-mono text-[11px] sm:text-sm font-bold uppercase tracking-wider text-black/80">
                   MERAPIKAN CV // MEMPERBESAR PELUANG LOLOS KERJA
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-[1.05] sm:leading-[1.0] text-black break-words">
+              <h1 className="text-2xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[1.1] sm:leading-[1.0] text-black break-words">
                 Rapikan CV Anda. Tingkatkan Peluang Dapat Kerja.
               </h1>
 
-              <p className="font-mono text-sm sm:text-lg text-black/85 max-w-3xl pt-2 leading-relaxed">
+              <p className="font-mono text-xs sm:text-base text-black/85 max-w-3xl pt-1 sm:pt-2 leading-relaxed">
                 Banyak kandidat hebat gagal dipanggil wawancara hanya karena susunan CV yang berantakan dan sulit dibaca sistem rekrutmen. Draft CV membantu Anda merapikan struktur resume ke standar 1-kolom ATS profesional dan memastikan isi pengalaman Anda menarik perhatian recruiter.
               </p>
             </div>
 
             {/* Call to Actions */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-4 pt-1 sm:pt-2">
               <Link
                 href="/analyzer"
-                className="brutal-btn w-full sm:w-auto justify-center bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center transition-colors shadow-[4px_4px_0px_#000]"
+                className="brutal-btn w-full sm:w-auto justify-center bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-black px-5 sm:px-8 py-3 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center transition-colors shadow-[3px_3px_0px_#000] sm:shadow-[4px_4px_0px_#000]"
               >
                 <span>CEK SKOR CV SAYA (GRATIS)</span>
               </Link>
               <Link
                 href="/builder"
-                className="brutal-btn w-full sm:w-auto justify-center bg-white hover:bg-black hover:text-white text-black font-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center transition-colors shadow-[4px_4px_0px_#000]"
+                className="brutal-btn w-full sm:w-auto justify-center bg-white hover:bg-black hover:text-white text-black font-black px-5 sm:px-8 py-3 sm:py-4 text-xs sm:text-base font-mono uppercase inline-flex items-center transition-colors shadow-[3px_3px_0px_#000] sm:shadow-[4px_4px_0px_#000]"
               >
                 <span>BUAT CV DENGAN BUILDER</span>
               </Link>
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-8 border-t-3 border-black">
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t-3 border-black">
+              <div className="p-2.5 sm:p-3 bg-white border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[10px] sm:text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   FORMAT RESMI
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">1-KOLOM</span>
-                <span className="block text-[11px] font-bold">Paling disukai HRD & mesin</span>
+                <span className="text-xl sm:text-3xl font-black font-mono">1-KOLOM</span>
+                <span className="block text-[10px] sm:text-[11px] font-bold">Paling disukai HRD & mesin</span>
               </div>
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
+              <div className="p-2.5 sm:p-3 bg-white border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[10px] sm:text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   WAKTU PROSES
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">INSTAN</span>
-                <span className="block text-[11px] font-bold">Analisis dalam hitungan detik</span>
+                <span className="text-xl sm:text-3xl font-black font-mono">INSTAN</span>
+                <span className="block text-[10px] sm:text-[11px] font-bold">Analisis hitungan detik</span>
               </div>
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
+              <div className="p-2.5 sm:p-3 bg-white border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[10px] sm:text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   KEAMANAN DATA
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">100% AMAN</span>
-                <span className="block text-[11px] font-bold">Dokumen Anda tidak disimpan</span>
+                <span className="text-xl sm:text-3xl font-black font-mono">100% AMAN</span>
+                <span className="block text-[10px] sm:text-[11px] font-bold">File tidak disimpan</span>
               </div>
-              <div className="p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
-                <span className="block font-mono text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
+              <div className="p-2.5 sm:p-3 bg-white border-2 border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] brutal-card-hover group cursor-default">
+                <span className="block font-mono text-[10px] sm:text-[11px] font-bold text-black/60 uppercase group-hover:text-[#1D4ED8] transition-colors">
                   BIAYA
                 </span>
-                <span className="text-2xl sm:text-3xl font-black font-mono">GRATIS</span>
-                <span className="block text-[11px] font-bold">Tanpa watermark & biaya</span>
+                <span className="text-xl sm:text-3xl font-black font-mono">GRATIS</span>
+                <span className="block text-[10px] sm:text-[11px] font-bold">Tanpa biaya & watermark</span>
               </div>
             </div>
           </div>

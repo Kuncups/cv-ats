@@ -244,7 +244,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
               </div>
 
               {bridgedText ? (
-                <div className="relative overflow-hidden border-3 border-black bg-blue-50/70 p-6 flex-1 flex flex-col items-center justify-center text-center space-y-3">
+                <div className="relative overflow-hidden border-3 border-black bg-blue-50/70 p-4 sm:p-6 flex-1 flex flex-col items-center justify-center text-center space-y-3">
                   {isAnalyzing && <div className="animate-laser" />}
                   <div className="w-12 h-12 bg-[#1D4ED8] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
                     <Check className="w-6 h-6" />
@@ -270,7 +270,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                 <div
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={handleDrop}
-                  className={`relative overflow-hidden border-3 border-dashed border-black p-8 text-center flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors ${
+                  className={`relative overflow-hidden border-3 border-dashed border-black p-5 sm:p-8 text-center flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors ${
                     file ? "bg-blue-50/80" : "bg-zinc-50 hover:bg-blue-50/40"
                   }`}
                   onClick={() => document.getElementById("file-input")?.click()}
@@ -325,7 +325,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
 
           {/* Job Description Input (7 cols) */}
           <div className="lg:col-span-7 flex flex-col">
-            <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6 flex-1 flex flex-col">
+            <div className="bg-white border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] p-4 sm:p-6 flex-1 flex flex-col">
               <div className="flex items-center justify-between pb-3 mb-3 border-b-2 border-black">
                 <span className="font-mono font-bold text-xs uppercase tracking-wider">
                   [ LANGKAH 2: LOWONGAN KERJA SASARAN ]
@@ -373,7 +373,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                   type="button"
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || (!file && !bridgedText)}
-                  className={`w-full sm:w-auto brutal-btn font-black px-8 py-3 text-sm font-mono uppercase flex items-center justify-center gap-2 transition-colors ${
+                  className={`w-full sm:w-auto brutal-btn font-black px-6 sm:px-8 py-3 text-xs sm:text-sm font-mono uppercase flex items-center justify-center gap-2 transition-colors ${
                     isAnalyzing || (!file && !bridgedText)
                       ? "bg-black/20 text-black/50 cursor-not-allowed border-black/30 shadow-none"
                       : "bg-[#1D4ED8] text-white hover:bg-[#2563EB] shadow-[3px_3px_0px_#000]"
@@ -395,10 +395,10 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
 
         {/* Scan Results Section */}
         {result && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="space-y-4 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
             {/* Main Score Hero Card */}
             <div className="bg-black text-white border-3 sm:border-4 border-black shadow-[4px_4px_0px_#000] sm:shadow-[8px_8px_0px_#000] p-4 sm:p-8">
-              <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6 pb-6 border-b-2 border-white/20">
+              <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6 pb-4 sm:pb-6 border-b-2 border-white/20">
                 <div>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
                     <div className="flex items-center gap-2">
@@ -450,28 +450,28 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
               </div>
 
               {/* Breakdown Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
-                <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">KATA KUNCI LOKER</span>
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 pt-4 sm:pt-6">
+                <div className="border-2 border-white/30 p-2.5 sm:p-3 bg-white/5">
+                  <span className="block text-[10px] sm:text-xs font-mono text-white/60">KATA KUNCI LOKER</span>
+                  <span className="text-xl sm:text-3xl font-black font-mono text-white">
                     <ScoreTicker target={result.matchScore} />%
                   </span>
                 </div>
-                <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">STRUKTUR & TATA LETAK</span>
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                <div className="border-2 border-white/30 p-2.5 sm:p-3 bg-white/5">
+                  <span className="block text-[10px] sm:text-xs font-mono text-white/60">STRUKTUR TATA LETAK</span>
+                  <span className="text-xl sm:text-3xl font-black font-mono text-white">
                     <ScoreTicker target={result.formattingScore} />%
                   </span>
                 </div>
-                <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">TINDAKAN & PENCAPAIAN</span>
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                <div className="border-2 border-white/30 p-2.5 sm:p-3 bg-white/5">
+                  <span className="block text-[10px] sm:text-xs font-mono text-white/60">TINDAKAN PENCAPAIAN</span>
+                  <span className="text-xl sm:text-3xl font-black font-mono text-white">
                     <ScoreTicker target={result.contentScore} />%
                   </span>
                 </div>
-                <div className="border-2 border-white/30 p-3 bg-white/5">
-                  <span className="block text-xs font-mono text-white/60">KELENGKAPAN KONTAK</span>
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                <div className="border-2 border-white/30 p-2.5 sm:p-3 bg-white/5">
+                  <span className="block text-[10px] sm:text-xs font-mono text-white/60">KELENGKAPAN KONTAK</span>
+                  <span className="text-xl sm:text-3xl font-black font-mono text-white">
                     <ScoreTicker target={result.contactScore} />%
                   </span>
                 </div>
@@ -479,9 +479,9 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
             </div>
 
             {/* Keywords Match Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
               {/* Matched Keywords */}
-              <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6">
+              <div className="bg-white border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] p-4 sm:p-6">
                 <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-green-600" />
@@ -495,7 +495,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                     result.matchedKeywords.map((kw) => (
                       <span
                         key={kw}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-100 text-green-950 border border-black text-xs font-mono font-bold"
+                        className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-green-100 text-green-950 border border-black text-xs font-mono font-bold"
                       >
                         <span>✓</span>
                         <span>{kw}</span>
@@ -510,7 +510,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
               </div>
 
               {/* Missing Keywords */}
-              <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6">
+              <div className="bg-white border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] p-4 sm:p-6">
                 <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b-2 border-black">
                   <div className="flex items-center gap-2">
                     <XCircle className="w-5 h-5 text-red-600" />
@@ -522,7 +522,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                     <button
                       type="button"
                       onClick={handleApplyKeywordsToBuilder}
-                      className="px-3 py-1.5 bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-mono font-bold text-xs border-2 border-black transition-colors flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000]"
+                      className="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-[#1D4ED8] text-white hover:bg-[#2563EB] font-mono font-bold text-xs border-2 border-black transition-colors flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#000]"
                       title="Salin kata kunci langsung ke draf CV Anda"
                     >
                       <Plus className="w-3.5 h-3.5" />
@@ -535,7 +535,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                     result.missingKeywords.map((kw) => (
                       <span
                         key={kw}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 text-red-950 border border-black text-xs font-mono font-bold"
+                        className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-red-100 text-red-950 border border-black text-xs font-mono font-bold"
                       >
                         <span>+</span>
                         <span>{kw}</span>
@@ -551,8 +551,8 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
             </div>
 
             {/* Checklist Audit Section */}
-            <div className="bg-white border-3 border-black shadow-[6px_6px_0px_#000] p-6">
-              <div className="pb-3 mb-4 border-b-2 border-black flex items-center justify-between">
+            <div className="bg-white border-3 border-black shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] p-4 sm:p-6">
+              <div className="pb-3 mb-4 border-b-2 border-black flex flex-wrap items-center justify-between gap-1.5">
                 <h3 className="font-mono font-bold text-sm uppercase">
                   Daftar Periksa Kelayakan Format CV
                 </h3>
@@ -561,7 +561,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-4">
                 {result.checks.map((chk) => (
                   <div
                     key={chk.id}
