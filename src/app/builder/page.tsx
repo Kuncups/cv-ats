@@ -362,8 +362,10 @@ export default function BuilderPage() {
         >
           <span>Pratinjau CV ATS</span>
           <span
-            className={`text-[10px] px-1.5 py-0.2 border border-black ${
-              pages.length > 1 ? "bg-red-300 text-black font-black" : "bg-zinc-100"
+            className={`text-[10px] px-1.5 py-0.5 border border-black font-mono font-bold leading-none ${
+              pages.length > 1
+                ? "bg-red-400 text-black"
+                : "bg-white text-black"
             }`}
           >
             {pages.length} Hlm

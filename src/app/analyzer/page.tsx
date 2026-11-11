@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BrutalistStar, DoubleArrow, Pill } from "@/components/BrutalistBadge";
+import { BrutalistStar, Pill } from "@/components/BrutalistBadge";
 import { SITE_CONFIG } from "@/config/site";
 import { AtsAnalysisResult } from "@/lib/ats-scanner";
 import {
@@ -387,10 +387,7 @@ ${result.recommendations.map((r, i) => `${i + 1}. [${r.title}] ${r.advice}`).joi
                       <span>SEDANG MEMINDAI DOKUMEN...</span>
                     </>
                   ) : (
-                    <>
-                      <span>ANALISIS KECOCOKAN CV SEKARANG</span>
-                      <DoubleArrow className="w-5 h-3 text-current" />
-                    </>
+                    <span>ANALISIS KECOCOKAN CV SEKARANG</span>
                   )}
                 </button>
               </div>
