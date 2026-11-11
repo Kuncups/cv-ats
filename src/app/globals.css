@@ -4,7 +4,7 @@
   --color-acid: #fff000;
   --color-acid-dark: #e5d800;
   --color-jet: #000000;
-  --color-canvas: #fff000;
+  --color-canvas: #f4f4f0;
   --font-mono: var(--font-geist-mono), monospace;
   --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -12,13 +12,23 @@
 :root {
   --acid: #fff000;
   --jet: #000000;
+  --canvas: #f4f4f0;
 }
 
 body {
-  background-color: var(--acid);
+  background-color: #f4f4f0;
   color: #000000;
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+/* Technical Blueprint Grid Background */
+.bg-blueprint {
+  background-color: #f4f4f0;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 /* Neo-Brutalist Utilities */

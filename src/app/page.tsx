@@ -16,7 +16,7 @@ import {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#FFF000] text-black flex flex-col font-sans selection:bg-black selection:text-[#FFF000]">
+    <div className="min-h-screen bg-blueprint text-black flex flex-col font-sans selection:bg-black selection:text-[#FFF000]">
       <Header />
 
       <main className="flex-1 w-full">
@@ -61,14 +61,14 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="/analyzer"
-                className="brutal-btn bg-black text-[#FFF000] font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-3"
+                className="brutal-btn bg-black text-[#FFF000] hover:bg-[#FFF000] hover:text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-3 transition-colors"
               >
                 <span>CEK SKOR CV SAYA (GRATIS)</span>
-                <DoubleArrow className="w-6 h-3 text-[#FFF000]" />
+                <DoubleArrow className="w-6 h-3 text-current" />
               </Link>
               <Link
                 href="/builder"
-                className="brutal-btn bg-white text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-2"
+                className="brutal-btn bg-white hover:bg-[#FFF000] text-black font-black px-8 py-4 text-sm sm:text-base font-mono uppercase inline-flex items-center gap-2 transition-colors"
               >
                 <span>BUAT CV DENGAN BUILDER</span>
                 <ArrowRight className="w-5 h-5" />
@@ -201,7 +201,7 @@ export default function HomePage() {
         </section>
 
         {/* DUAL TOOLS SECTION */}
-        <section className="border-b-4 border-black py-16 px-4 sm:px-6 lg:px-8 bg-[#FFF000]">
+        <section className="border-b-4 border-black py-16 px-4 sm:px-6 lg:px-8 bg-blueprint">
           <div className="w-full space-y-12">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <Pill variant="black">FITUR UTAMA</Pill>

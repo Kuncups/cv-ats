@@ -265,7 +265,7 @@ export default function BuilderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFDF5] text-black flex flex-col font-mono selection:bg-[#FFF000] selection:text-black">
+    <div className="min-h-screen bg-blueprint text-black flex flex-col font-mono selection:bg-[#FFF000] selection:text-black">
       <Header />
 
       {/* Top Status & Fast Action Bar */}

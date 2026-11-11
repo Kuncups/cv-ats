@@ -162,7 +162,7 @@ export default function AnalyzerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF000] text-black flex flex-col font-sans">
+    <div className="min-h-screen bg-blueprint text-black flex flex-col font-sans">
       <Header />
 
       <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
