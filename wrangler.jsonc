@@ -11,5 +11,16 @@
   },
   "ai": {
     "binding": "AI"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cv-ats-db",
+      "database_id": "21455d37-8910-47c8-9be1-b54e2098c239"
+    }
+  ],
+  "vars": {
+    "AUTH_TRUST_HOST": "true",
+    "NEXTAUTH_URL": "https://draftcv.my.id"
   }
 }

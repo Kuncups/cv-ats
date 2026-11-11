@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -31,6 +31,9 @@ import {
   Trash2,
   Check,
   Cloud,
+  FolderOpen,
+  Plus,
+  ChevronDown,
 } from "lucide-react";
 
 // Backwards compatibility re-exports
@@ -52,6 +55,8 @@ export default function BuilderPage() {
   const [pendingDownload, setPendingDownload] = useState(false);
   const [cloudSyncStatus, setCloudSyncStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [resumeCloudId, setResumeCloudId] = useState<string | null>(null);
+  const [userDrafts, setUserDrafts] = useState<Array<{ id: string; title: string; updatedAt: string }>>([]);
+  const [showDraftMenu, setShowDraftMenu] = useState(false);
   const isInitialMount = useRef(true);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [data, setData] = useState<ResumeData>(DEFAULT_SAMPLE_RESUME);
@@ -104,6 +109,135 @@ export default function BuilderPage() {
     }
   }, []);
 
+  // Fetch list of user's saved drafts from cloud
+  const fetchUserDrafts = useCallback(async () => {
+    if (!session?.user) return;
+    try {
+      const res = await fetch("/api/resumes");
+      if (res.ok) {
+        const json = (await res.json()) as { data?: Array<{ id: string; title: string; updatedAt: string }> };
+        if (Array.isArray(json.data)) {
+          setUserDrafts(json.data);
+          // If no active draft is set but user has drafts in cloud, activate the latest one
+          const currentId = localStorage.getItem("roster_resume_id");
+          if (!currentId && json.data.length > 0) {
+            handleSwitchDraft(json.data[0].id);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Gagal mengambil daftar draf:", err);
+    }
+  }, [session?.user]);
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchUserDrafts();
+    } else {
+      setUserDrafts([]);
+    }
+  }, [session?.user, fetchUserDrafts]);
+
+  // Switch active draft
+  const handleSwitchDraft = async (draftId: string) => {
+    try {
+      const res = await fetch(`/api/resumes?id=${draftId}`);
+      if (res.ok) {
+        const json = (await res.json()) as { data?: { content?: ResumeData } };
+        if (json.data?.content) {
+          setData(json.data.content);
+          setResumeCloudId(draftId);
+          localStorage.setItem("roster_resume_draft", JSON.stringify(json.data.content));
+          localStorage.setItem("roster_resume_id", draftId);
+          setShowDraftMenu(false);
+        }
+      }
+    } catch (err) {
+      console.error("Gagal berpindah draf:", err);
+    }
+  };
+
+  // Create new draft
+  const handleCreateNewDraft = async () => {
+    if (!session?.user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    const newDraftNumber = userDrafts.length + 1;
+    const newTitle = `Draf CV #${newDraftNumber}`;
+    const newResume: ResumeData = {
+      ...DEFAULT_SAMPLE_RESUME,
+      personal: {
+        ...DEFAULT_SAMPLE_RESUME.personal,
+        jobTitle: newTitle,
+        fullName: session.user.name || DEFAULT_SAMPLE_RESUME.personal.fullName,
+        email: session.user.email || DEFAULT_SAMPLE_RESUME.personal.email,
+      },
+    };
+
+    try {
+      const res = await fetch("/api/resumes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: newTitle,
+          content: newResume,
+        }),
+      });
+
+      if (res.ok) {
+        const json = (await res.json()) as { data?: { id?: string } };
+        if (json.data?.id) {
+          setData(newResume);
+          setResumeCloudId(json.data.id);
+          localStorage.setItem("roster_resume_draft", JSON.stringify(newResume));
+          localStorage.setItem("roster_resume_id", json.data.id);
+          setShowDraftMenu(false);
+          await fetchUserDrafts();
+        }
+      }
+    } catch (err) {
+      console.error("Gagal membuat draf baru:", err);
+    }
+  };
+
+  // Delete draft
+  const handleDeleteDraft = async (
+    draftId: string,
+    draftTitle: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+    if (!confirm(`Hapus draf "${draftTitle}" secara permanen dari akun Anda?`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/resumes?id=${draftId}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        const remaining = userDrafts.filter((d) => d.id !== draftId);
+        setUserDrafts(remaining);
+
+        if (resumeCloudId === draftId) {
+          if (remaining.length > 0) {
+            handleSwitchDraft(remaining[0].id);
+          } else {
+            setData(EMPTY_RESUME);
+            setResumeCloudId(null);
+            localStorage.removeItem("roster_resume_draft");
+            localStorage.removeItem("roster_resume_id");
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Gagal menghapus draf:", err);
+    }
+  };
+
   // Save to localStorage on change
   const updateData = (newData: ResumeData) => {
     setData(newData);
@@ -138,8 +272,24 @@ export default function BuilderPage() {
         if (!res.ok) throw new Error("Gagal menyimpan ke cloud");
         const json = (await res.json()) as { data?: { id?: string } };
         if (json.data?.id) {
-          setResumeCloudId(json.data.id);
-          localStorage.setItem("roster_resume_id", json.data.id);
+          const savedId = json.data.id;
+          setResumeCloudId(savedId);
+          localStorage.setItem("roster_resume_id", savedId);
+          const currentTitle = data.personal.jobTitle || data.personal.fullName || "Draf CV";
+          setUserDrafts((prev) => {
+            const exists = prev.some((d) => d.id === savedId);
+            if (exists) {
+              return prev.map((d) =>
+                d.id === savedId
+                  ? { ...d, title: currentTitle, updatedAt: new Date().toISOString() }
+                  : d
+              );
+            }
+            return [
+              { id: savedId, title: currentTitle, updatedAt: new Date().toISOString() },
+              ...prev,
+            ];
+          });
         }
         setCloudSyncStatus("saved");
       } catch (err) {
@@ -288,6 +438,102 @@ export default function BuilderPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Multi-Draft Selector for Authenticated User */}
+            {session?.user && (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowDraftMenu((prev) => !prev)}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white text-black font-bold border-2 border-black hover:bg-zinc-100 text-xs font-mono transition-colors cursor-pointer shadow-[2px_2px_0px_#000]"
+                  title="Buka daftar draf CV Anda"
+                >
+                  <FolderOpen className="w-3.5 h-3.5 text-[#1D4ED8]" />
+                  <span className="max-w-[120px] xs:max-w-[160px] truncate">
+                    {userDrafts.find((d) => d.id === resumeCloudId)?.title ||
+                      data.personal.jobTitle ||
+                      "Draf CV"}
+                  </span>
+                  <span className="text-[10px] px-1 bg-[#1D4ED8] text-white font-mono">
+                    {userDrafts.length}
+                  </span>
+                  <ChevronDown className="w-3 h-3 text-black/70" />
+                </button>
+
+                {/* Dropdown Menu */}
+                {showDraftMenu && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowDraftMenu(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-1.5 w-72 bg-white text-black border-3 border-black shadow-[4px_4px_0px_#000] z-50 p-2 space-y-2">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-black text-[11px] font-mono font-bold uppercase">
+                        <span>DRAF CV SAYA</span>
+                        <button
+                          type="button"
+                          onClick={handleCreateNewDraft}
+                          className="text-[10px] bg-[#1D4ED8] hover:bg-[#2563EB] text-white px-2 py-0.5 border border-black font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>+ DRAF BARU</span>
+                        </button>
+                      </div>
+
+                      <div className="max-h-60 overflow-y-auto space-y-1">
+                        {userDrafts.length === 0 ? (
+                          <div className="p-3 text-center text-xs font-mono text-black/60">
+                            Belum ada draf tersimpan
+                          </div>
+                        ) : (
+                          userDrafts.map((d) => {
+                            const isActive = d.id === resumeCloudId;
+                            return (
+                              <div
+                                key={d.id}
+                                onClick={() => handleSwitchDraft(d.id)}
+                                className={`p-2 border cursor-pointer transition-colors flex items-center justify-between gap-2 text-xs font-mono ${
+                                  isActive
+                                    ? "bg-blue-50 border-[#1D4ED8] font-bold"
+                                    : "bg-white border-black/20 hover:border-black hover:bg-zinc-50"
+                                }`}
+                              >
+                                <div className="flex flex-col min-w-0">
+                                  <span className="truncate">{d.title || "Draf Tanpa Judul"}</span>
+                                  <span className="text-[10px] text-black/50">
+                                    {new Date(d.updatedAt).toLocaleDateString("id-ID", {
+                                      day: "numeric",
+                                      month: "short",
+                                      year: "numeric",
+                                    })}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1 shrink-0">
+                                  {isActive ? (
+                                    <span className="text-[9px] bg-[#1D4ED8] text-white px-1.5 py-0.5 font-bold">
+                                      AKTIF
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={(e) => handleDeleteDraft(d.id, d.title, e)}
+                                      className="text-red-500 hover:text-red-700 p-1 hover:bg-red-50 rounded"
+                                      title="Hapus draf ini"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
             {/* Debounced Cloud Auto-Save Status */}
             {session?.user ? (
               <div

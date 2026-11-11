@@ -1,7 +1,7 @@
 import { ResumeData } from "@/types/resume";
 import { getDb } from "@/db";
 import { resumes } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 
 export interface StoredResumeRecord {
   id: string;
@@ -15,11 +15,124 @@ export interface StoredResumeRecord {
 // In-memory fallback store when D1 binding is not yet attached
 const fallbackStore = new Map<string, StoredResumeRecord>();
 
-function getD1Binding(): D1Database | undefined {
+async function getD1Binding(): Promise<D1Database | undefined> {
+  try {
+    if ((globalThis as any).__CF_ENV__?.DB) {
+      return (globalThis as any).__CF_ENV__.DB as D1Database;
+    }
+  } catch {}
+
+  try {
+    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+    const ctx = await getCloudflareContext({ async: true });
+    if ((ctx?.env as any)?.DB) {
+      return (ctx.env as any).DB as D1Database;
+    }
+  } catch {}
+
+  try {
+    const cf = (globalThis as any)[Symbol.for("__cloudflare-context__")];
+    if (cf?.env?.DB) {
+      return cf.env.DB as D1Database;
+    }
+  } catch {}
+
   if (typeof process !== "undefined" && (process.env as any).DB) {
     return (process.env as any).DB as D1Database;
   }
+
   return undefined;
+}
+
+export async function getUserResumes(userId: string): Promise<StoredResumeRecord[]> {
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+
+  if (db) {
+    try {
+      const records = await db
+        .select()
+        .from(resumes)
+        .where(eq(resumes.userId, userId))
+        .orderBy(desc(resumes.updatedAt));
+
+      return records.map((r) => ({
+        id: r.id,
+        userId: r.userId || userId,
+        title: r.title,
+        content: JSON.parse(r.contentJson) as ResumeData,
+        createdAt: r.createdAt.toISOString(),
+        updatedAt: r.updatedAt.toISOString(),
+      }));
+    } catch (e) {
+      console.warn("[resume-store] D1 list failed, fallback:", e);
+    }
+  }
+
+  const list: StoredResumeRecord[] = [];
+  for (const record of fallbackStore.values()) {
+    if (record.userId === userId) {
+      list.push(record);
+    }
+  }
+  return list.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+}
+
+export async function getResumeById(id: string, userId: string): Promise<StoredResumeRecord | null> {
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+
+  if (db) {
+    try {
+      const record = await db
+        .select()
+        .from(resumes)
+        .where(and(eq(resumes.id, id), eq(resumes.userId, userId)))
+        .get();
+
+      if (record) {
+        return {
+          id: record.id,
+          userId: record.userId || userId,
+          title: record.title,
+          content: JSON.parse(record.contentJson) as ResumeData,
+          createdAt: record.createdAt.toISOString(),
+          updatedAt: record.updatedAt.toISOString(),
+        };
+      }
+    } catch (e) {
+      console.warn("[resume-store] D1 getById failed, fallback:", e);
+    }
+  }
+
+  const found = fallbackStore.get(id);
+  if (found && found.userId === userId) {
+    return found;
+  }
+  return null;
+}
+
+export async function deleteUserResume(id: string, userId: string): Promise<boolean> {
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+
+  if (db) {
+    try {
+      await db
+        .delete(resumes)
+        .where(and(eq(resumes.id, id), eq(resumes.userId, userId)));
+      return true;
+    } catch (e) {
+      console.warn("[resume-store] D1 delete failed:", e);
+    }
+  }
+
+  const found = fallbackStore.get(id);
+  if (found && found.userId === userId) {
+    fallbackStore.delete(id);
+    return true;
+  }
+  return false;
 }
 
 export async function saveUserResume(
@@ -31,12 +144,19 @@ export async function saveUserResume(
   const id = resumeId || `res_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const now = new Date();
   const nowIso = now.toISOString();
-  const finalTitle = title || content.personal.jobTitle || "Resume Tanpa Judul";
+  const finalTitle = title?.trim() || content.personal.jobTitle || "Draf Resume";
 
-  const db = getDb(getD1Binding());
+  const d1 = await getD1Binding();
+  const db = getDb(d1);
+
   if (db) {
     try {
-      const existing = await db.select().from(resumes).where(eq(resumes.id, id)).get();
+      const existing = await db
+        .select()
+        .from(resumes)
+        .where(and(eq(resumes.id, id), eq(resumes.userId, userId)))
+        .get();
+
       if (existing) {
         await db
           .update(resumes)

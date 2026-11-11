@@ -255,6 +255,44 @@ async function runSelfChecks() {
   assert.strictEqual(emptyStarters.length, 3);
   assert.ok(emptyStarters[0].sentence.includes("Accountant"));
 
+  // 11. Multi-Draft Resume Store Validation
+  const {
+    saveUserResume,
+    getUserResumes,
+    getResumeById,
+    deleteUserResume,
+  } = await import("../src/lib/resume-store.ts");
+
+  const testUserId = "user-test-multi-draft";
+  const draft1 = await saveUserResume(
+    testUserId,
+    "CV Software Engineer",
+    DEFAULT_SAMPLE_RESUME
+  );
+  assert.ok(draft1.id, "Draft 1 must have an ID");
+  assert.strictEqual(draft1.title, "CV Software Engineer");
+
+  const draft2 = await saveUserResume(
+    testUserId,
+    "CV Tech Lead",
+    DEFAULT_SAMPLE_RESUME
+  );
+  assert.ok(draft2.id, "Draft 2 must have an ID");
+
+  const userDrafts = await getUserResumes(testUserId);
+  assert.ok(userDrafts.length >= 2, "Must list all drafts for user");
+  assert.ok(userDrafts.some((d) => d.id === draft1.id));
+  assert.ok(userDrafts.some((d) => d.id === draft2.id));
+
+  const fetchedDraft1 = await getResumeById(draft1.id, testUserId);
+  assert.strictEqual(fetchedDraft1?.title, "CV Software Engineer");
+
+  const deleted = await deleteUserResume(draft2.id, testUserId);
+  assert.strictEqual(deleted, true, "Draft deletion must succeed");
+
+  const remaining = await getUserResumes(testUserId);
+  assert.ok(!remaining.some((d) => d.id === draft2.id), "Deleted draft must not exist");
+
   console.log("✓ All self-checks passed successfully!");
 }
 
