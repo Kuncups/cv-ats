@@ -525,7 +525,7 @@ export default function BuilderPage() {
                           className="text-[10px] bg-[#1D4ED8] hover:bg-[#2563EB] text-white px-2 py-0.5 border border-black font-bold flex items-center gap-1 cursor-pointer"
                         >
                           <Plus className="w-3 h-3" />
-                          <span>+ DRAF BARU</span>
+                          <span>DRAF BARU</span>
                         </button>
                       </div>
 
